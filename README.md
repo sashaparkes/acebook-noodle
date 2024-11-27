@@ -15,7 +15,7 @@ Below, you'll find specific learning objectives for each tool.
 
 - Fork and clone this repository to your machine
 - Open the codebase in an IDE like InteliJ or VSCode
-- Create a new Postgres database called `acebook_springboot_development`
+- Create two new Postgres databases called `acebook_springboot_development` and `acebook_springboot_test`
 - Install Maven `brew install maven`
 - [Set up Auth0](https://journey.makers.tech/pages/auth0) (you only need the "Create an Auth0 app" section)
   - NOTE: Each member of the team will need their own Auth0 app
@@ -26,7 +26,7 @@ Below, you'll find specific learning objectives for each tool.
 ## Running the tests
 
 - Install chromedriver using `brew install chromedriver`
-- Start the server in a terminal session `mvn spring-boot:run`
+- Start the server in a terminal session `mvn spring-boot:run -Dspring-boot.run.profiles=test`
 - Open a new terminal session and navigate to the Acebook directory
 - Run your tests in the second terminal session with `mvn test`
 
