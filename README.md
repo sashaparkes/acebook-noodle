@@ -57,6 +57,14 @@ This app already has a few basic features
 * A signed in user can create posts at `/posts`
 * A signed in user can sign out at `/logout`
 
+### What is Auth0?
+Auth0 is a service that handles user authentication and authorisation for you, it will store data related to that such
+as username, passwords, 2 factor codes, oauth details (e.g. log in with google) etc, but you still need to store all the information you want to
+about the user e.g. favourite ice cream flavour, pet name etc. It’s not a database of users, it’s an auth handling service.
+
+Using a third-party service means you don’t have to worry about protecting critical information like login data and gives
+you automatic features like oauth integration for free. This can save businesses a lot of time and money.
+
 ## Design
 
 This app uses the repository pattern. The repository pattern separates the business logic of models from the responsibility of connecting to the database and making queries. Take a look in the `src/main/java/repository` and you'll find `PostRepository` which generates and executes queries to Create, Read, Update and Delete (CRUD) posts. Depending on what you've built in the past, it might or might not feel familiar to you.
