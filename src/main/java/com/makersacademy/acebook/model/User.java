@@ -1,7 +1,6 @@
 package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
-
 import lombok.Data;
 
 import static java.lang.Boolean.TRUE;
@@ -29,7 +28,4 @@ public class User {
         this.username = username;
         this.enabled = enabled;
     }
-
-    public String getUsername() { return this.username; }
-    public void setUsername(String username) { this.username = username; }
 }

@@ -8,6 +8,7 @@ The application uses:
   - `faker` to generate fake names for testing
   - `junit4` for unit testing
   - `auth0` and `spring-security` for authentication and user management
+  - `lombok` to generate getters and setters for us
   
 Below, you'll find specific learning objectives for each tool.
 
@@ -15,10 +16,11 @@ Below, you'll find specific learning objectives for each tool.
 
 - Fork and clone this repository to your machine
 - Open the codebase in an IDE like InteliJ or VSCode
-- Create a new Postgres database called `acebook_springboot_development`
+  - If using IntelliJ, accept the prompt to install the Lombok plugin (if you don't get prompted, press command and comma
+  to open the Settings and go to Plugins and search for Lombok made by Jetbrains and install).
+- Create two new Postgres databases called `acebook_springboot_development` and `acebook_springboot_test`
 - Install Maven `brew install maven`
 - [Set up Auth0](https://journey.makers.tech/pages/auth0) (you only need the "Create an Auth0 app" section)
-  - NOTE: Each member of the team will need their own Auth0 app
 - Build the app and start the server, using the Maven command `mvn spring-boot:run`
 > The database migrations will run automatically at this point
 - Visit `http://localhost:8080/` to sign up
@@ -26,7 +28,7 @@ Below, you'll find specific learning objectives for each tool.
 ## Running the tests
 
 - Install chromedriver using `brew install chromedriver`
-- Start the server in a terminal session `mvn spring-boot:run`
+- Start the server in a terminal session `mvn spring-boot:run -Dspring-boot.run.profiles=test`
 - Open a new terminal session and navigate to the Acebook directory
 - Run your tests in the second terminal session with `mvn test`
 
@@ -53,6 +55,14 @@ This app already has a few basic features
 * A signed up user can sign in
 * A signed in user can create posts at `/posts`
 * A signed in user can sign out at `/logout`
+
+### What is Auth0?
+Auth0 is a service that handles user authentication and authorisation for you, it will store data related to that such
+as username, passwords, 2 factor codes, oauth details (e.g. log in with google) etc, but you still need to store all the information you want to
+about the user e.g. favourite ice cream flavour, pet name etc. It’s not a database of users, it’s an auth handling service.
+
+Using a third-party service means you don’t have to worry about protecting critical information like login data and gives
+you automatic features like oauth integration for free. This can save businesses a lot of time and money.
 
 ## Design
 
