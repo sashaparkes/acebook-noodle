@@ -1,5 +1,5 @@
 okta:
   oauth2:
-    issuer: https://dev-edward-andress.uk.auth0.com/
-    client-id: ${OKTA_CLIENT_ID}
-    client-secret: ${OKTA_CLIENT_SECRET}
+    issuer: https://dev-11mkptye4o4w052e.us.auth0.com/
+    client-id: SnYU8ncAHpO8HiEi4LGAa1R1kXiMpA8Y
+    client-secret: MALd_wgUGPLyv9URx6A8NB4sxeO1Kju1v1Gx_s8fXw1l9a-qLBfeEXfhvDaWAPWR
