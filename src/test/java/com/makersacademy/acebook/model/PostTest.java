@@ -5,9 +5,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
+
 public class PostTest {
 
-	private Post post = new Post("hello");
+	Timestamp now = new Timestamp();
+	private Post post = new Post("hello", 1, );
+
 
 	@Test
 	public void postHasContent() {
