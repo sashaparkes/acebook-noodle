@@ -1,5 +1,7 @@
 # Acebook
 
+https://trello.com/b/VidgaAkH/acebook-engineering-project-2
+
 The application uses:
   - `maven` to build the project
   - `thymeleaf` for templating
