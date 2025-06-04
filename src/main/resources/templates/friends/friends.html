@@ -10,8 +10,13 @@
 
 <h2>Friend Requests</h2>
 <ul>
-  <li th:each="requester : ${requesterUsers}"
-      th:text="${requester.first_name + ' ' + requester.last_name}"></li>
+  <li th:each="requester : ${requesterUsers}">
+      <span th:text="${requester.first_name + ' ' + requester.last_name}"></span>
+      <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
+      <button type="submit" name="decision" value="accept">Accept</button>
+      <button type="submit" name="decision" value="decline">Decline</button>
+      </form>
+  </li>
 </ul>
 
 <h2>Your Friends</h2>
