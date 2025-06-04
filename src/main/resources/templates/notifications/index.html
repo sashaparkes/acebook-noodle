@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 
     <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href="/static/main.css" />
+<!--        <link rel="stylesheet" href="../../static/main.css" />-->
     </head>
-
     <body>
 
         <h1>Notifications</h1>
@@ -17,14 +16,14 @@
             Signed in as <span sec:authentication="principal.attributes['email']"></span>
         </div>
 
-<!--        <form action="#" th:action="@{/notifications}" th:object="${post}" method="get">-->
-<!--            <p>Content: <input type="text" th:field="*{content}" /></p>-->
-<!--            <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>-->
-<!--        </form>-->
-
-        <ul th:each="notification: ${notifications}">
-            <li th:text="${{(userRepository.getUser(notification.sending_user_id)).firstName}} ' ' ${notification.type}'d your post!'" />
-        </ul>
-
+        <table th:each="notification: ${notifications}">
+            <tr>
+                <form action="#" th:action="@{/notifications}" th:object="${notification}" method="post">
+<!--                    <input type="hidden" th:field="*{id}" />-->
+                    <button th:id="'markAsRead_' + ${notification.id}" value="read" type="submit"><span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
+                    </button>
+                </form>
+            </tr>
+        </table>
     </body>
 </html>
