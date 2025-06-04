@@ -56,48 +56,10 @@ public class UsersController {
         String username = (String) principal.getAttributes().get("email");
         User userByEmail = userRepository.findUserByUsername(username).get();
 //        Optional<User> user = userRepository.findById(userByEmail.getId());
-        ModelAndView settings = new ModelAndView("/settings");
+        ModelAndView settings = new ModelAndView("/users/settings");
         settings.addObject("user", userByEmail);
         return settings;
     }
-
-//    @PostMapping("/settings")
-//    public RedirectView update(@ModelAttribute("user") User user) {
-//        userRepository.save(user);
-//        return new RedirectView("/settings");
-//    }
-
-//    @PostMapping("/settings")
-//    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
-//        // Get the logged-in user's email
-//        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
-//                .getContext()
-//                .getAuthentication()
-//                .getPrincipal();
-//
-//        String email = (String) principal.getAttributes().get("email");
-//
-//        // Find the user from the DB
-//        User userInDb = userRepository.findUserByUsername(email)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//
-//        try {
-//            String filePath = saveImage(file);
-//            userInDb.setProfile_pic(filePath);
-//        } catch (IOException e) {
-//            return new RedirectView("/settings");
-//        }
-//
-//        // Update only allowed fields
-//        userInDb.setFirst_name(userFromForm.getFirst_name());
-//        userInDb.setLast_name(userFromForm.getLast_name());
-//        // Add others if needed: userInDb.setLastName(...), etc.
-//
-//        // Save the updated user
-//        userRepository.save(userInDb);
-//
-//        return new RedirectView("/settings");
-//    }
 
     @PostMapping("/settings")
     public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
@@ -113,8 +75,7 @@ public class UsersController {
 
         try {
             if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
-                saveImage(file); // Save to disk
+                String fileName = saveImage(file, userInDb.getId().toString()); // Save to disk
                 userInDb.setProfile_pic("/images/user_profile/" + fileName); // Or adjust path
             }
         } catch (IOException e) {
@@ -131,18 +92,34 @@ public class UsersController {
     }
 
 
-    private String saveImage(MultipartFile file) throws IOException {
+    private String saveImage(MultipartFile file, String userId) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
+        String contentType = file.getContentType();
+        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+            throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
+        }
+
         String fileName = file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
+        String extension = getFileExtension(fileName);
+        String newFileName = userId + extension;
+        Path filePath = uploadPath.resolve(newFileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return filePath.toString();
+        return newFileName;
     }
+
+        public static String getFileExtension(String fileName) {
+            Path path = Paths.get(fileName);
+            return Optional.ofNullable(path.getFileName())
+                    .map(Path::toString)
+                    .filter(f -> f.contains("."))
+                    .map(f -> f.substring(f.lastIndexOf(".")))
+                    .orElse("");
+        }
 
 
 }
