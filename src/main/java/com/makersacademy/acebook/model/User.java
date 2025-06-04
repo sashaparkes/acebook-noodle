@@ -18,6 +18,9 @@ public class User {
     private String last_name;
     private String profile_pic;
 
+    public User(){
+    }
+
     public User(String username) {
         this.enabled = TRUE;
     }
