@@ -42,20 +42,6 @@ public class PostsController {
         return "posts/index";
     }
 
-//    @GetMapping("/posts")
-//    public ModelAndView posts() {
-//        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
-//                .getContext()
-//                .getAuthentication()
-//                .getPrincipal();
-//
-//        String username = (String) principal.getAttributes().get("email");
-//        Optional<User> user = userRepository.findUserByUsername(username);
-//        ModelAndView posts = new ModelAndView("posts/index");
-//        posts.addObject("user", user);
-//        return posts;
-//    }
-
     @PostMapping("/posts")
     public RedirectView create(@ModelAttribute Post post) {
         repository.save(post);
