@@ -18,12 +18,11 @@
 
         <table th:each="notification: ${notifications}">
             <tr>
-                <div class="form-container">
-                    <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
-                        <button th:id="'read' + ${notification.id}" value="read" type="submit"><span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
-                        </button>
-                    </form  >
-                </div>
+                <form action="#" th:action="@{/notifications}+'/'+${{notification.id}}" th:object="${notification}" method="POST">
+                    <input type="hidden" name="id" th:value="${notification.id}">
+                    <button th:id="'read' + ${notification.id}" value="read" type="submit"><span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
+                    </button>
+                </form>
             </tr>
         </table>
     </body>

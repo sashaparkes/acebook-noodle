@@ -35,16 +35,16 @@ public class NotificationsController {
         model.addAttribute("senderNames", senderNames);
         return "notifications/index";
     }
-//
-//    @PostMapping("/notifications")
-//    public RedirectView markAsRead(@ModelAttribute Notification notification) {
-//        Optional<Notification> readNotification = notificationRepository.findById(1L);
-//        if (readNotification.isPresent()) {
-//            Notification notif = readNotification.get();
-//            notif.set_read(true);
-//            notificationRepository.save(notif);
-//        }
-////        notification.set_read(true);
-//        return new RedirectView("/notifications");
-//    }
+
+    @PostMapping("/notifications/{id}")
+    public RedirectView markAsRead(@ModelAttribute Notification notification, @RequestParam String id) {
+        Optional<Notification> readNotification = notificationRepository.findById(1L);
+        if (readNotification.isPresent()) {
+            Notification notif = readNotification.get();
+            notif.set_read(true);
+            notificationRepository.save(notif);
+        }
+//        notification.set_read(true);
+        return new RedirectView("/notifications");
+    }
 }
