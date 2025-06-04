@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Acebook</title>
+    </head>
+
+    <body>
+        <div id="post-body">
+            <h2>Here is post  <span th:text="${id}"></span>!
+            </h2>
+            Content: <span th:text="${post.content}"></span>
+        </div>
+    </body>
+</html>

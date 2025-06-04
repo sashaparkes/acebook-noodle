@@ -53,4 +53,19 @@ public class PostsController {
         }
         return new RedirectView("/posts");
     }
+
+    @GetMapping("/posts/{id}")
+    public ModelAndView viewPost(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("posts/post");
+        ModelAndView errorView = new ModelAndView("genericErrorPage");
+        Optional<Post> currentPost = postRepository.findById(id);
+        if (currentPost.isPresent()) {
+            Post post = currentPost.get();
+            modelAndView.addObject("post", post);
+            return modelAndView;
+        }
+        else {
+            return errorView;
+        }
+    }
 }
