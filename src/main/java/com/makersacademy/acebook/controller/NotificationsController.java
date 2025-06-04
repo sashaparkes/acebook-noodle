@@ -1,6 +1,7 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Notification;
+import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.NotificationRepository;
 import com.makersacademy.acebook.repository.UserRepository;
@@ -9,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
@@ -38,13 +42,16 @@ public class NotificationsController {
 
     @PostMapping("/notifications/{id}")
     public RedirectView markAsRead(@ModelAttribute Notification notification, @RequestParam String id) {
-        Optional<Notification> readNotification = notificationRepository.findById(1L);
+        Long notificationId = Long.parseLong(id);
+        Optional<Notification> readNotification = notificationRepository.findById(notificationId);
         if (readNotification.isPresent()) {
             Notification notif = readNotification.get();
             notif.set_read(true);
             notificationRepository.save(notif);
+            return new RedirectView("/notifications");
         }
-//        notification.set_read(true);
-        return new RedirectView("/notifications");
+        else {
+                return new RedirectView("genericErrorPage");
+        }
     }
 }
