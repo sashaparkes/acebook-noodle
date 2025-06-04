@@ -4,6 +4,8 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
@@ -65,9 +67,40 @@ public class UsersController {
 //        return new RedirectView("/settings");
 //    }
 
+//    @PostMapping("/settings")
+//    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
+//        // Get the logged-in user's email
+//        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+//                .getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+//
+//        String email = (String) principal.getAttributes().get("email");
+//
+//        // Find the user from the DB
+//        User userInDb = userRepository.findUserByUsername(email)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+//
+//        try {
+//            String filePath = saveImage(file);
+//            userInDb.setProfile_pic(filePath);
+//        } catch (IOException e) {
+//            return new RedirectView("/settings");
+//        }
+//
+//        // Update only allowed fields
+//        userInDb.setFirst_name(userFromForm.getFirst_name());
+//        userInDb.setLast_name(userFromForm.getLast_name());
+//        // Add others if needed: userInDb.setLastName(...), etc.
+//
+//        // Save the updated user
+//        userRepository.save(userInDb);
+//
+//        return new RedirectView("/settings");
+//    }
+
     @PostMapping("/settings")
-    public RedirectView update(@ModelAttribute User userFromForm) {
-        // Get the logged-in user's email
+    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -75,23 +108,41 @@ public class UsersController {
 
         String email = (String) principal.getAttributes().get("email");
 
-        // Find the user from the DB
         User userInDb = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Update only allowed fields
+        try {
+            if (!file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                saveImage(file); // Save to disk
+                userInDb.setProfile_pic("/images/user_profile/" + fileName); // Or adjust path
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // optionally log it
+            return new RedirectView("/settings?error=file");
+        }
+
         userInDb.setFirst_name(userFromForm.getFirst_name());
         userInDb.setLast_name(userFromForm.getLast_name());
-        userInDb.setProfile_pic(userFromForm.getProfile_pic());
-        // Add others if needed: userInDb.setLastName(...), etc.
 
-        // Save the updated user
         userRepository.save(userInDb);
 
         return new RedirectView("/settings");
     }
 
 
+    private String saveImage(MultipartFile file) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return filePath.toString();
+    }
 
 
 }
