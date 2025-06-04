@@ -13,7 +13,8 @@
     <h1>Posts</h1>
 
     <div sec:authorize="isAuthenticated()" id="greeting">
-        Signed in as <span sec:authentication="principal.attributes['email']"></span>
+        Signed in as <span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"> </span>
+        <img th:src="@{${user.profile_pic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
     </div>
 
     <form action="#" th:action="@{/posts}" th:object="${post}" method="post">

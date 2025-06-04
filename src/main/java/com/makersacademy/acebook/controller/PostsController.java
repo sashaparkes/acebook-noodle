@@ -6,11 +6,15 @@ import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,6 +22,7 @@ public class PostsController {
 
     @Autowired
     PostRepository postRepository;
+
     @Autowired
     UserRepository userRepository;
 
@@ -26,6 +31,16 @@ public class PostsController {
         Iterable<Post> posts = postRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
+
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        String username = (String) principal.getAttributes().get("email");
+        User user = userRepository.findUserByUsername(username).get();
+        model.addAttribute("user", user);
+
         return "posts/index";
     }
 
