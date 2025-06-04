@@ -6,10 +6,10 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-<!--        <link rel="stylesheet" href="../../static/main.css" />-->
+<!--        <link rel="stylesheet" href="static/main.css" />-->
     </head>
-    <body>
 
+    <body>
         <h1>Notifications</h1>
 
         <div sec:authorize="isAuthenticated()" id="greeting">
@@ -18,11 +18,12 @@
 
         <table th:each="notification: ${notifications}">
             <tr>
-                <form action="#" th:action="@{/notifications}" th:object="${notification}" method="post">
-<!--                    <input type="hidden" th:field="*{id}" />-->
-                    <button th:id="'markAsRead_' + ${notification.id}" value="read" type="submit"><span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
-                    </button>
-                </form>
+                <div class="form-container">
+                    <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
+                        <button th:id="'read' + ${notification.id}" value="read" type="submit"><span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
+                        </button>
+                    </form  >
+                </div>
             </tr>
         </table>
     </body>
