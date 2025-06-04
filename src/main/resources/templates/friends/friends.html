@@ -10,12 +10,14 @@
 
 <h2>Friend Requests</h2>
 <ul>
-  <li th:each="requester : ${requesterUsers}"th:text="${requester.id}" th:text="${request.username}"></li>
+  <li th:each="requester : ${requesterUsers}"
+      th:text="${requester.first_name + ' ' + requester.last_name}"></li>
 </ul>
 
 <h2>Your Friends</h2>
 <ul>
-  <li th:each="friend : ${friendUsers}" th:text="${friend.username}"></li>
+  <li th:each="friend : ${friendUsers}"
+      th:text="${friend.first_name + ' ' + friend.last_name}"></li>
 </ul>
 
 </body>
