@@ -73,6 +73,8 @@
     </form>
 
     <ul th:each="post: ${posts}">
+        <img th:src="@{${post.user.profile_pic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
+        <strong th:text="${post.user.first_name + ' ' + post.user.last_name}"></strong>:
         <li th:text="${post.content}" />
     </ul>
     <!--        script for bootstrap  -->
