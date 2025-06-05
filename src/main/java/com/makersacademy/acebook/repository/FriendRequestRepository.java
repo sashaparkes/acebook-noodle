@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface FriendRequestRepository extends CrudRepository<FriendRequest, Long> {
     List<FriendRequest> findAllByReceiverIdAndStatus(Long receiverId, String status);
 
+    Optional<FriendRequest> findByRequesterIdAndReceiverIdAndStatus(Long requesterId, Long currentUserId, String pending);
 }
