@@ -10,7 +10,9 @@
     </head>
     <body>
 
-    <h1>Posts</h1>
+    <h1 id="Title">Posts</h1>
+
+    <a href="/settings">Settings</a>
 
     <div sec:authorize="isAuthenticated()" id="greeting">
         Signed in as <span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"> </span>

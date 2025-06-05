@@ -17,7 +17,7 @@ import java.time.Duration;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class SignUpTest {
+public class SettingsTest {
 
     WebDriver driver;
     Faker faker;
@@ -35,27 +35,24 @@ public class SignUpTest {
     }
 
     @Test
-    public void userCanSignUp() {
-        String email = faker.name().username() + "@email.com";
-        String givenName = faker.name().firstName();
-        String familyName = faker.name().lastName();
-
+    public void successfulGetRequestOnSettingsPage() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get("http://localhost:8080/");
         driver.findElement(By.linkText("Login / Sign Up")).click();
-        driver.findElement(By.xpath("(//a[text()='Sign Up'])[1]")).click();
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("given_name")).sendKeys(givenName);
-        driver.findElement(By.name("family_name")).sendKeys(familyName);
+        driver.findElement(By.name("email")).sendKeys(
+                "winona.anderson@email.com");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement passwordField = wait.until(
                 ExpectedConditions.elementToBeClickable(By.id("1-password"))
         );
         passwordField.sendKeys("Password123");
         driver.findElement(By.className("auth0-label-submit")).click();
-        driver.findElement(By.name("action")).click();
+        WebElement settingsLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.linkText("Settings"))
+        );
+        settingsLink.click();
         String actualTitle = driver.getTitle();
-        assertThat(actualTitle, containsString("Acebook"));
+        assertThat(actualTitle, containsString("Settings"));
 
     }
 }
