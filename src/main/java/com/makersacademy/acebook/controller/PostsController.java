@@ -1,10 +1,16 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.dto.CommentDto;
+import com.makersacademy.acebook.model.Comment;
+import com.makersacademy.acebook.model.Comment;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.makersacademy.acebook.service.CommentLikeService;
+import com.makersacademy.acebook.service.CommentService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -20,11 +26,20 @@ import java.util.Optional;
 @Controller
 public class PostsController {
 
-    @Autowired
-    PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
 
-    @Autowired
-    UserRepository userRepository;
+    public PostsController(PostRepository postRepository,
+                           UserRepository userRepository,
+                           CommentService commentService,
+                           CommentLikeService commentLikeService) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.commentService = commentService;
+        this.commentLikeService = commentLikeService;
+    }
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -58,14 +73,38 @@ public class PostsController {
     public ModelAndView viewPost(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("posts/post");
         ModelAndView errorView = new ModelAndView("genericErrorPage");
+
         Optional<Post> currentPost = postRepository.findById(id);
-        if (currentPost.isPresent()) {
-            Post post = currentPost.get();
-            modelAndView.addObject("post", post);
-            return modelAndView;
-        }
-        else {
+        if (currentPost.isEmpty()) {
             return errorView;
         }
+
+        Post post = currentPost.get();
+        List<Comment> commentEntities = commentService.getCommentsForPost(id);
+
+        List<CommentDto> commentDtos = commentEntities.stream()
+                .map(comment -> {
+                    String displayName = comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
+                    long likesCount = commentService.getLikesCount(comment.getId());
+                    List<String> likers = commentLikeService.getLikersForComment(comment.getId());
+
+                    return new CommentDto(
+                            comment.getId(),
+                            comment.getContent(),
+                            displayName,
+                            comment.getCreatedAt(),
+                            likesCount,
+                            likers
+                    );
+                })
+                .toList();
+
+        modelAndView.addObject("post", post);
+        modelAndView.addObject("comments", commentDtos);
+        modelAndView.addObject("newComment", new Comment());
+
+        return modelAndView;
     }
+
 }
+

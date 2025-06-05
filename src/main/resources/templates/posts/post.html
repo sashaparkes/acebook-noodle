@@ -1,18 +1,69 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Acebook</title>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Post #' + ${post.id}">Post Detail</title>
+</head>
 
-    <body>
-        <div id="post-body">
-            <h2>Here is post  <span th:text="${id}"></span>!
-            </h2>
-            Content: <span th:text="${post.content}"></span>
-        </div>
-    </body>
+<body>
+
+<div id="post-body">
+    <h2>Post #<span th:text="${post.id}"></span></h2>
+    <p th:text="${post.content}"></p>
+</div>
+
+<hr/>
+
+<div id="comments-section">
+    <h3>Comments</h3>
+    <div th:if="${comments.size() == 0}">
+        <p>No comments yet. Be the first to comment!</p>
+    </div>
+
+    <ul>
+        <li th:each="comment : ${comments}">
+            <p>
+            <p>
+                <strong th:text="${comment.displayName}">Name</strong> said:
+            </p>
+            <p th:text="${comment.content}">Comment content</p>
+            <p><small th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Date</small></p>
+
+            <form th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <button type="submit">Like</button>
+            </form>
+
+            <!-- Show likes count -->
+            <p>Likes: <span th:text="${comment.likesCount}">0</span></p>
+
+            <!-- Show who liked -->
+            <p th:if="${comment.likers != null and !comment.likers.isEmpty()}">
+                Liked by:
+                <span th:each="liker, iterStat : ${comment.likers}">
+        <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+    </span>
+            </p>
+
+        </li>
+    </ul>
+</div>
+
+<hr/>
+
+<div id="add-comment-section">
+    <h3>Add a Comment</h3>
+    <form th:action="@{/posts/comments}" method="post">
+        <input type="hidden" name="postId" th:value="${post.id}" />
+        <textarea name="content" placeholder="Write your comment here..." rows="4" cols="50" required></textarea>
+        <br/>
+        <button type="submit">Submit Comment</button>
+    </form>
+</div>
+
+</body>
 </html>
+

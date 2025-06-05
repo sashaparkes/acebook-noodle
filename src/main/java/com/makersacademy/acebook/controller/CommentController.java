@@ -7,12 +7,15 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.CommentService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-@RestController
-@RequestMapping("/post/comments")
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
+@Controller
+@RequestMapping("/posts/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -25,25 +28,31 @@ public class CommentController {
         this.userRepository = userRepository;
     }
 
+    // This endpoint can be used for API calls or AJAX, but optional depending on needs:
     @GetMapping("/post/{postId}")
+    @ResponseBody
     public List<Comment> getCommentsByPost(@PathVariable Long postId) {
         return commentService.getCommentsForPost(postId);
     }
 
+    // Handle form POST to add a comment, then redirect back to post detail page
     @PostMapping
-    public Comment createComment(@RequestBody CommentRequest request) {
+    public RedirectView createComment(@ModelAttribute CommentRequest request,
+                                      @AuthenticationPrincipal(expression = "attributes['email']") String email) {
         Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        User user = userRepository.findById(request.getUserId())
+
+        User user = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Long commentId = 0L;
-        Comment comment = new Comment(commentId);
+        Comment comment = new Comment();
         comment.setPost(post);
         comment.setUser(user);
         comment.setContent(request.getContent());
 
-        return commentService.addComment(comment);
+        commentService.addComment(comment);
+        return new RedirectView("/posts/" + post.getId());
     }
-}
 
+
+}

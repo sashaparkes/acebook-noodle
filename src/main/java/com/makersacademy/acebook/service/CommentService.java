@@ -1,4 +1,5 @@
 package com.makersacademy.acebook.service;
+import com.makersacademy.acebook.service.CommentService;
 
 import com.makersacademy.acebook.model.Comment;
 import com.makersacademy.acebook.model.CommentLike;
@@ -29,13 +30,13 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsForPost(Long postId) {
-        return commentRepository.findByPost_IdOrderByCreatedAtDesc(postId);
+        return commentRepository.findByPost_IdOrderByCreatedAtAsc(postId);
     }
 
     @Transactional
     public void likeComment(Long userId, Long commentId) {
         boolean alreadyLiked = commentLikeRepository
-                .findByUser_IdAndComment_Id(userId, commentId)
+                .findByUserIdAndCommentId(userId, commentId)
                 .isPresent();
 
         if (!alreadyLiked) {
@@ -48,10 +49,13 @@ public class CommentService {
 
     @Transactional
     public void unlikeComment(Long userId, Long commentId) {
-        commentLikeRepository.deleteByUser_IdAndComment_Id(userId, commentId);
+        commentLikeRepository.deleteByUserIdAndCommentId(userId, commentId);
     }
 
     public long getLikesCount(Long commentId) {
-        return commentLikeRepository.countByComment_Id(commentId);
+        return commentLikeRepository.countByCommentId(commentId);
     }
+
+
+
 }
