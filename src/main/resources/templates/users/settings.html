@@ -56,13 +56,13 @@
 
 <form th:action="@{/settings}" th:object="${user}" method="post" enctype="multipart/form-data">
     <label th:for="first_name">First Name:</label>
-    <input type="text" th:field="*{first_name}"/> <br>
-    <label th:for="last_name">Last Name:</label>
-    <input type="text" th:field="*{last_name}"/> <br>
-    <label th:for="profile_pic">Profile Picture:</label>
-    <input type="file" name="file"/> <br>
+  <input type="text" th:field="*{first_name}"/> <br>
+  <label th:for="last_name">Last Name:</label>
+  <input type="text" th:field="*{last_name}"/> <br>
+  <label th:for="profile_pic">Profile Picture:</label>
+  <input type="file" name="file"/> <br>
     <input type="submit" value="Submit"/>
-    <input type="reset" value="Reset" />
+  <input type="reset" value="Reset" />
 </form>
 
 </body>

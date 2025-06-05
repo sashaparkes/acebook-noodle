@@ -40,4 +40,7 @@ public class User {
         this.last_name = last_name;
         this.profile_pic = profile_pic;
     }
+
+    public User(Long userId) {
+    }
 }
