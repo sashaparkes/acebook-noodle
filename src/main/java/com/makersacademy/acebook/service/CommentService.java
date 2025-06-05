@@ -40,8 +40,8 @@ public class CommentService {
 
         if (!alreadyLiked) {
             CommentLike like = new CommentLike();
-            like.setUser(new User(userId));           // assumes User(Long id) constructor exists
-            like.setComment(new Comment(commentId));  // assumes Comment(Long id) constructor exists
+            like.setUserId(userId);
+            like.setCommentId(commentId);
             commentLikeRepository.save(like);
         }
     }

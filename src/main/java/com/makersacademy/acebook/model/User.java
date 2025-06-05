@@ -14,25 +14,33 @@ public class User {
     private Long id;
     private String username;
     private boolean enabled;
+    private String first_name;
+    private String last_name;
+    private String profile_pic;
 
-    // No-arg constructor (required by JPA)
-    public User() {
-        this.enabled = TRUE;
-    }
-
-    // Constructor with ID only — for setting references (e.g., CommentLike)
-    public User(Long userId) {
-        this.id = userId;
-        this.enabled = TRUE;
+    public User(){
     }
 
     public User(String username) {
-        this.username = username;
         this.enabled = TRUE;
     }
 
-    public User(String username, boolean enabled) {
+    public User(String username, String first_name, String last_name, String profile_pic) {
+        this.username = username;
+        this.enabled = TRUE;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.profile_pic = profile_pic;
+    }
+
+    public User(String username, boolean enabled, String first_name, String last_name, String profile_pic) {
         this.username = username;
         this.enabled = enabled;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.profile_pic = profile_pic;
+    }
+
+    public User(Long userId) {
     }
 }
