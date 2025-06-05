@@ -17,8 +17,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private Long user_id; // current user is populated in PostController
+    @Column(name="user_id")
+    private Long userId; // current user is populated in PostController
     @CreationTimestamp
-    private Timestamp time_posted;
+    @Column(name="time_posted")
+    private Timestamp timePosted;
 
 }

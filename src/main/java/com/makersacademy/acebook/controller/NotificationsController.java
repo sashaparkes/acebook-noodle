@@ -5,7 +5,8 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.NotificationRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,30 +22,44 @@ public class NotificationsController {
     @Autowired
     UserRepository userRepository;
 
+
+    // Get notifications for current user
     @GetMapping("/notifications")
     public String index(Model model) {
-        List<Notification> notifications = new ArrayList<>();
-        notificationRepository.findAll().forEach(notifications::add);
-        Collections.reverse(notifications);
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        String username = (String) principal.getAttributes().get("email");
+        User currentUser = userRepository.findUserByUsername(username).get();
+
+        Collection<Notification> notifications = new ArrayList<>();
+        notifications.addAll(notificationRepository.findByReceivingUserIdOrderByCreatedAtDesc(2L));
         Map<Long, String> senderNames = new HashMap<>();
         for (Notification notification : notifications) {
-            Optional<User> sender = userRepository.findById(notification.getSending_user_id());
-            sender.ifPresent(user -> senderNames.put(notification.getId(), user.getUsername())); //needs updated with proper User getFirstName
+            Optional<User> sender = userRepository.findById(notification.getSendingUserId());
+            sender.ifPresent(user -> senderNames.put(notification.getId(), user.getFirst_name()));
         }
         model.addAttribute("notifications", notifications);
         model.addAttribute("senderNames", senderNames);
         return "notifications/index";
     }
-//
-//    @PostMapping("/notifications")
-//    public RedirectView markAsRead(@ModelAttribute Notification notification) {
-//        Optional<Notification> readNotification = notificationRepository.findById(1L);
-//        if (readNotification.isPresent()) {
-//            Notification notif = readNotification.get();
-//            notif.set_read(true);
-//            notificationRepository.save(notif);
-//        }
-////        notification.set_read(true);
-//        return new RedirectView("/notifications");
-//    }
+
+
+    // Mark notification as read, redirect to specific post page
+    @PostMapping("/notifications")
+    public RedirectView markAsRead(@ModelAttribute Notification notification, @RequestParam String id) {
+        Long notificationId = Long.parseLong(id);
+        Optional<Notification> readNotification = notificationRepository.findById(notificationId);
+        if (readNotification.isPresent()) {
+            Notification activeNotification = readNotification.get();
+            activeNotification.setRead(true);
+            notificationRepository.save(activeNotification);
+            String postId = Long.toString(activeNotification.getPostId());
+            return new RedirectView("/posts/" + postId);
+        }
+        else {
+                return new RedirectView("genericErrorPage");
+        }
+    }
 }
