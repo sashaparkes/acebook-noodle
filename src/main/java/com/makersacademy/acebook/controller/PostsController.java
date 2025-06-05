@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -22,13 +21,14 @@ public class PostsController {
 
     @Autowired
     PostRepository postRepository;
-
     @Autowired
     UserRepository userRepository;
 
+
+    // View all posts
     @GetMapping("/posts")
     public String index(Model model) {
-        Iterable<Post> posts = postRepository.findAll();
+        Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
 
@@ -44,16 +44,20 @@ public class PostsController {
         return "posts/index";
     }
 
+
+    // Create new post
     @PostMapping("/posts")
     public RedirectView create(@ModelAttribute Post post, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
         Optional<User> user = userRepository.findUserByUsername(email);
         if (user.isPresent()) {
-            post.setUser_id(user.get().getId());
+            post.setUserId(user.get().getId());
             postRepository.save(post);
         }
         return new RedirectView("/posts");
     }
 
+
+    //View specific post
     @GetMapping("/posts/{id}")
     public ModelAndView viewPost(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("posts/post");
