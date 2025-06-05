@@ -18,11 +18,17 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long receiving_user_id;
-    private Long sending_user_id;
+
+    @Column(name="receiving_user_id")
+    private Long receivingUserId;
+    @Column(name="sending_user_id")
+    private Long sendingUserId;
     private String type;
-    private Long post_id;
-    private boolean is_read;
-    private Timestamp created_at;
+    @Column(name= "post_id")
+    private Long postId;
+    @Column(name="is_read")
+    private boolean isRead;
+    @Column(name="created_at")
+    private Timestamp createdAt;
 
 }
