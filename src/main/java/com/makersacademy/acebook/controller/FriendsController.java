@@ -103,11 +103,13 @@ public class FriendsController {
             Friend friendship1 = new Friend();
             friendship1.setMainUserId(currentUserId);
             friendship1.setFriendUserId(requesterId);
+            friendship1.setFriendsSince(now);
             friendRepository.save(friendship1);
 
             Friend friendship2 = new Friend();
             friendship2.setMainUserId(requesterId);
             friendship2.setFriendUserId(currentUserId);
+            friendship2.setFriendsSince(now);
             friendRepository.save(friendship2);
 
         } else if (decision.equals("decline")) {
