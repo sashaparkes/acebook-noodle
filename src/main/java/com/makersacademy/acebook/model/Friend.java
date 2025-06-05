@@ -3,6 +3,7 @@ package com.makersacademy.acebook.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 // Composite key class
 @Data
@@ -28,4 +29,7 @@ public class Friend {
     @Id
     @Column(name = "friend_user_id")
     private Long friendUserId;
+
+    @Column(name = "friends_since")
+    private Timestamp friendsSince;
 }

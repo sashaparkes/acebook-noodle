@@ -11,14 +11,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +71,55 @@ public class FriendsController {
         modelAndView.addObject("requesterUsers", requesterUsers);
 
         return modelAndView;
+    }
+
+    @PostMapping("/friend_request/{requesterId}")
+    public RedirectView respondToFriendRequest(
+            @PathVariable Long requesterId,
+            @RequestParam String decision,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        // Get Friend Request!
+        Optional<FriendRequest> friendRequestOptional = friendRequestRepository
+                .findByRequesterIdAndReceiverIdAndStatus(requesterId, currentUserId, "pending");
+
+
+        FriendRequest friendRequest = friendRequestOptional.get();
+
+        if (decision.equals("accept")) {
+            friendRequest.setStatus("accepted");
+            Instant instant = Instant.now();
+            Timestamp now = Timestamp.from(instant);
+            friendRequest.setRespondedAt(now);
+            friendRequestRepository.save(friendRequest);
+
+
+            Friend friendship1 = new Friend();
+            friendship1.setMainUserId(currentUserId);
+            friendship1.setFriendUserId(requesterId);
+            friendship1.setFriendsSince(now);
+            friendRepository.save(friendship1);
+
+            Friend friendship2 = new Friend();
+            friendship2.setMainUserId(requesterId);
+            friendship2.setFriendUserId(currentUserId);
+            friendship2.setFriendsSince(now);
+            friendRepository.save(friendship2);
+
+        } else if (decision.equals("decline")) {
+            friendRequest.setStatus("rejected");
+//            friendRequest.setRespondedAt();
+            friendRequestRepository.save(friendRequest);
+        }
+
+        return new RedirectView("/friends");
+    }
 
 //    @PostMapping("/friends")
 //    public RedirectView create(@ModelAttribute Friend friend, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
@@ -83,4 +130,4 @@ public class FriendsController {
 //        return new RedirectView("friends/friends");
 //    }
     }
-}
+
