@@ -17,11 +17,11 @@ public class UserTest {
     public void userIsEnabled() {assertEquals(true, user.isEnabled());}
 
     @Test
-    public void userHasFirstName() {assertThat(user.getFirst_name(), containsString("Sasha"));}
+    public void userHasFirstName() {assertThat(user.getFirstName(), containsString("Sasha"));}
 
     @Test
-    public void userHasLastName() {assertThat(user.getLast_name(), containsString("Parkes"));}
+    public void userHasLastName() {assertThat(user.getLastName(), containsString("Parkes"));}
 
     @Test
-    public void userHasProfilePic() {assertThat(user.getProfile_pic(), containsString("images/profile/default.jpeg"));}
+    public void userHasProfilePic() {assertThat(user.getProfilePic(), containsString("images/profile/default.jpeg"));}
 }
