@@ -1,5 +1,6 @@
 html, body {
     background-color: #fbf4e6 !important;
+    padding-top: 35px;
 }
 
 .posts-main {
@@ -13,10 +14,24 @@ html, body {
     margin-bottom: 0.5rem;;
 }
 
-.navbar-brand,
 .navbar-text,
-.navbar-link {
+.nav-link {
+    line-height: 1 !important;
+    #655e4e!important;
 }
+
+.nav-link:hover {
+    color: #cc3939!important;
+}
+
+.greeting {
+    color: #655e4e!important;
+}
+
+.greeting:hover {
+    color: #655e4e!important;
+}
+
 
 .navbar {
     background-color: #e6d7b7
