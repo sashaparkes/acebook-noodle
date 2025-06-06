@@ -56,25 +56,29 @@
 <h2>Friend Requests</h2>
 <ul>
   <li th:each="requester : ${requesterUsers}">
-      <span th:text="${requester.first_name + ' ' + requester.last_name}"></span>
-      <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
+      <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>
+      <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
       <button type="submit" name="decision" value="accept">Accept</button>
       <button type="submit" name="decision" value="decline">Decline</button>
       </form>
   </li>
 </ul>
 
-    <h2>Your Friends</h2>
+<h2>Your Friends</h2>
     <ul>
         <li th:each="friend : ${friendUsers}">
-            <span th:text="${friend.first_name + ' ' + friend.last_name}"></span>
+            <span th:text="${friend.firstName + ' ' + friend.lastName}"></span>
             <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
                 <button type="submit">Remove Friend</button>
             </form>
         </li>
     </ul>
-<!--        script for bootstrap  -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!--        scripts for bootstrap  -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <!--        end scripts for bootstrap  -->
 </body>
 </html>
 

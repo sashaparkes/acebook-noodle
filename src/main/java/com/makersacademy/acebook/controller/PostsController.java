@@ -1,9 +1,13 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.dto.CommentDto;
+import com.makersacademy.acebook.model.Comment;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.CommentLikeService;
+import com.makersacademy.acebook.service.CommentService;
 import com.makersacademy.acebook.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +28,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import lombok.*;
+
 
 @Controller
 public class PostsController {
@@ -35,12 +41,31 @@ public class PostsController {
     @Autowired
     ImageStorageService imageStorageService;
 
+    //    private final PostRepository postRepository;
+    //    private final UserRepository userRepository;
+    private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
+
+
+    public PostsController(PostRepository postRepository,
+                           UserRepository userRepository,
+                           CommentService commentService,
+                           CommentLikeService commentLikeService) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.commentService = commentService;
+        this.commentLikeService = commentLikeService;
+    }
+
+
+
     @Value("${file.upload-dir.post-images}")
     private String uploadDir;
 
     // View all posts
     @GetMapping("/posts")
     public String index(Model model) {
+        // Finds all posts and shows them in reverse chronological order
         Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
@@ -52,8 +77,8 @@ public class PostsController {
                 .getAuthentication()
                 .getPrincipal();
 
-        // Uses the pricipal variable above to extract email and assign to username var
-        // Then utilises the 'username' variable to search the database and return matching User object
+        // Uses the principal variable above to extract email and assign to username var
+        // Then utilizes the 'username' variable to search the database and return matching User object
         // Adds the user object to the model (page)
         String username = (String) principal.getAttributes().get("email");
         User user = userRepository.findUserByUsername(username).get();
@@ -95,13 +120,36 @@ public class PostsController {
         ModelAndView modelAndView = new ModelAndView("posts/post");
         ModelAndView errorView = new ModelAndView("genericErrorPage");
         Optional<Post> currentPost = postRepository.findById(id);
-        if (currentPost.isPresent()) {
-            Post post = currentPost.get();
-            modelAndView.addObject("post", post);
-            return modelAndView;
+        if (currentPost.isEmpty()) {
+            return errorView;
         }
         else {
-            return errorView;
+            Post post = currentPost.get();
+
+            List<Comment> commentEntities = commentService.getCommentsForPost(id);
+            List<CommentDto> commentDtos = commentEntities.stream()
+                    .map(comment -> {
+                        String displayName = comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
+                        long likesCount = commentService.getLikesCount(comment.getId());
+                        List<String> likers = commentLikeService.getLikersForComment(comment.getId());
+
+                        return new CommentDto(
+                                comment.getId(),
+                                comment.getContent(),
+                                displayName,
+                                comment.getCreatedAt(),
+                                likesCount,
+                                likers,
+                                comment.getUser().getProfilePic()
+                        );
+                    })
+                    .toList();
+
+            modelAndView.addObject("post", post);
+            modelAndView.addObject("comments", commentDtos);
+            modelAndView.addObject("newComment", new Comment());
+            return modelAndView;
         }
     }
 }
+

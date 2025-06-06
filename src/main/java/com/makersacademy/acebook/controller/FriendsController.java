@@ -54,7 +54,7 @@ public class FriendsController {
         }
 
         // Sort the users into alphabetical order!
-        friendUsers.sort(Comparator.comparing(User::getFirst_name));
+        friendUsers.sort(Comparator.comparing(User::getFirstName));
 
 
         // Friend Requests!
