@@ -83,8 +83,8 @@ public class UsersController {
             return new RedirectView("/settings?error=file");
         }
 
-        userInDb.setFirst_name(userFromForm.getFirst_name());
-        userInDb.setLast_name(userFromForm.getLast_name());
+        userInDb.setFirstName(userFromForm.getFirstName());
+        userInDb.setLastName(userFromForm.getLastName());
 
         userRepository.save(userInDb);
 
