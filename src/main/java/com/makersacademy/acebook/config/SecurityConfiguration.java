@@ -33,7 +33,10 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/images/**").permitAll()
+                        .requestMatchers("/",
+                                "/main.css",
+                                "/images/**",
+                                "/favicon.png").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

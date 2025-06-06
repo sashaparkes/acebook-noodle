@@ -22,6 +22,6 @@ public class UserTest {
     @Test
     public void userHasLastName() {assertThat(user.getLast_name(), containsString("Parkes"));}
 
-//    @Test
-//    public void userHasProfilePic() {assertThat(user.getProfile_pic(), containsString("image/profpic"));}
+    @Test
+    public void userHasProfilePic() {assertThat(user.getProfile_pic(), containsString("images/profile/default.jpeg"));}
 }
