@@ -43,12 +43,8 @@ public class ImageStorageService {
             throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
         }
 
-        // Removes underscores from filenames
-        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String cleanFileName = UUID.randomUUID() + "_" + originalFileName;
-
-        // Updates filename using id parameter and concatenating with file extension (getFileExtension function is below)
-        String extension = getFileExtension(cleanFileName);
+        // Extracts the file extension from the filename, and concatenates with
+        String extension = getFileExtension(file.getOriginalFilename());
         String newFileName = id + extension;
 
         // These two blocks handle setting the upload path and getting the file stored in right location
@@ -64,9 +60,7 @@ public class ImageStorageService {
     }
 
     public static String getFileExtension(String fileName) {
-        Path path = Paths.get(fileName);
-        return Optional.ofNullable(path.getFileName())
-                .map(Path::toString)
+        return Optional.ofNullable(fileName)
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(f.lastIndexOf(".")))
                 .orElse("");

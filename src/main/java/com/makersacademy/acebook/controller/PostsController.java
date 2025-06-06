@@ -73,13 +73,12 @@ public class PostsController {
 
             // Sets post image as uploaded image - uses postsList finding the index of the first list item (most recent
             // post) and adds 1, so that the filename of the image corresponds with the id for the new post
-            // Prevents unintended duplication / replacement
-            if (!file.isEmpty()) {
                 List<Post> postsList = postRepository.findByOrderByTimePostedDesc();
                 Post lastPost = postsList.getFirst();
                 String fileName = imageStorageService.storePostImage(file, String.valueOf(lastPost.getId() + 1));
-                post.setImage(fileName);
-            }
+                if (fileName != null) {
+                    post.setImage(fileName);
+                }
 
             postRepository.save(post);
         }
