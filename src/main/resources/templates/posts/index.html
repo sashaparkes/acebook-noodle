@@ -70,20 +70,10 @@ V2
         <p>Say Something: <input type="text" th:field="*{content}" /></p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>-->
-        <p>Say Something: <input type="text" th:field="*{content}" /></p>
-        <input type="text" name="content" /> <!-- no th:field -->
+        <p>Say Something: <input type="text" name="content"/></p>
+<!--        <input type="text" name="content" /> &lt;!&ndash; no th:field &ndash;&gt;-->
         <input type="file" name="image" />
         <input type="submit" />
-    </form>
-
-    <div sec:authorize="isAuthenticated()" id="greeting">
-        Signed in as <span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"> </span>
-        <img th:src="@{${user.profile_pic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
-    </div>
-
-    <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
-        <p>Content: <input type="text" th:field="*{content}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
 
     <div class = "post container">

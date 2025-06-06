@@ -111,6 +111,7 @@ public class UsersController {
 
         return new RedirectView("/settings");
     }
+}
 //
 //    // Function to handle saving an uploaded image - takes a file and a userId string (for unique saving) as inputs)
 //    private String saveImage(MultipartFile file, String userId) throws IOException {
