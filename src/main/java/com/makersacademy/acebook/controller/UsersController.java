@@ -2,6 +2,7 @@ package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,10 @@ public class UsersController {
     @Autowired
     UserRepository userRepository;
 
-    @Value("${file.upload-dir}")
+    @Autowired
+    private ImageStorageService imageStorageService;
+
+    @Value("${file.upload-dir.user-profile}")
     private String uploadDir;
 
     @GetMapping("/users/after-login")
@@ -47,7 +51,7 @@ public class UsersController {
     }
 
     @GetMapping("/settings")
-    public ModelAndView settings(){
+    public ModelAndView settings() {
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -62,7 +66,7 @@ public class UsersController {
     }
 
     @PostMapping("/settings")
-    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
+    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) throws IOException {
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -73,15 +77,7 @@ public class UsersController {
         User userInDb = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        try {
-            if (!file.isEmpty()) {
-                String fileName = saveImage(file, userInDb.getId().toString()); // Save to disk
-                userInDb.setProfile_pic("/images/user_profile/" + fileName); // Or adjust path
-            }
-        } catch (IOException e) {
-            e.printStackTrace(); // optionally log it
-            return new RedirectView("/settings?error=file");
-        }
+        imageStorageService.storeProfileImage(file, String.valueOf(userInDb.getId()));
 
         userInDb.setFirst_name(userFromForm.getFirst_name());
         userInDb.setLast_name(userFromForm.getLast_name());
@@ -91,35 +87,67 @@ public class UsersController {
         return new RedirectView("/settings");
     }
 
-
-    private String saveImage(MultipartFile file, String userId) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        String contentType = file.getContentType();
-        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
-            throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
-        }
-
-        String fileName = file.getOriginalFilename();
-        String extension = getFileExtension(fileName);
-        String newFileName = userId + extension;
-        Path filePath = uploadPath.resolve(newFileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return newFileName;
-    }
-
-        public static String getFileExtension(String fileName) {
-            Path path = Paths.get(fileName);
-            return Optional.ofNullable(path.getFileName())
-                    .map(Path::toString)
-                    .filter(f -> f.contains("."))
-                    .map(f -> f.substring(f.lastIndexOf(".")))
-                    .orElse("");
-        }
-
-
 }
+
+//    @PostMapping("/settings")
+//    public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) {
+//        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+//                .getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+//
+//        String email = (String) principal.getAttributes().get("email");
+//
+//        User userInDb = userRepository.findUserByUsername(email)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+//
+//        try {
+//            if (!file.isEmpty()) {
+//                String fileName = saveImage(file, userInDb.getId().toString()); // Save to disk
+//                userInDb.setProfile_pic("/images/user_profile/" + fileName); // Or adjust path
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace(); // optionally log it
+//            return new RedirectView("/settings?error=file");
+//        }
+//
+//        userInDb.setFirst_name(userFromForm.getFirst_name());
+//        userInDb.setLast_name(userFromForm.getLast_name());
+//
+//        userRepository.save(userInDb);
+//
+//        return new RedirectView("/settings");
+//    }
+//
+//
+//    private String saveImage(MultipartFile file, String userId) throws IOException {
+//        Path uploadPath = Paths.get(uploadDir);
+//        if (!Files.exists(uploadPath)) {
+//            Files.createDirectories(uploadPath);
+//        }
+//
+//        String contentType = file.getContentType();
+//        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+//            throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
+//        }
+//
+//        String fileName = file.getOriginalFilename();
+//        String extension = getFileExtension(fileName);
+//        String newFileName = userId + extension;
+//        Path filePath = uploadPath.resolve(newFileName);
+//        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//
+//        return newFileName;
+//    }
+//
+//        public static String getFileExtension(String fileName) {
+//            Path path = Paths.get(fileName);
+//            return Optional.ofNullable(path.getFileName())
+//                    .map(Path::toString)
+//                    .filter(f -> f.contains("."))
+//                    .map(f -> f.substring(f.lastIndexOf(".")))
+//                    .orElse("");
+//        }
+//
+//
+//}

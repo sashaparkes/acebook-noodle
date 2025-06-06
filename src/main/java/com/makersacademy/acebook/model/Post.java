@@ -22,5 +22,6 @@ public class Post {
     @CreationTimestamp
     @Column(name="time_posted")
     private Timestamp timePosted;
+    private String image;
 
 }

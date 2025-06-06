@@ -13,7 +13,7 @@ public class PostTest {
     Instant instant = Instant.now();
     Timestamp now = Timestamp.from(instant);
 
-	private Post post = new Post(null, "hello", 1L, now);
+	private Post post = new Post(null, "hello", 1L, now, null);
 
 	@Test
 	public void postHasContent() {
