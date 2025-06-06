@@ -11,5 +11,3 @@ dependency-reduced-pom.xml
 .settings/
 application.yml
 .DS_Store
-/uploads/post_images
-/uploads/user_profile
