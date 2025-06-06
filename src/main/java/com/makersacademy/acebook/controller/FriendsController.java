@@ -8,8 +8,6 @@ import com.makersacademy.acebook.repository.FriendRequestRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +53,13 @@ public class FriendsController {
             }
         }
 
+        // Sort the users into alphabetical order!
+        friendUsers.sort(Comparator.comparing(User::getFirst_name));
+
+
         // Friend Requests!
-        List<FriendRequest> pendingRequests = friendRequestRepository.findAllByReceiverIdAndStatus(userId, "pending");
+        List<FriendRequest> pendingRequests = friendRequestRepository.findAllByReceiverIdAndStatusOrderByCreatedAtDesc(userId, "pending");
+
 
         // Objectify!
         List<User> requesterUsers = new ArrayList<>();
@@ -72,6 +76,7 @@ public class FriendsController {
 
         return modelAndView;
     }
+
 
     @PostMapping("/friend_request/{requesterId}")
     public RedirectView respondToFriendRequest(
@@ -114,9 +119,59 @@ public class FriendsController {
 
         } else if (decision.equals("decline")) {
             friendRequest.setStatus("rejected");
-//            friendRequest.setRespondedAt();
+            Instant instant = Instant.now();
+            Timestamp now = Timestamp.from(instant);
+            friendRequest.setRespondedAt(now);
             friendRequestRepository.save(friendRequest);
         }
+
+        return new RedirectView("/friends");
+    }
+
+    @PostMapping("/remove_friend/{friendId}")
+    public RedirectView removeFriend(
+            @PathVariable Long friendId,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        //Find Friendships!
+
+        Optional<Friend> friendship1 = friendRepository.findByMainUserIdAndFriendUserId(currentUserId, friendId);
+        Optional<Friend> friendship2 = friendRepository.findByMainUserIdAndFriendUserId(friendId, currentUserId);
+
+        //Remove Friendships!
+        friendship1.ifPresent(friendRepository::delete);
+        friendship2.ifPresent(friendRepository::delete);
+
+        //Redirect to Friends!
+        return new RedirectView("/friends");
+    }
+
+    @PostMapping("/add_friend/{userId}")
+    public RedirectView addFriend(
+            @PathVariable Long userId,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        Optional<User> requestee = userRepository.findById(userId);
+
+        User requesteeUser = requestee.get();
+        Long requesteeId = requesteeUser.getId();
+
+        FriendRequest request = new FriendRequest();
+        request.setRequesterId(currentUserId);
+        request.setReceiverId(requesteeId);
+        friendRequestRepository.save(request);
 
         return new RedirectView("/friends");
     }
