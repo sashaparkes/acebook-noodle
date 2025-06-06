@@ -71,6 +71,9 @@ public class PostsController {
             post.setContent(content);
             post.setUserId(user.get().getId());
 
+            // Sets post image as uploaded image - uses postsList finding the index of the first list item (most recent
+            // post) and adds 1, so that the filename of the image corresponds with the id for the new post
+            // Prevents unintended duplication / replacement
             if (!file.isEmpty()) {
                 List<Post> postsList = postRepository.findByOrderByTimePostedDesc();
                 Post lastPost = postsList.getFirst();
