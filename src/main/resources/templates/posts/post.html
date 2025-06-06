@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 
     <head>
         <meta charset="UTF-8">
         <title>Acebook</title>
+        <title th:text="'Post #' + ${post.id}">Post Detail</title>
 
         <!--        links for bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
@@ -14,8 +15,8 @@
         <!--        end links for bootstrap-->
     </head>
 
-    <body>
 
+    <body>
     <!--    Navbar starts here  -->
     <div style="margin-top: 35px;text-align: center;" class="navbar navbar-inverse navbar-fixed-top container">
         <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
@@ -53,13 +54,65 @@
     </div>
     <!--end of navbar -->
 
-        <div id="post-body">
-            <h2>Here is post  <span th:text="${id}"></span>!
-            </h2>
-            <img th:src="@{${post.user.profile_pic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
-            <strong th:text="${post.user.first_name + ' ' + post.user.last_name}"></strong>:
-            <span th:text="${post.content}"></span>
+    <div id="post-body">
+        <h2>Here is post  <span th:text="${id}"></span>!
+        </h2>
+        <img th:src="@{${post.user.profilePic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
+        <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong>:
+        <span th:text="${post.content}"></span>
+    </div>
+
+    <hr/>
+
+    <div id="comments-section">
+        <h3>Comments</h3>
+        <div th:if="${comments.size() == 0}">
+            <p>No comments yet. Be the first to comment!</p>
         </div>
+
+        <ul>
+            <li th:each="comment : ${comments}">
+                <p>
+                <p>
+                    <span>
+                            <img th:src="@{${comment.profilePic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
+                        </span> <strong th:text="${comment.displayName}">Name</strong> said:
+                </p>
+                <p th:text="${comment.content}"></p>
+                <p><small th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Date</small></p>
+
+                <form th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
+                    <input type="hidden" name="postId" th:value="${post.id}" />
+                    <button type="submit">Like</button>
+                </form>
+
+                <!-- Show likes count -->
+                <p>Likes: <span th:text="${comment.likesCount}">0</span></p>
+
+                <!-- Show who liked -->
+                <p th:if="${comment.likers != null and !comment.likers.isEmpty()}">
+                    Liked by:
+                    <span th:each="liker, iterStat : ${comment.likers}">
+        <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+    </span>
+                </p>
+
+            </li>
+        </ul>
+    </div>
+
+    <hr/>
+
+    <div id="add-comment-section">
+        <h3>Add a Comment</h3>
+        <form th:action="@{/posts/comments}" method="post">
+            <input type="hidden" name="postId" th:value="${post.id}" />
+            <textarea name="content" placeholder="Write your comment here..." rows="4" cols="50" required></textarea>
+            <br/>
+            <button type="submit">Submit Comment</button>
+        </form>
+    </div>
+<!--&lt;!&ndash;    Shanni Code end&ndash;&gt;-->
 
     <!--        scripts for bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>

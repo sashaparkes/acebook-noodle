@@ -48,16 +48,16 @@
 </div>
 <!--end of navbar -->
 
-<h2 th:text="'First name: ' + ${user.first_name}"></h2>
-<h2 th:text="'Surname: ' + ${user.last_name}"></h2>
-<img th:src="@{${user.profile_pic}}" alt="User Profile Image" style="width: 50px; height: 50px;"/>
+<h2 th:text="'First name: ' + ${user.firstName}"></h2>
+<h2 th:text="'Surname: ' + ${user.lastName}"></h2>
+<img th:src="@{${user.profilePic}}" alt="User Profile Image" style="width: 50px; height: 50px;"/>
 
 <form th:action="@{/settings}" th:object="${user}" method="post" enctype="multipart/form-data">
-    <label th:for="first_name">First Name:</label>
-  <input type="text" th:field="*{first_name}"/> <br>
-  <label th:for="last_name">Last Name:</label>
-  <input type="text" th:field="*{last_name}"/> <br>
-  <label th:for="profile_pic">Profile Picture:</label>
+    <label th:for="firstName">First Name:</label>
+  <input type="text" th:field="*{firstName}"/> <br>
+  <label th:for="lastName">Last Name:</label>
+  <input type="text" th:field="*{lastName}"/> <br>
+  <label th:for="profilePic">Profile Picture:</label>
   <input type="file" name="file"/> <br>
     <input type="submit" value="Submit" id="submit"/>
   <input type="reset" value="Reset" />

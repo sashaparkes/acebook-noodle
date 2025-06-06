@@ -13,43 +13,6 @@
 </head>
 
 <body>
-<!--    Navbar starts here  -->
-<div style="margin-top: 35px;text-align: center;" class="navbar navbar-inverse navbar-fixed-top container">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/posts">Acebook</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarText">
-                <span class="navbar-text">
-                    <div sec:authorize="isAuthenticated()">
-                        Hi! You're logged in as <span sec:authentication="principal.attributes['email']">.  |</span>
-                    </div>
-                </span>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile">| My Profile |</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/friends">| Friends |</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/notifications">| Notifications |</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/settings">| Settings |</a>
-                </li>
-            </ul>
-            <span class="nav-item active">
-                    <form name="logoutForm" th:action="@{/logout}" method="post"> <button type="submit" value="Log out" class="btn btn--stripe" style="display: inline-block;">| Log Out |</button>
-                    </form>
-                </span>
-        </div>
-    </nav>
-</div>
-<!--end of navbar -->
-
 <h1>Welcome to Acebook</h1>
 
 <a href="/posts">Login / Sign Up</a>
