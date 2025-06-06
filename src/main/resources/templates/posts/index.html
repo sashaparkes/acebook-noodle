@@ -66,8 +66,8 @@
                     <span>
                             <img th:src="@{${post.user.profilePic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
                         </span>
-                    <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong> posted:
-                    <span th:text="${post.content}" />
+                    <a th:href="@{/posts/{id}(id=${post.id})}"><strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong> posted:
+                    <span th:text="${post.content}" /></a>
                 </div>
             </div>
         </div>
