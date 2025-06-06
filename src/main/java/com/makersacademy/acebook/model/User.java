@@ -14,10 +14,14 @@ public class User {
     private Long id;
     private String username;
     private boolean enabled;
+
+    // For some reason, it wasn't pulling through first name and last name for post comments
+    // Until I linked it to the DB like below and then used Java's preferred camelCase
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    //
     private String profile_pic;
 
     public User(){

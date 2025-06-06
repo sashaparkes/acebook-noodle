@@ -28,14 +28,14 @@ public class CommentController {
         this.userRepository = userRepository;
     }
 
-    // This endpoint can be used for API calls or AJAX, but optional depending on needs:
+
     @GetMapping("/post/{postId}")
     @ResponseBody
     public List<Comment> getCommentsByPost(@PathVariable Long postId) {
         return commentService.getCommentsForPost(postId);
     }
 
-    // Handle form POST to add a comment, then redirect back to post detail page
+    // This will POST to add a comment and then redirect back to the post with the updated comment for that post
     @PostMapping
     public RedirectView createComment(@ModelAttribute CommentRequest request,
                                       @AuthenticationPrincipal(expression = "attributes['email']") String email) {

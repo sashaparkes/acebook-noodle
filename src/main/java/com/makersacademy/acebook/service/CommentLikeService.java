@@ -32,7 +32,7 @@ public class CommentLikeService {
             like.setCommentId(commentId);
             commentLikeRepository.save(like);
         }
-        // else: already liked, do nothing or throw exception if you want
+
     }
 
     public long getLikesCount(Long commentId) {
