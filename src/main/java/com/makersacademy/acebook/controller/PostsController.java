@@ -85,19 +85,12 @@ public class PostsController {
 
 //    // Create new post
 //    @PostMapping("/posts")
-//    public RedirectView create(@ModelAttribute Post post, @AuthenticationPrincipal(expression = "attributes['email']") String email, @RequestParam("image") MultipartFile file) throws IOException {
+//    public RedirectView create(@ModelAttribute Post post, @AuthenticationPrincipal(expression = "attributes['email']") String email)  {
 //        Optional<User> user = userRepository.findUserByUsername(email);
 //        if (user.isPresent()) {
 //            post.setUserId(user.get().getId());
+//            postRepository.save(post);
 //        }
-//
-//        if (!file.isEmpty()) {
-//            String imageFileName =imageStorageService.storePostImage(file, String.valueOf(post.getId()));
-//            post.setImage(imageFileName);
-//        }
-//
-//        postRepository.save(post);
-//
 //        return new RedirectView("/posts");
 //    }
 
