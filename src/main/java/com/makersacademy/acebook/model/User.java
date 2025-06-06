@@ -1,7 +1,7 @@
 package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import static java.lang.Boolean.TRUE;
 
@@ -14,15 +14,12 @@ public class User {
     private Long id;
     private String username;
     private boolean enabled;
-
-    // For some reason, it wasn't pulling through first name and last name for post comments
-    // Until I linked it to the DB like below and then used Java's preferred camelCase
-    @Column(name = "first_name")
+    @Column(name = "firstName")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    //
-    private String profile_pic;
+    @Column(name = "profile_pic")
+    private String profilePic;
 
     public User(){
     }
@@ -31,20 +28,20 @@ public class User {
         this.enabled = TRUE;
     }
 
-    public User(String username, String first_name, String last_name, String profile_pic) {
+    public User(String username, String firstName, String last_name, String profilePic) {
         this.username = username;
         this.enabled = TRUE;
-        this.firstName = first_name;
+        this.firstName = firstName;
         this.lastName = last_name;
-        this.profile_pic = profile_pic;
+        this.profilePic = profilePic;
     }
 
-    public User(String username, boolean enabled, String first_name, String last_name, String profile_pic) {
+    public User(String username, boolean enabled, String firstName, String last_name, String profilePic) {
         this.username = username;
         this.enabled = enabled;
-        this.firstName = first_name;
+        this.firstName = firstName;
         this.lastName = last_name;
-        this.profile_pic = profile_pic;
+        this.profilePic = profilePic;
     }
 
     public User(Long userId) {

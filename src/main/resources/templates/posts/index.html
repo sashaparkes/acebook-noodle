@@ -64,13 +64,13 @@
             <div class="list-group list-group-flush" >
                 <div th:each="post: ${posts}">
                     <span>
-                            <img th:src="@{${post.user.profile_pic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
+                            <img th:src="@{${post.user.profilePic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
                         </span>
-                    <strong th:text="${post.user.first_name + ' ' + post.user.last_name}"></strong> posted:
+                    <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong> posted:
                     <span th:text="${post.content}" />
                 </div>
             </div>
-    </div>
+        </div>
     </div>
 
     <!--        scripts for bootstrap  -->

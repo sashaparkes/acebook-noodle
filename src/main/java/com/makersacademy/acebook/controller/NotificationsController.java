@@ -38,7 +38,7 @@ public class NotificationsController {
         Map<Long, String> senderNames = new HashMap<>();
         for (Notification notification : notifications) {
             Optional<User> sender = userRepository.findById(notification.getSendingUserId());
-            sender.ifPresent(user -> senderNames.put(notification.getId(), user.getFirst_name()));
+            sender.ifPresent(user -> senderNames.put(notification.getId(), user.getFirstName()));
         }
         model.addAttribute("notifications", notifications);
         model.addAttribute("senderNames", senderNames);

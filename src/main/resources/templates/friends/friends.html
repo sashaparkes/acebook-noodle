@@ -54,8 +54,8 @@
 <h2>Friend Requests</h2>
 <ul>
   <li th:each="requester : ${requesterUsers}">
-      <span th:text="${requester.first_name + ' ' + requester.last_name}"></span>
-      <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
+      <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>
+      <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
       <button type="submit" name="decision" value="accept">Accept</button>
       <button type="submit" name="decision" value="decline">Decline</button>
       </form>
@@ -65,7 +65,7 @@
 <h2>Your Friends</h2>
 <ul>
   <li th:each="friend : ${friendUsers}"
-      th:text="${friend.first_name + ' ' + friend.last_name}"></li>
+      th:text="${friend.firstName + ' ' + friend.lastName}"></li>
 </ul>
     <!--        scripts for bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>

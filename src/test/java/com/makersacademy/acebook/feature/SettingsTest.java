@@ -136,8 +136,8 @@ public class SettingsTest {
         waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='User Profile Image']")));
 
         driver.findElement(By.id("last_name")).clear();
-        driver.findElement(By.id("first_name")).clear();
-        driver.findElement(By.id("first_name")).sendKeys("Harry");
+        driver.findElement(By.id("firstName")).clear();
+        driver.findElement(By.id("firstName")).sendKeys("Harry");
         driver.findElement(By.id("last_name")).sendKeys("Parkes");
         driver.findElement(By.xpath("//input[@type='submit']")).click();
 
