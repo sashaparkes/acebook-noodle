@@ -17,28 +17,29 @@
 
     <body>
     <!--    Navbar starts here  -->
-    <div class="container mt-5">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light">
-<!--            <a class="navbar-brand" href="/posts">Acebook</a>-->
-            <div class="d-flex align-items-end">
-                <a class="navbar-brand ps-3" href="/posts">
-                    <img src="images/AcebookFull.png" alt="Acebook Logo Full" width="100">
-                </a>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+        <div class="container-fluid d-flex align-items-end">
+            <a class="navbar-brand ps-3" href="/posts">
+                <img src="images/AcebookFull.png" alt="Acebook Logo Full" width="100">
+            </a>
 
-            <span class="navbar-text ms-3 pb-1">
+            <!-- Greeting -->
+            <div class="ms-3 mb-1">
                 <div sec:authorize="isAuthenticated()">
-                    Hi <span sec:authentication="principal.attributes['given_name'] + '!'"></span>
+                    <span class="navbar-text">Hi <span sec:authentication="principal.attributes['given_name'] + '!'"></span></span>
                 </div>
-            </span>
+            </div>
 
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarText"
-                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Toggler -->
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarText" aria-controls="navbarText"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Right side links -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarText">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/profile">My Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="/friends">Friends</a></li>
                     <li class="nav-item"><a class="nav-link" href="/notifications">Notifications</a></li>
@@ -46,10 +47,8 @@
                     <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 </ul>
             </div>
-            </div>
-        </nav>
-    </div>
-
+        </div>
+    </nav>
     <!--end of navbar -->
 
 
