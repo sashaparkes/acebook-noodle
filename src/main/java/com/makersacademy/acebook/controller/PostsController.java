@@ -57,11 +57,16 @@ private final PostRepository postRepository;
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
 
+        // Creates principal variable of type Default0idcUser - Spring Security class which represents a user authenticated by Auth0
+        // The get commands work together to extract user attributes from Auth0 (email, given_name, family_name)
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
 
+        // Uses the pricipal variable above to extract email and assign to username var
+        // Then utilises the 'username' variable to search the database and return matching User object
+        // Adds the user object to the model (page)
         String username = (String) principal.getAttributes().get("email");
         User user = userRepository.findUserByUsername(username).get();
         model.addAttribute("user", user);
