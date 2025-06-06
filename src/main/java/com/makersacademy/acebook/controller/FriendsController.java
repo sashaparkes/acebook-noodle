@@ -128,6 +128,54 @@ public class FriendsController {
         return new RedirectView("/friends");
     }
 
+    @PostMapping("/remove_friend/{friendId}")
+    public RedirectView removeFriend(
+            @PathVariable Long friendId,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        //Find Friendships!
+
+        Optional<Friend> friendship1 = friendRepository.findByMainUserIdAndFriendUserId(currentUserId, friendId);
+        Optional<Friend> friendship2 = friendRepository.findByMainUserIdAndFriendUserId(friendId, currentUserId);
+
+        //Remove Friendships!
+        friendship1.ifPresent(friendRepository::delete);
+        friendship2.ifPresent(friendRepository::delete);
+
+        //Redirect to Friends!
+        return new RedirectView("/friends");
+    }
+
+    @PostMapping("/add_friend/{userId}")
+    public RedirectView addFriend(
+            @PathVariable Long userId,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        Optional<User> requestee = userRepository.findById(userId);
+
+        User requesteeUser = requestee.get();
+        Long requesteeId = requesteeUser.getId();
+
+        FriendRequest request = new FriendRequest();
+        request.setRequesterId(currentUserId);
+        request.setReceiverId(requesteeId);
+        friendRequestRepository.save(request);
+
+        return new RedirectView("/friends");
+    }
+
 //    @PostMapping("/friends")
 //    public RedirectView create(@ModelAttribute Friend friend, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
 //        Optional<User> user = userRepository.findUserByUsername(email);

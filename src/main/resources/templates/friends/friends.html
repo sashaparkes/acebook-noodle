@@ -64,11 +64,15 @@
   </li>
 </ul>
 
-<h2>Your Friends</h2>
-<ul>
-  <li th:each="friend : ${friendUsers}"
-      th:text="${friend.first_name + ' ' + friend.last_name}"></li>
-</ul>
+    <h2>Your Friends</h2>
+    <ul>
+        <li th:each="friend : ${friendUsers}">
+            <span th:text="${friend.first_name + ' ' + friend.last_name}"></span>
+            <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
+                <button type="submit">Remove Friend</button>
+            </form>
+        </li>
+    </ul>
 <!--        script for bootstrap  -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
