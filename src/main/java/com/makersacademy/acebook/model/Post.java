@@ -22,6 +22,7 @@ public class Post {
     @CreationTimestamp
     @Column(name="time_posted")
     private Timestamp timePosted;
+    private String image;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
