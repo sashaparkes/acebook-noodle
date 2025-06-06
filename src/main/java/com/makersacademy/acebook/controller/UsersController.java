@@ -5,6 +5,7 @@ import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -109,5 +110,19 @@ public class UsersController {
         userRepository.save(userInDb);
 
         return new RedirectView("/settings");
+    }
+
+    @GetMapping("/profile")
+    public ModelAndView profile() {
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        String username = (String) principal.getAttributes().get("email");
+        User userForProfile = userRepository.findUserByUsername(username).get();
+        ModelAndView profile = new ModelAndView("users/profile");
+        profile.addObject("user", userForProfile);
+        return profile;
     }
 }
