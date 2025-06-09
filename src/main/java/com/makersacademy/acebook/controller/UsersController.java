@@ -105,6 +105,7 @@ public class UsersController {
         userInDb.setFirstName(userFromForm.getFirstName());
         userInDb.setLastName(userFromForm.getLastName());
 
+
         // Save function will update, rather than create, if user already in existence - once userInDb attributes are
         // updated, essentially overwrites existing name and image fields
         userRepository.save(userInDb);
