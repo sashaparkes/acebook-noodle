@@ -1,22 +1,20 @@
 package com.makersacademy.acebook.service;
-import com.makersacademy.acebook.service.CommentService;
 
 import com.makersacademy.acebook.model.Comment;
-import com.makersacademy.acebook.model.CommentLike;
-import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.CommentLikeRepository;
 import com.makersacademy.acebook.repository.CommentRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
+
 
     public CommentService(CommentRepository commentRepository,
                           CommentLikeRepository commentLikeRepository) {
@@ -33,29 +31,16 @@ public class CommentService {
         return commentRepository.findByPost_IdOrderByCreatedAtAsc(postId);
     }
 
-    @Transactional
-    public void likeComment(Long userId, Long commentId) {
-        boolean alreadyLiked = commentLikeRepository
-                .findByUserIdAndCommentId(userId, commentId)
-                .isPresent();
-
-        if (!alreadyLiked) {
-            CommentLike like = new CommentLike();
-            like.setUserId(userId);
-            like.setCommentId(commentId);
-            commentLikeRepository.save(like);
-        }
-    }
-
-    @Transactional
-    public void unlikeComment(Long userId, Long commentId) {
-        commentLikeRepository.deleteByUserIdAndCommentId(userId, commentId);
-    }
-
     public long getLikesCount(Long commentId) {
         return commentLikeRepository.countByCommentId(commentId);
     }
 
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 
-
+    public void deleteCommentsByPostId(Long postId) {
+        commentRepository.deleteAllByPostId(postId);
+    }
 }
+

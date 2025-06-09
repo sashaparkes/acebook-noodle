@@ -2,24 +2,26 @@ package com.makersacademy.acebook.service;
 
 import com.makersacademy.acebook.model.*;
 import com.makersacademy.acebook.repository.*;
-import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.makersacademy.acebook.model.Comment;
 import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.NotificationRepository;
 import com.makersacademy.acebook.model.Notification;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import jakarta.annotation.Nullable;
+
 
 @Service
 public class NotificationService {
+
     @Autowired
     NotificationRepository notificationRepository;
     @Autowired
     CommentRepository commentRepository;
     @Autowired
     PostRepository postRepository;
+
 
     public void newNotification(Long userId, String type, @Nullable Comment comment, @Nullable PostLike postLike, @Nullable CommentLike commentLike) {
         Post post = null;
@@ -42,8 +44,9 @@ public class NotificationService {
         }
     }
 
-//    public void deleteNotification(){
-//
-//    }
+
+    public Integer notificationCount(Long receivingUserId) {
+        return notificationRepository.countByReceivingUserIdAndIsRead(receivingUserId, false);
+    }
 }
 

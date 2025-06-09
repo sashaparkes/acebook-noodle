@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class CommentLikeService {
 
@@ -22,12 +23,12 @@ public class CommentLikeService {
         this.notificationService = notificationService;
     }
 
+
     public void likeComment(Long commentId, String userEmail) {
         User user = userRepository.findUserByUsername(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Optional<CommentLike> existingLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), commentId);
-
         if (existingLike.isEmpty()) {
             CommentLike like = new CommentLike();
             like.setUserId(user.getId());
@@ -38,9 +39,11 @@ public class CommentLikeService {
 
     }
 
+
     public long getLikesCount(Long commentId) {
         return commentLikeRepository.countByCommentId(commentId);
     }
+
 
     public void unlikeComment(Long commentId, String userEmail) {
         User user = userRepository.findUserByUsername(userEmail)
@@ -48,6 +51,8 @@ public class CommentLikeService {
 
         commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), commentId);
     }
+
+
     public List<String> getLikersForComment(Long commentId) {
         List<CommentLike> likes = commentLikeRepository.findByCommentId(commentId);
         return likes.stream()
@@ -61,3 +66,4 @@ public class CommentLikeService {
     }
 
 }
+
