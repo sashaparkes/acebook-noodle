@@ -2,6 +2,7 @@ package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.dto.CommentDto;
 import com.makersacademy.acebook.model.Comment;
+import com.makersacademy.acebook.model.Friend;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.FriendRepository;
@@ -28,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.*;
@@ -52,9 +54,23 @@ public class ProfileController {
                 .getPrincipal();
 
         String username = (String) principal.getAttributes().get("email");
-        User userForProfile = userRepository.findUserByUsername(username).get();
+        User userForProfile = userRepository.findById(id).get();
+        Iterable<Post> posts = postRepository.findAllByUserId(id);
+        Iterable<Friend> friendships = friendRepository.findAllByMainUserId(id);
+
+        List<User> friends = new ArrayList<>();
+        for (Friend friend : friendships) {
+            Long friendId = friend.getFriendUserId();
+            Optional<User> friendUser = userRepository.findById(friendId);
+            if (friendUser.isPresent()) {
+                friends.add(friendUser.get());
+            }
+        }
+
         ModelAndView profile = new ModelAndView("users/profile");
         profile.addObject("user", userForProfile);
+        profile.addObject("posts", posts);
+        profile.addObject("friends", friends);
         return profile;
     }
 
