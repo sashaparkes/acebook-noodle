@@ -1,20 +1,19 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.dto.CommentDto;
-import com.makersacademy.acebook.model.Comment;
-import com.makersacademy.acebook.model.Post;
-import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.dto.PostDto;
+import com.makersacademy.acebook.model.*;
+import com.makersacademy.acebook.repository.PostLikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
-import com.makersacademy.acebook.service.CommentLikeService;
-import com.makersacademy.acebook.service.CommentService;
-import com.makersacademy.acebook.service.ImageStorageService;
+import com.makersacademy.acebook.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +35,12 @@ public class PostsController {
 
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    PostLikeRepository postLikeRepository;
+    @Autowired
+    PostService postService;
+    @Autowired
+    PostLikeService postLikeService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -95,21 +100,18 @@ public class PostsController {
             @AuthenticationPrincipal(expression = "attributes['email']") String email,
             @RequestParam("image") MultipartFile file
     ) throws IOException {
-        Optional<User> user = userRepository.findUserByUsername(email);
-        if (user.isPresent()) {
-            Post post = new Post();
-            post.setContent(content);
-            post.setUserId(user.get().getId());
+        User user = userRepository.findUserByUsername(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Post post = new Post(
+                null, content, user.getId(), null, null, user);
+        post = postRepository.save(post);
 
+        String fileName = imageStorageService.storePostImage(file, String.valueOf(post.getId()));
+        if (fileName != null) {
+            post.setImage(fileName);
             postRepository.save(post);
-
-            String fileName = imageStorageService.storePostImage(file, String.valueOf(post.getId()));
-            if (fileName != null) {
-                post.setImage(fileName);
-                postRepository.save(post);
-            }
-
         }
+
         return new RedirectView("/posts");
     }
 
@@ -125,14 +127,26 @@ public class PostsController {
         }
         else {
             Post post = currentPost.get();
-
+            String posterName = post.getUser().getFirstName() + " " + post.getUser().getLastName();
+            long postLikesCount = postService.getLikesCount(post.getId());
+            List<String> likedBy = postLikeService.getLikersForPost(post.getId());
+            PostDto postDto = new PostDto(
+                    post.getId(),
+                    post.getContent(),
+                    posterName,
+                    post.getTimePosted(),
+                    post.getImage(),
+                    postLikesCount,
+                    likedBy,
+                    post.getUser().getProfilePic(),
+                    post.getUser().getId()
+            );
             List<Comment> commentEntities = commentService.getCommentsForPost(id);
             List<CommentDto> commentDtos = commentEntities.stream()
                     .map(comment -> {
                         String displayName = comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
                         long likesCount = commentService.getLikesCount(comment.getId());
                         List<String> likers = commentLikeService.getLikersForComment(comment.getId());
-
                         return new CommentDto(
                                 comment.getId(),
                                 comment.getContent(),
@@ -140,16 +154,40 @@ public class PostsController {
                                 comment.getCreatedAt(),
                                 likesCount,
                                 likers,
-                                comment.getUser().getProfilePic()
+                                comment.getUser().getProfilePic(),
+                                comment.getUser().getId()
                         );
                     })
                     .toList();
 
-            modelAndView.addObject("post", post);
+            modelAndView.addObject("post", postDto);
             modelAndView.addObject("comments", commentDtos);
             modelAndView.addObject("newComment", new Comment());
             return modelAndView;
         }
+    }
+
+    @Transactional
+    public void likePost(Long userId, Long postId) {
+        boolean alreadyLiked = postLikeRepository
+                .findByUserIdAndPostId(userId, postId)
+                .isPresent();
+
+        if (!alreadyLiked) {
+            PostLike like = new PostLike();
+            like.setUserId(userId);
+            like.setPostId(postId);
+            postLikeRepository.save(like);
+        }
+    }
+
+    @Transactional
+    public void unlikePost(Long userId, Long postId) {
+        postLikeRepository.deleteByUserIdAndPostId(userId, postId);
+    }
+
+    public long getLikesCount(Long postId) {
+        return postLikeRepository.countByPostId(postId);
     }
 }
 
