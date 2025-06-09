@@ -1,6 +1,5 @@
 html, body {
     background-color: #fbf4e6 !important;
-    padding-top: 35px;
 }
 
 .posts-main {
@@ -16,12 +15,11 @@ html, body {
 
 .navbar-text,
 .nav-link {
-    line-height: 1 !important;
-    #655e4e!important;
+    colour: #655e4e
 }
 
-.nav-link:hover {
-    color: #cc3939!important;
+.navbar .nav-link.active {
+  color: #cc3939 !important;
 }
 
 .greeting {
@@ -32,10 +30,51 @@ html, body {
     color: #655e4e!important;
 }
 
-
 .navbar {
-    background-color: #e6d7b7
+  height: 70px;
+  background-color: #e6d7b7;
+  position: relative;
+  z-index: 1;
 }
+
+@media (max-width: 767.98px) {
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #e6d7b7;
+    z-index: 0;
+  }
+}
+
+.navbar-brand img {
+  display: block;
+  height: 40px;
+}
+
+.navbar-dropdown {
+  background-color: #fbf4e6 !important;
+  color: #655e4e;
+}
+
+.navbar-dropdown .dropdown-item,
+.navbar-dropdown .fw-bold,
+.navbar-dropdown .text-truncate {
+  background-color: #fbf4e6;
+  color: #655e4e;
+}
+
+.navbar-dropdown .dropdown-item:hover {
+  background-color: #fbf4e6;
+  color: #000000;
+}
+
+/* Optional: Divider color */
+.custom-dropdown .dropdown-divider {
+  border-top-color: #555;
+}
+
 
 .login-button{
         background-color: #e6d7b7!important;
