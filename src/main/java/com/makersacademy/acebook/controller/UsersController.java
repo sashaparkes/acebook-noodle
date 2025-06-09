@@ -108,6 +108,7 @@ public class UsersController {
         userInDb.setFirstName(userFromForm.getFirstName());
         userInDb.setLastName(userFromForm.getLastName());
 
+
         // Save function will update, rather than create, if user already in existence - once userInDb attributes are
         // updated, essentially overwrites existing name and image fields
         userRepository.save(userInDb);
@@ -115,54 +116,3 @@ public class UsersController {
         return new RedirectView("/settings");
     }
 }
-//
-//    // Function to handle saving an uploaded image - takes a file and a userId string (for unique saving) as inputs)
-//    private String saveImage(MultipartFile file, String userId) throws IOException {
-//
-//        // Creates new uploadPath item referencing the uploadDirectory object at top of the page
-//        // This is configured in application.properties
-//        // If it doesn't exist - create it
-//        Path uploadPath = Paths.get(uploadDir);
-//        if (!Files.exists(uploadPath)) {
-//            Files.createDirectories(uploadPath);
-//        }
-//
-//        // Checks that the content type of the file is of type JPEG or PNG
-//        // else - Error handling TBC
-//        String contentType = file.getContentType();
-//        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
-//            throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
-//        }
-//
-//        /*
-//         Compiles elements for the filename
-//         Uses original filename, and calls getFileExtension function below to extract .jpg / .png
-//         Then concatenates that with the userId - so when user #1 changes prof pic - it will always save as 1.png/.jpg
-//         This then links with the uploadDir variable above - so it creates a complete file path, within the correct
-//         directory, and with our chosen filename
-//         Bottom line replaces existing filepath - so overwrites user's existing prof_pic with a new one
-//        */
-//        String fileName = file.getOriginalFilename();
-//        String extension = getFileExtension(fileName);
-//        String newFileName = userId + extension;
-//        Path filePath = uploadPath.resolve(newFileName);
-//        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//        return newFileName;
-//    }
-//
-//    // Function to extract file extension e.g. .jpeg / .png - takes a filename as an input
-//        public static String getFileExtension(String fileName) {
-//
-//            // Allows the item to be null
-//            // Filters the string for instances of '.'
-//            // Creates a substring from the last instance of '.' onwards - this isolates the extension
-//            // else returns nothing (?)
-//            return Optional.ofNullable(fileName)
-//                    .filter(f -> f.contains("."))
-//                    .map(f -> f.substring(f.lastIndexOf(".")))
-//                    .orElse("");
-//        }
-//
-//
-//}

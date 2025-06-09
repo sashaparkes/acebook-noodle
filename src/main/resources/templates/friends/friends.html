@@ -54,8 +54,9 @@
 <h2>Friend Requests</h2>
 <ul>
   <li th:each="requester : ${requesterUsers}">
-      <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>
-      <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
+      <a th:href="@{/profile/{id}(id=${requester.id})}">
+      <span th:text="${requester.firstName + ' ' + requester.lastName}"></span></a>
+      <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
       <button type="submit" name="decision" value="accept">Accept</button>
       <button type="submit" name="decision" value="decline">Decline</button>
       </form>
@@ -65,7 +66,8 @@
 <h2>Your Friends</h2>
     <ul>
         <li th:each="friend : ${friendUsers}">
-            <span th:text="${friend.firstName + ' ' + friend.lastName}"></span>
+            <a th:href="@{/profile/{id}(id=${friend.id})}">
+                <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
             <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
                 <button type="submit">Remove Friend</button>
             </form>
