@@ -102,7 +102,7 @@
                         <div class="box shadow-sm border rounded bg-white mb-3 post">
                             <div class="p-3 d-flex align-items-center border-bottom">
                                 <span>
-                                <img class="rounded-circle mb-2 mt-3" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                <img class="rounded-circle mb-2 mt-3" th:src="@{${post.user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
                                 <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong> posted:
                                 </span>
                                 <span class="ms-auto small">Time Stamp?</span>

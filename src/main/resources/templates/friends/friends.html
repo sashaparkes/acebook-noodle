@@ -55,7 +55,7 @@
 <ul>
   <li th:each="requester : ${requesterUsers}">
       <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>
-      <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
+      <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
       <button type="submit" name="decision" value="accept">Accept</button>
       <button type="submit" name="decision" value="decline">Decline</button>
       </form>
