@@ -76,8 +76,10 @@
     <div class="container mt-3">
         <div class="row">
             <div  class="d-grid gap-2 d-md-block">
+                <h1 class="text-center mt-3 text-nowrap">
+                    Friend Requests
+                </h1>
                 <div class="box shadow-sm border rounded mb-3">
-                    <h2>Friend Requests</h2>
                     <ul>
                       <li th:each="requester : ${requesterUsers}">
                         <a th:href="@{/profile/{id}(id=${requester.id})}">
@@ -89,17 +91,20 @@
                       </li>
                     </ul>
                 </div>
+                <h1 class="text-center mt-3 text-nowrap">
+                    Your Friends
+                </h1>
                 <div class="box shadow-sm border rounded mb-3">
-                    <h2>Your Friends</h2>
-                        <ul>
-                            <li th:each="friend : ${friendUsers}">
-                              <a th:href="@{/profile/{id}(id=${friend.id})}">
-                                <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
-                                <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
-                                    <button type="submit">Remove Friend</button>
-                                </form>
-                            </li>
-                        </ul>
+
+                   <ul>
+                       <li th:each="friend : ${friendUsers}">
+                          <a th:href="@{/profile/{id}(id=${friend.id})}">
+                              <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
+                           <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
+                               <button type="submit">Remove Friend</button>
+                           </form>
+                       </li>
+                   </ul>
                 </div>
             </div>
         </div>
