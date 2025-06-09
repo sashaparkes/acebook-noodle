@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 
 
     <head>
@@ -88,6 +88,13 @@
                                      </span>
                             <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                         </div>
+                        <div class="p-3 d-flex align-items-center border-bottom">
+                            <img th:if="${post.image != null}"
+                                 th:src="@{${post.image}}"
+                                 alt="Post image"
+                                 style="width: 300px; height: auto;" />
+                            <span th:text="${post.content}"></span>
+                        </div>
                     <!-- Likes -->
                         <div id="post-likes-buttons button-group">
                         <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
@@ -122,6 +129,11 @@
                         <h3>Comments</h3>
                         <div th:if="${comments.size() == 0}">
                             <p>No comments yet. Be the first to comment!</p>
+                        </div>
+                        <div th:if="${comments.size() == 1}">
+                            <p>1 comment so far.</p>
+                        </div>
+                        <div th:text="${comments.size()} + ' comments so far.'">
                         </div>
 
                         <ul>
