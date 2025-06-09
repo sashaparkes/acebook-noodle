@@ -73,6 +73,7 @@ public class FriendsController {
 
         modelAndView.addObject("friendUsers", friendUsers);
         modelAndView.addObject("requesterUsers", requesterUsers);
+        modelAndView.addObject("currentUser", currentUser);
 
         return modelAndView;
     }
