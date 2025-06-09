@@ -101,12 +101,14 @@ public class PostsController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Post post = new Post(
                 null, content, user.getId(), null, null, user);
+        post = postRepository.save(post);
 
         String fileName = imageStorageService.storePostImage(file, String.valueOf(post.getId()));
         if (fileName != null) {
             post.setImage(fileName);
+            postRepository.save(post);
         }
-        postRepository.save(post);
+
         return new RedirectView("/posts");
     }
 
