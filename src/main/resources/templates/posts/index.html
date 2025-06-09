@@ -110,7 +110,7 @@
                             <div class="p-3 border-bottom">
                             <a><span th:text="${post.content}" /></a>
                             <img th:if="${post.image != null}"
-                                 th:src="@{'/uploads/post_images/' + ${post.image}}"
+                                 th:src="@{${post.image}}"
                                  alt="Post image"
                                  style="width: 100px; height: auto;" />
                             </div>

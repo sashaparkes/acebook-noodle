@@ -56,7 +56,7 @@ public class ImageStorageService {
         Path filePath = uploadPath.resolve(newFileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return newFileName;
+        return String.valueOf("/" + filePath);
     }
 
     public static String getFileExtension(String fileName) {
