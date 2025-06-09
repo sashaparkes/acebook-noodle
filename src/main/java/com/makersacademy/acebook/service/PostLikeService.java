@@ -33,7 +33,7 @@ public class PostLikeService {
             like.setUserId(user.getId());
             like.setPostId(postId);
             postLikeRepository.save(like);
-            notificationService.newNotification(user.getId(), "postlike", null, like, null);
+            notificationService.newNotification(user.getId(), "postLike", null, like, null);
         }
 
     }

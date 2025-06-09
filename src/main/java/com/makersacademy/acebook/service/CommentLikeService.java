@@ -33,7 +33,7 @@ public class CommentLikeService {
             like.setUserId(user.getId());
             like.setCommentId(commentId);
             commentLikeRepository.save(like);
-            notificationService.newNotification(user.getId(), "commentlike", null, null, like);
+            notificationService.newNotification(user.getId(), "commentLike", null, null, like);
         }
 
     }
