@@ -18,9 +18,10 @@ public class CommentDto {
     private long likesCount;
     private List<String> likers;
     private String profilePic;
+    private Long commenterId;
 
     public CommentDto(Long id, String content, String displayName,
-                      LocalDateTime createdAt, long likesCount, List<String> likers, String profilePic) {
+                      LocalDateTime createdAt, long likesCount, List<String> likers, String profilePic, Long commenterId) {
         this.id = id;
         this.content = content;
         this.displayName = displayName;
@@ -28,6 +29,7 @@ public class CommentDto {
         this.likesCount = likesCount;
         this.likers = likers;
         this.profilePic = profilePic;
+        this.commenterId = commenterId;
     }
 }
 
