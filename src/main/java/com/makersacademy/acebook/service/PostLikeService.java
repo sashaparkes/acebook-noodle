@@ -14,10 +14,12 @@ public class PostLikeService {
 
     private final PostLikeRepository postLikeRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
-    public PostLikeService(PostLikeRepository postLikeRepository, UserRepository userRepository) {
+    public PostLikeService(PostLikeRepository postLikeRepository, UserRepository userRepository, NotificationService notificationService) {
         this.postLikeRepository = postLikeRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public void likePost(Long postId, String userEmail) {
@@ -31,6 +33,7 @@ public class PostLikeService {
             like.setUserId(user.getId());
             like.setPostId(postId);
             postLikeRepository.save(like);
+            notificationService.newNotification(user.getId(), "postlike", null, like, null);
         }
 
     }

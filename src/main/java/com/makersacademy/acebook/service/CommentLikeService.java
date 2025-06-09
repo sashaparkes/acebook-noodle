@@ -14,10 +14,12 @@ public class CommentLikeService {
 
     private final CommentLikeRepository commentLikeRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
-    public CommentLikeService(CommentLikeRepository commentLikeRepository, UserRepository userRepository) {
+    public CommentLikeService(CommentLikeRepository commentLikeRepository, UserRepository userRepository, NotificationService notificationService) {
         this.commentLikeRepository = commentLikeRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public void likeComment(Long commentId, String userEmail) {
@@ -31,6 +33,7 @@ public class CommentLikeService {
             like.setUserId(user.getId());
             like.setCommentId(commentId);
             commentLikeRepository.save(like);
+            notificationService.newNotification(user.getId(), "commentlike", null, null, like);
         }
 
     }

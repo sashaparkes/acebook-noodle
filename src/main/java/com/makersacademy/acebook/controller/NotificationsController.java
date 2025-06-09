@@ -34,7 +34,7 @@ public class NotificationsController {
         User currentUser = userRepository.findUserByUsername(username).get();
 
         Collection<Notification> notifications = new ArrayList<>();
-        notifications.addAll(notificationRepository.findByReceivingUserIdOrderByCreatedAtDesc(2L));
+        notifications.addAll(notificationRepository.findByReceivingUserIdOrderByCreatedAtDesc(currentUser.getId()));
         Map<Long, String> senderNames = new HashMap<>();
         for (Notification notification : notifications) {
             Optional<User> sender = userRepository.findById(notification.getSendingUserId());
