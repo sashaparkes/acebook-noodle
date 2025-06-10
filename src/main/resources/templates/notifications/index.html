@@ -86,9 +86,17 @@
                     <tr>
                         <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
                             <input type="hidden" name="id" th:value="${notification.id}">
-                            <button class="btn btn-primary" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts">
-                                <span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
-                            </button>
+                                    <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
+                                        <div th:if = "${notification.getType() == 'comment'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                                        </div>
+                                        <div th:if = "${notification.getType() == 'commentLike'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> liked your comment!
+                                        </div>
+                                        <div th:if = "${notification.getType() == 'postLike'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> liked your post!
+                                        </div>
+                                    </button>
                         </form>
                     </tr>
                     </div>
