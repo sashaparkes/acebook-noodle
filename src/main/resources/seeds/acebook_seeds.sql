@@ -197,11 +197,11 @@ INSERT INTO comment_likes (user_id, comment_id, created_at) VALUES
 -- Insert Notifications
 INSERT INTO notifications (receiving_user_id, sending_user_id, type, post_id, comment_id, is_read, created_at) VALUES
 -- Post like notifications
-(1, 2, 'post_like', 1, NULL, true, NOW() - INTERVAL '1.5 hours'),
-(1, 9, 'post_like', 1, NULL, false, NOW() - INTERVAL '1 hour'),
-(1, 8, 'post_like', 2, NULL, false, NOW() - INTERVAL '15 hours'),
-(2, 1, 'post_like', 4, NULL, true, NOW() - INTERVAL '3.5 hours'),
-(2, 12, 'post_like', 5, NULL, false, NOW() - INTERVAL '1.5 days'),
+(1, 2, 'postLike', 1, NULL, true, NOW() - INTERVAL '1.5 hours'),
+(1, 9, 'postLike', 1, NULL, false, NOW() - INTERVAL '1 hour'),
+(1, 8, 'postLike', 2, NULL, false, NOW() - INTERVAL '15 hours'),
+(2, 1, 'postLike', 4, NULL, true, NOW() - INTERVAL '3.5 hours'),
+(2, 12, 'postLike', 5, NULL, false, NOW() - INTERVAL '1.5 days'),
 
 -- Comment notifications
 (1, 2, 'comment', 1, 1, true, NOW() - INTERVAL '1 hour'),
@@ -211,16 +211,16 @@ INSERT INTO notifications (receiving_user_id, sending_user_id, type, post_id, co
 (3, 8, 'comment', 8, 8, false, NOW() - INTERVAL '20 hours'),
 
 -- Comment like notifications
-(2, 1, 'comment_like', 1, 1, true, NOW() - INTERVAL '50 minutes'),
-(9, 1, 'comment_like', 1, 2, false, NOW() - INTERVAL '35 minutes'),
-(8, 1, 'comment_like', 2, 3, false, NOW() - INTERVAL '10 hours'),
+(2, 1, 'commentLike', 1, 1, true, NOW() - INTERVAL '50 minutes'),
+(9, 1, 'commentLike', 1, 2, false, NOW() - INTERVAL '35 minutes'),
+(8, 1, 'commentLike', 2, 3, false, NOW() - INTERVAL '10 hours');
 
 -- Friend request notifications
-(11, 4, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '2 days'),
-(1, 10, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '1 day'),
-(3, 7, 'friend_request', NULL, NULL, true, NOW() - INTERVAL '1 week'),
-(5, 11, 'friend_request', NULL, NULL, true, NOW() - INTERVAL '2 weeks'),
-(10, 6, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '3 days');
+--(11, 4, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '2 days'),
+--(1, 10, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '1 day'),
+--(3, 7, 'friend_request', NULL, NULL, true, NOW() - INTERVAL '1 week'),
+--(5, 11, 'friend_request', NULL, NULL, true, NOW() - INTERVAL '2 weeks'),
+--(10, 6, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '3 days');
 
 -- Summary of seeded data
 SELECT 
