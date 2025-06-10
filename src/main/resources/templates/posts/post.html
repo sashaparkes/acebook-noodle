@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 
 
     <head>
@@ -33,7 +33,7 @@
                 <ul class="navbar-nav ms-auto d-flex align-items-center">
                     <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
                     <li class="nav-item d-none d-md-block"><a class="nav-link" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
-                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications"></i>&nbsp;</a></li>
+                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;&nbsp;</a></li>
                     <li class="nav-item dropdown d-none d-md-block">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="rounded-circle me-2" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
@@ -86,19 +86,31 @@
                                         <img class="rounded-circle mb-2 mt-3" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
                                         <strong th:text="${post.posterName}"></strong> posted:
                                      </span>
-                            <span class="ms-auto small">Time Stamp?</span>
+                            <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                         </div>
-                    <!--        <small th:text="${#temporals.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Date</small>-->
+                        <div class="p-3 d-flex align-items-center border-bottom">
+                            <img th:if="${post.image != null}"
+                                 th:src="@{${post.image}}"
+                                 alt="Post image"
+                                 style="width: 300px; height: auto;" />
+                            <span th:text="${post.content}"></span>
+                        </div>
                     <!-- Likes -->
                         <div id="post-likes-buttons button-group">
-                        <form th:action="@{posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
+                        <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                             <input type="hidden" name="postId" th:value="${postId}" />
                             <button type="submit">Like</button>
                         </form>
-                        <form th:action="@{posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
+                        <form th:action="@{/posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
                             <input type="hidden" name="postId" th:value="${postId}" />
                             <button type="submit">Unlike</button>
                         </form>
+                        <div th:if="${post.posterId} == ${userId}">
+                            <form th:action="@{/posts/{postId}/delete(postId=${post.id})}" method="post" style="display:inline">
+                                <input type="hidden" name="postId" th:value="${postId}" />
+                                <button type="submit">Delete Post</button>
+                            </form>
+                        </div>
                         </div>
                         <!-- Show likes count -->
                         <p>Likes: <span th:text="${post.postLikesCount}">0</span></p>
@@ -117,6 +129,11 @@
                         <h3>Comments</h3>
                         <div th:if="${comments.size() == 0}">
                             <p>No comments yet. Be the first to comment!</p>
+                        </div>
+                        <div th:if="${comments.size() == 1}">
+                            <p>1 comment so far.</p>
+                        </div>
+                        <div th:text="${comments.size()} + ' comments so far.'">
                         </div>
 
                         <ul>
@@ -140,6 +157,12 @@
                                     <input type="hidden" name="postId" th:value="${post.id}" />
                                     <button type="submit">Unlike</button>
                                 </form>
+                                <div th:if="${comment.commenterId} == ${userId}">
+                                    <form th:action="@{/posts/comments/{commentId}/delete(commentId=${comment.id})}" method="post" style="display:inline">
+                                        <input type="hidden" name="postId" th:value="${post.id}" />
+                                        <button type="submit">Delete Comment</button>
+                                    </form>
+                                </div>
                                 </div>
 
                                 <!-- Show likes count -->
@@ -162,7 +185,7 @@
                         <h5>Add a Comment</h5>
                         <form th:action="@{/posts/comments}" method="post">
                             <input type="hidden" name="postId" th:value="${post.id}" />
-                            <textarea name="content" placeholder="Write your comment here..." rows="2" cols="50" required></textarea>
+                            <input type="textarea" name="content" placeholder="Write your comment here..." rows="2" cols="50" required>
                             <br/>
                             <button type="submit">Submit Comment</button>
                         </form>

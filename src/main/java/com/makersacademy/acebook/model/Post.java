@@ -1,11 +1,11 @@
 package com.makersacademy.acebook.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+
 
 @Data
 @Entity
@@ -33,8 +33,8 @@ public class Post {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-
     public Post(Long id) {
         this.id = id;
     }
 }
+

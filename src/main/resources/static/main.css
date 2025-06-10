@@ -2,6 +2,10 @@ html, body {
     background-color: #fbf4e6 !important;
 }
 
+h1 {
+    color: #655e4e !important;
+}
+
 .posts-main {
     border-collapse: collapse;
 }

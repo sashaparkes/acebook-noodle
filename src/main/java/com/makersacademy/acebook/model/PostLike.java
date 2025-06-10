@@ -1,16 +1,15 @@
 package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "post_likes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"}))
 @IdClass(PostLikeId.class)
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class PostLike {
 
     @Id
@@ -20,6 +19,5 @@ public class PostLike {
     @Id
     @Column(name = "post_id")
     private Long postId;
-
 
 }
