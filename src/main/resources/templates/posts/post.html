@@ -83,8 +83,9 @@
                         <!-- Show posters profile picture and name -->
                         <div class="p-3 d-flex align-items-center border-bottom">
                                      <span>
+                                         <a th:href="@{/profile/{id}(id=${post.posterId})}" class="text-decoration-none text-reset">
                                         <img class="rounded-circle mb-2 mt-3" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                        <strong th:text="${post.posterName}"></strong> posted:
+                                        <strong th:text="${post.posterName}"></strong></a> posted:
                                      </span>
                             <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                         </div>
@@ -117,6 +118,7 @@
                         <!-- Show who liked -->
                         <p th:if="${post.likedBy != null and !post.likedBy.isEmpty()}">
                             Liked by:
+                            <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
                             <span th:each="liker, iterStat : ${post.likedBy}">
                         <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
                     </span>
@@ -143,7 +145,8 @@
                                     <span>
                                             <img th:src="@{${comment.profilePic}}" alt="User Profile Image" style="width: auto; height: 20px;"/>
                                         </span>
-                                <a th:href="@{/profiles/{id}(id=${comment.commenterId})}"><strong th:text="${comment.displayName}">Name</strong></a> said:
+                                <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
+                                    <strong th:text="${comment.displayName}">Name</strong></a> said:
                                 </p>
                                 <p th:text="${comment.content}"></p>
                                 <p><small th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Date</small></p>

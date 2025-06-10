@@ -69,12 +69,37 @@ public class ProfileController {
             }
         }
 
+        boolean isFriend = isFriend(signedInUser.getId(), userForProfile.getId());
+
         ModelAndView profile = new ModelAndView("users/profile");
         profile.addObject("user", userForProfile);
         profile.addObject("signedInUser", signedInUser);
         profile.addObject("posts", posts);
         profile.addObject("friends", friends);
+        profile.addObject("isFriend", isFriend);
         return profile;
+    }
+
+    private boolean isFriend(Long userId, Long friendId) {
+
+        Iterable<Friend> signedInFriendships = friendRepository.findAllByMainUserId(userId);
+
+        List<Long> friends = new ArrayList<>();
+        for (Friend friend : signedInFriendships) {
+            Long friendUserId = friend.getFriendUserId();
+            Optional<User> signedInFriendUser = userRepository.findById(friendUserId);
+            if (signedInFriendUser.isPresent()) {
+                friends.add(signedInFriendUser.get().getId());
+            }
+        }
+
+        if (friends.contains(friendId)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
 }

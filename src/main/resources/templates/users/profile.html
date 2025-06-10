@@ -87,8 +87,14 @@
                 <div class="container d-flex flex-column align-items-center mt-3">
                     <form th:action="@{'/add_friend/' + ${user.id}}" method="POST" style="display:inline;">
                         <button type="submit"
-                                th:disabled="${signedInUser.id == user.id}">
+                                th:disabled="${signedInUser.id == user.id or isFriend}">
                             Add Friend
+                        </button>
+                    </form>
+                    <form th:action="@{'/remove_friend/' + ${user.id}}" method="POST" style="display:inline;">
+                        <button type="submit"
+                            th:disabled="${signedInUser.id == user.id or !isFriend}">
+                            Remove Friend
                         </button>
                     </form>
                 <ul>
