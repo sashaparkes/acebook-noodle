@@ -17,46 +17,48 @@
 
 <body>
 
-    <!-- Navbar  -->
-    <nav class="navbar navbar-expand-md sticky-top">
-        <div class="container d-flex justify-content-between align-items-center position-relative">
-            <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
-            <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
-                <img src="images/AcebookSmall.png" alt="Acebook Logo" height="50">
-            </a>
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="collapseNavbar">
-                <ul class="navbar-nav ms-auto d-flex align-items-center">
-                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
-                    <li class="nav-item d-none d-md-block"><a class="nav-link active" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
-                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications"></i>&nbsp;</a></li>
-                    <li class="nav-item dropdown d-none d-md-block">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown">
-                            <div class="d-flex flex-column align-items-center">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
-                                </div>
-                                <div class="fw-bold text-center">
-                                    <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
-                                </div>
+
+<!-- Navbar  -->
+<nav class="navbar navbar-expand-md sticky-top">
+    <div class="container d-flex justify-content-between align-items-center position-relative">
+        <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
+        <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
+            <img src="images/AcebookSmall.png" alt="Acebook Logo" height="50">
+        </a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="collapseNavbar">
+            <ul class="navbar-nav ms-auto d-flex align-items-center">
+                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
+                <li class="nav-item d-none d-md-block"><a class="nav-link active" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
+                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
+                <li class="nav-item dropdown d-none d-md-block">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                             </div>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
-                            <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
-                        </div>
-                    </li>
+                            <div class="fw-bold text-center">
+                                <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
+                            </div>
+                            
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+                        <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
+                    </div>
+                </li>
+
 
                 <li class="nav-item d-block d-md-none text-center px-3">
                     <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                     <div class="fw-bold text-center">
-                        <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                        <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
                     </div>
                 </li>
 
@@ -64,7 +66,7 @@
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
