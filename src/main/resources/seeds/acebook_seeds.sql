@@ -36,63 +36,63 @@ INSERT INTO users (username, enabled, first_name, last_name, profile_pic) VALUES
 -- Insert Posts
 INSERT INTO posts (content, user_id, time_posted, image) VALUES
 -- Taylor Swift posts
-('Just finished writing my 200th song this year 🎵 The stories keep coming!', 1, NOW() - INTERVAL '2 hours', 'taylor_post.jpg'),
+('Just finished writing my 200th song this year 🎵 The stories keep coming!', 1, NOW() - INTERVAL '2 hours', '/uploads/post_images/taylor_post.jpg'),
 ('Cats are better than people and I will die on this hill 🐱', 1, NOW() - INTERVAL '1 day', NULL),
 ('13 is my lucky number for a reason ✨', 1, NOW() - INTERVAL '3 days', NULL),
 
 -- Ariana Grande posts
 ('thank u, next era was just the beginning 💫', 2, NOW() - INTERVAL '4 hours', NULL),
-('My vocal range today: 4 octaves and counting 🎤', 2, NOW() - INTERVAL '2 days', 'ariana_post.jpeg'),
+('My vocal range today: 4 octaves and counting 🎤', 2, NOW() - INTERVAL '2 days', '/uploads/post_images/ariana_post.jpeg'),
 ('Donut licking was a mistake but yuh 🍩', 2, NOW() - INTERVAL '1 week', NULL),
 
 -- Justin Bieber posts
 ('Sorry for all the apologies, but here''s another one 🙏', 3, NOW() - INTERVAL '6 hours', NULL),
-('Hailey and I just adopted another puppy! 🐕', 3, NOW() - INTERVAL '1 day', 'justin_post.jpg'),
+('Hailey and I just adopted another puppy! 🐕', 3, NOW() - INTERVAL '1 day', '/uploads/post_images/justin_post.jpg'),
 ('Baby baby baby ohhh... still stuck in my head', 3, NOW() - INTERVAL '4 days', NULL),
 
 -- Billie Eilish posts
-('wore color today and everyone lost their minds 🌈', 4, NOW() - INTERVAL '3 hours', 'billie_post.jpg'),
+('wore color today and everyone lost their minds 🌈', 4, NOW() - INTERVAL '3 hours', '/uploads/post_images/billie_post.jpg'),
 ('bad guy but make it acoustic 😈', 4, NOW() - INTERVAL '2 days', NULL),
 ('oversized clothes = maximum comfort level achieved', 4, NOW() - INTERVAL '5 days', NULL),
 
 -- Dua Lipa posts
 ('Levitating to the studio for another banger 🚀', 5, NOW() - INTERVAL '5 hours', NULL),
-('New rules: always dance like nobody''s watching 💃', 5, NOW() - INTERVAL '3 days', 'dua_post.gif'),
+('New rules: always dance like nobody''s watching 💃', 5, NOW() - INTERVAL '3 days', '/uploads/post_images/dua_post.jpg'),
 ('Physical training for the tour starts now 💪', 5, NOW() - INTERVAL '1 week', NULL),
 
 -- Ed Sheeran posts
 ('Mathematical precision in every melody 🔢🎵', 6, NOW() - INTERVAL '7 hours', NULL),
 ('Thinking out loud about my next album concept', 6, NOW() - INTERVAL '2 days', NULL),
-('Perfect collaboration brewing with someone special 👀', 6, NOW() - INTERVAL '6 days', 'ed_post.jpg'),
+('Perfect collaboration brewing with someone special 👀', 6, NOW() - INTERVAL '6 days', '/uploads/post_images/ed_post.jpg'),
 
 -- Olivia Rodrigo posts
 ('drivers license test: passed ✅ heartbreak songs: unlimited', 7, NOW() - INTERVAL '1 hour', NULL),
 ('good 4 u if you''re not crying to my music rn', 7, NOW() - INTERVAL '1 day', NULL),
-('brutal honesty is my brand and I''m not sorry', 7, NOW() - INTERVAL '4 days', 'olivia_post.jpg'),gti
+('brutal honesty is my brand and I''m not sorry', 7, NOW() - INTERVAL '4 days', '/uploads/post_images/olivia_post.jpg'),
 
 -- Harry Styles posts
 ('Watermelon sugar high and loving life 🍉', 8, NOW() - INTERVAL '8 hours', NULL),
-('Fine line between fashion and art, I choose both', 8, NOW() - INTERVAL '3 days', 'harry_post.jpg'),
+('Fine line between fashion and art, I choose both', 8, NOW() - INTERVAL '3 days', '/uploads/post_images/harry_post.jpg'),
 ('Treat people with kindness, always ❤️', 8, NOW() - INTERVAL '1 week', NULL),
 
 -- Selena Gomez posts
 ('Rare moments of self-love hit different 💕', 9, NOW() - INTERVAL '2 hours', NULL),
-('Lose you to love me was just the beginning of my journey', 9, NOW() - INTERVAL '2 days', 'selena_post.jpg'),
+('Lose you to love me was just the beginning of my journey', 9, NOW() - INTERVAL '2 days', '/uploads/post_images/selena_post.png'),
 ('Mental health check: we''re all learning and growing 🌱', 9, NOW() - INTERVAL '5 days', NULL),
 
 -- The Weeknd posts
 ('Blinding lights, but make it emotional 🌟', 10, NOW() - INTERVAL '4 hours', NULL),
 ('Can''t feel my face when the music hits just right', 10, NOW() - INTERVAL '1 day', NULL),
-('After hours creativity is when magic happens ✨', 10, NOW() - INTERVAL '3 days', 'abel_post.jpg'),
+('After hours creativity is when magic happens ✨', 10, NOW() - INTERVAL '3 days', '/uploads/post_images/abel_post.jpg'),
 
 -- Adele posts
 ('Hello, it''s me wondering if you''re ready for album 31 👋', 11, NOW() - INTERVAL '6 hours', NULL),
 ('Rolling in the deep... thoughts about life and love', 11, NOW() - INTERVAL '4 days', NULL),
-('Someone like you is out there, just keep believing 💫', 11, NOW() - INTERVAL '1 week', 'adele_post.jpg'),
+('Someone like you is out there, just keep believing 💫', 11, NOW() - INTERVAL '1 week', '/uploads/post_images/adele_post.jpg'),
 
 -- Bruno Mars posts
 ('Just the way you are is exactly how you should be ✨', 12, NOW() - INTERVAL '3 hours', NULL),
-('Uptown funk vibes all day, every day 🕺', 12, NOW() - INTERVAL '2 days', 'bruno_post.jpg'),
+('Uptown funk vibes all day, every day 🕺', 12, NOW() - INTERVAL '2 days', '/uploads/post_images/bruno_post.png'),
 ('Count on me to bring the groove to every situation', 12, NOW() - INTERVAL '6 days', NULL);
 
 -- Insert Friend Relationships (bidirectional)
