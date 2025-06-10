@@ -6,20 +6,18 @@ import com.makersacademy.acebook.service.ImageStorageService;
 import com.makersacademy.acebook.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,9 +31,11 @@ public class UsersController {
     @Autowired
     NotificationService notificationService;
 
+
     // Inserts "uploads/user_profile" filepath (taken from application.properties) as uploadDir variable value
     @Value("${file.upload-dir.user-profile}")
     private String uploadDir;
+
 
     @GetMapping("/users/after-login")
     public RedirectView afterLogin() {
@@ -55,13 +55,14 @@ public class UsersController {
         String profile_pic = "/images/profile/default.jpg";
 
         // Uses the email address captured above to find the relevant user
-        // OR creates a new user if doesn't exist, utilising the elements captured above
+        // OR creates a new user if doesn't exist, utilizing the elements captured above
         userRepository
                 .findUserByUsername(username)
                 .orElseGet(() -> userRepository.save(new User(username, first_name, last_name, profile_pic)));
 
         return new RedirectView("/posts");
     }
+
 
     @GetMapping("/settings")
     public ModelAndView settings() {
@@ -88,6 +89,7 @@ public class UsersController {
         settings.addObject("user", userByEmail);
         return settings;
     }
+
 
     @PostMapping("/settings")
     public RedirectView update(@ModelAttribute User userFromForm, @RequestParam("file") MultipartFile file) throws IOException {
@@ -126,29 +128,42 @@ public class UsersController {
     }
 
 
-    // Search database for users
     @GetMapping("/friends/search")
-    public ModelAndView searchMenu(){
+    public ModelAndView searchPage() {
         ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
-
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
-
         User currentUser = userRepository.findUserByUsername((String) principal.getAttributes().get("email"))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-//        Iterable<User> otherUsers = userRepository.findUserByFirstNameAndLastName();
-        // Get notifications count for navbar
         Integer notificationCount = notificationService.notificationCount(currentUser.getId());
-
         searchPage.addObject("notificationCount", notificationCount);
-
         searchPage.addObject("currentUser", currentUser);
         return searchPage;
     }
 
-//    @PostMapping
 
+    @RequestMapping(value = "/friends/search", method = RequestMethod.POST)
+    public ModelAndView searchUsers(@RequestParam String searchInput){
+        ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
+        ModelAndView errorPage = new ModelAndView("genericErrorPage");
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepository.findUserByUsername((String) principal.getAttributes().get("email"))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<User> searchResults = userRepository.findUsersBySearchInput(searchInput);
+
+//         Get notifications count for navbar
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+        searchPage.addObject("notificationCount", notificationCount);
+        searchPage.addObject("currentUser", currentUser);
+        searchPage.addObject("searchResults", searchResults);
+        searchPage.addObject("searchInput", searchInput);
+        return searchPage;
+    }
 }
