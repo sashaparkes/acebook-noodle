@@ -68,7 +68,7 @@ INSERT INTO posts (content, user_id, time_posted, image) VALUES
 -- Olivia Rodrigo posts
 ('drivers license test: passed ✅ heartbreak songs: unlimited', 7, NOW() - INTERVAL '1 hour', NULL),
 ('good 4 u if you''re not crying to my music rn', 7, NOW() - INTERVAL '1 day', NULL),
-('brutal honesty is my brand and I''m not sorry', 7, NOW() - INTERVAL '4 days', 'olivia_post.jpg'),
+('brutal honesty is my brand and I''m not sorry', 7, NOW() - INTERVAL '4 days', 'olivia_post.jpg'),gti
 
 -- Harry Styles posts
 ('Watermelon sugar high and loving life 🍉', 8, NOW() - INTERVAL '8 hours', NULL),

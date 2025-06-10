@@ -84,7 +84,7 @@
                       <li th:each="requester : ${requesterUsers}">
                         <a th:href="@{/profile/{id}(id=${requester.id})}">
                             <span th:text="${requester.firstName + ' ' + requester.lastName}"></span></a>
-                        <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
+                        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
                             <button type="submit" name="decision" value="accept">Accept</button>
                             <button type="submit" name="decision" value="decline">Decline</button>
                         </form>
