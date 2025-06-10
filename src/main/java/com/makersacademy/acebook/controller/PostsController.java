@@ -13,19 +13,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import jakarta.transaction.Transactional;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.*;
 
@@ -45,12 +42,11 @@ public class PostsController {
     UserRepository userRepository;
     @Autowired
     ImageStorageService imageStorageService;
+    @Autowired
+    NotificationService notificationService;
 
-    //    private final PostRepository postRepository;
-    //    private final UserRepository userRepository;
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
-
 
     public PostsController(PostRepository postRepository,
                            UserRepository userRepository,
@@ -61,7 +57,6 @@ public class PostsController {
         this.commentService = commentService;
         this.commentLikeService = commentLikeService;
     }
-
 
 
     @Value("${file.upload-dir.post-images}")
@@ -87,7 +82,9 @@ public class PostsController {
         // Adds the user object to the model (page)
         String username = (String) principal.getAttributes().get("email");
         User user = userRepository.findUserByUsername(username).get();
+        Integer notificationCount = notificationService.notificationCount(user.getId());
         model.addAttribute("user", user);
+        model.addAttribute("notificationCount", notificationCount);
 
         return "posts/index";
     }
@@ -118,7 +115,7 @@ public class PostsController {
 
     //View specific post
     @GetMapping("/posts/{id}")
-    public ModelAndView viewPost(@PathVariable("id") Long id) {
+    public ModelAndView viewPost(@PathVariable("id") Long id, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
         ModelAndView modelAndView = new ModelAndView("posts/post");
         ModelAndView errorView = new ModelAndView("genericErrorPage");
         Optional<Post> currentPost = postRepository.findById(id);
@@ -159,7 +156,9 @@ public class PostsController {
                         );
                     })
                     .toList();
+            String userId = Long.toString((userRepository.findUserByUsername(email).get()).getId());
 
+            modelAndView.addObject("userId", userId);
             modelAndView.addObject("post", postDto);
             modelAndView.addObject("comments", commentDtos);
             modelAndView.addObject("newComment", new Comment());
@@ -167,27 +166,17 @@ public class PostsController {
         }
     }
 
-    @Transactional
-    public void likePost(Long userId, Long postId) {
-        boolean alreadyLiked = postLikeRepository
-                .findByUserIdAndPostId(userId, postId)
-                .isPresent();
 
-        if (!alreadyLiked) {
-            PostLike like = new PostLike();
-            like.setUserId(userId);
-            like.setPostId(postId);
-            postLikeRepository.save(like);
+    @Transactional
+    @PostMapping("/posts/{postId}/delete")
+    public RedirectView deletePost(@PathVariable Long postId,
+                                   @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+        if (Objects.equals(userRepository.findUserByUsername(email).get().getId(), postRepository.findById(postId).get().getUserId())) {
+            commentService.deleteCommentsByPostId(postId);
+            postService.deletePost(postId);
         }
+        return new RedirectView("/posts");
     }
 
-    @Transactional
-    public void unlikePost(Long userId, Long postId) {
-        postLikeRepository.deleteByUserIdAndPostId(userId, postId);
-    }
-
-    public long getLikesCount(Long postId) {
-        return postLikeRepository.countByPostId(postId);
-    }
 }
 

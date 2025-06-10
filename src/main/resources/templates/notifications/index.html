@@ -77,14 +77,24 @@
         <h1>Notifications</h1>
 
         <div class="notifications container">
-            <div  class="col-2 md-block">
+            <div  class="table">
                 <table class="table" th:each="notification: ${notifications}">
                     <tr>
                         <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
                             <input type="hidden" name="id" th:value="${notification.id}">
-                            <button class="btn btn-primary" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts">
-                                <span th:text="${senderNames[notification.id]}"></span> <span th:text="${notification.getType()}"></span>d your post!
-                            </button>
+<!--                                <div th:switch="${notification.isRead}">-->
+                                    <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
+                                        <div th:if = "${notification.getType() == 'comment'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                                        </div>
+                                        <div th:if = "${notification.getType() == 'commentLike'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> liked your comment!
+                                        </div>
+                                        <div th:if = "${notification.getType() == 'postLike'}">
+                                            <span th:text="${senderNames[notification.id]}"></span> liked your post!
+                                        </div>
+                                    </button>
+<!--                                </div>-->
                         </form>
                     </tr>
                 </table>
