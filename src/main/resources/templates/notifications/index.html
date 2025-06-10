@@ -74,15 +74,18 @@
     </nav>
     <!-- End of navbar  -->
 
-        <h1>Notifications</h1>
+    <div class="container mt-3">
+        <div class="row">
+            <div  class="d-grid gap-2 d-md-block">
+                <h1 class="text-center mt-3 text-nowrap">
+                    Notifications
+                </h1>
 
-        <div class="notifications container">
-            <div  class="table">
                 <table class="table" th:each="notification: ${notifications}">
+                    <div class="box shadow-sm border rounded mb-3">
                     <tr>
                         <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
                             <input type="hidden" name="id" th:value="${notification.id}">
-<!--                                <div th:switch="${notification.isRead}">-->
                                     <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
                                         <div th:if = "${notification.getType() == 'comment'}">
                                             <span th:text="${senderNames[notification.id]}"></span> commented on your post!
@@ -94,12 +97,13 @@
                                             <span th:text="${senderNames[notification.id]}"></span> liked your post!
                                         </div>
                                     </button>
-<!--                                </div>-->
                         </form>
                     </tr>
+                    </div>
                 </table>
             </div>
         </div>
+    </div>
 
     <!--        scripts for bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
