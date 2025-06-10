@@ -31,7 +31,7 @@
             <ul class="navbar-nav ms-auto d-flex align-items-center">
                 <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
                 <li class="nav-item d-none d-md-block"><a class="nav-link active" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
-                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications"></i>&nbsp;</a></li>
+                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
                 <li class="nav-item dropdown d-none d-md-block">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
