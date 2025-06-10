@@ -22,7 +22,7 @@
     <!-- Navbar  -->
     <nav class="navbar navbar-expand-md sticky-top">
         <div class="container d-flex justify-content-between align-items-center position-relative">
-            <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
+            <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
             <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
                 <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
             </a>
@@ -36,19 +36,19 @@
                     <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
                     <li class="nav-item dropdown d-none d-md-block">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="rounded-circle me-2" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
+                            <img class="rounded-circle me-2" th:src="@{${signedInUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
                         </a>
                         <div class="dropdown-menu dropdown-menu-end navbar-dropdown">
                             <div class="d-flex flex-column align-items-center">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" th:src="@{${user.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <img class="rounded-circle" th:src="@{${signedInUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                                 </div>
                                 <div class="fw-bold text-center">
-                                    <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                                    <div class="text-truncate"><span th:text="@{${signedInUser.firstName}}"></span> <span th:text="@{${signedInUser.lastName}}"></span></div>
                                 </div>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" th:href="@{/profile/{id}(id=${user.id})}" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+                            <a class="dropdown-item" th:href="@{/profile/{id}(id=${signedInUser.id})}" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
                             <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
@@ -56,17 +56,17 @@
                     </li>
 
                     <li class="nav-item d-block d-md-none text-center px-3">
-                        <img class="rounded-circle mb-2 mt-3" th:src="@{${user.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img class="rounded-circle mb-2 mt-3" th:src="@{${signedInUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                         <div class="fw-bold text-center">
-                            <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                            <div class="text-truncate"><span th:text="@{${signedInUser.firstName}}"></span> <span th:text="@{${signedInUser.lastName}}"></span></div>
                         </div>
                     </li>
 
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i> Notifications</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${signedInUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                 </ul>
@@ -80,7 +80,7 @@
         <div class="row">
             <div  class="d-grid gap-2 d-md-block">
                 <div class="container d-flex align-items-center justify-content-center mt-3">
-                <img th:src="@{${user.profilePic}}" alt="User Profile Image" style="width: 100px; height: 100px;"/>
+                    <img class="rounded-circle mb-2" th:src="@{${user.profilePic}}" style="width: 100px; height: 100px; object-fit: cover;">
                 <h1 class="text-nowrap" th:text="' ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
                 </div>
                 <!--<h2 th:text="'${user.firstName}''s Friends"></h2>-->
@@ -113,7 +113,7 @@
                                                 <img class="rounded-circle mb-2 mt-3" th:src="@{${post.user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
                                             <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong> posted:
                                             </span>
-                                <span class="ms-auto small">Time Stamp?</span>
+                                <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                             </div>
                             <div class="p-3 border-bottom">
                                 <a><span th:text="${post.content}" /></a>
@@ -122,9 +122,14 @@
                                      alt="Post image"
                                      style="width: 100px; height: auto;" />
                             </div>
+
+                        <!--        post likes/buttons                    -->
                             <div class="p-3 d-flex align-items-center border-bottom">
-                                <a href="#" class="me-3 text-secondary text-decoration-none"><i class="bi bi-heart-fill text-danger"></i> Like </a>
-                                <a href="#" class="me-3 text-secondary text-decoration-none"><i class="bi-chat-left-fill"></i> Comment</a>
+                                <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
+                                    <input type="hidden" name="postId" th:value="${postId}" />
+                                    <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                </form>
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none"><i class="bi-chat-left-fill"></i> Comment</a>
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small"><i class="bi bi-eye-fill"></i>View Post</a>
                             </div>
                         </div>
