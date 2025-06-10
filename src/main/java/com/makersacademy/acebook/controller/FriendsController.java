@@ -172,18 +172,12 @@ public class FriendsController {
         FriendRequest request = new FriendRequest();
         request.setRequesterId(currentUserId);
         request.setReceiverId(requesteeId);
+        request.setStatus("pending"); // Set status
+        request.setCreatedAt(new Timestamp(System.currentTimeMillis())); // Set timestamp
         friendRequestRepository.save(request);
 
-        return new RedirectView("/friends");
+        return new RedirectView("/profile/{userId}");
     }
 
-//    @PostMapping("/friends")
-//    public RedirectView create(@ModelAttribute Friend friend, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
-//        Optional<User> user = userRepository.findUserByUsername(email);
-//        if (user.isPresent()) {
-//            Long id = user.get().getId();
-//        }
-//        return new RedirectView("friends/friends");
-//    }
-    }
+}
 

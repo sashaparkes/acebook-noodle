@@ -87,7 +87,7 @@
                 <div class="container d-flex flex-column align-items-center mt-3">
                     <form th:action="@{'/add_friend/' + ${user.id}}" method="POST" style="display:inline;">
                         <button type="submit"
-                                th:disabled="${signedInUser.id == user.id or isFriend}">
+                                th:disabled="${signedInUser.id == user.id or isFriend or pendingRequest}">
                             Add Friend
                         </button>
                     </form>

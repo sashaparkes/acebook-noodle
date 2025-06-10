@@ -1,10 +1,7 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.dto.CommentDto;
-import com.makersacademy.acebook.model.Comment;
-import com.makersacademy.acebook.model.Friend;
-import com.makersacademy.acebook.model.Post;
-import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.model.*;
 import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.FriendRequestRepository;
 import com.makersacademy.acebook.repository.PostRepository;
@@ -70,6 +67,7 @@ public class ProfileController {
         }
 
         boolean isFriend = isFriend(signedInUser.getId(), userForProfile.getId());
+        boolean pendingRequest = isFriendRequest(signedInUser.getId(), userForProfile.getId());
 
         ModelAndView profile = new ModelAndView("users/profile");
         profile.addObject("userId", userId);
@@ -78,6 +76,7 @@ public class ProfileController {
         profile.addObject("posts", posts);
         profile.addObject("friends", friends);
         profile.addObject("isFriend", isFriend);
+        profile.addObject("pendingRequest", pendingRequest);
         return profile;
     }
 
@@ -95,6 +94,40 @@ public class ProfileController {
         }
 
         if (friends.contains(friendId)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    private boolean isFriendRequest(Long requesterId, Long receiverId) {
+
+        Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(requesterId, "pending");
+
+        List<Long> requests = new ArrayList<>();
+        for (FriendRequest request : pendingFriendRequests) {
+            Long receiverUserId = request.getReceiverId();
+            Optional<User> receiverUser = userRepository.findById(receiverUserId);
+            if (receiverUser.isPresent()) {
+                requests.add(receiverUser.get().getId());
+            }
+        }
+
+        Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByReceiverIdAndStatus(receiverId, "pending");
+
+        List<Long> incomingRequests = new ArrayList<>();
+        for (FriendRequest request : incomingPendingFriendRequests) {
+            Long requesterUserId = request.getRequesterId();
+            Optional<User> requesterUser = userRepository.findById(requesterUserId);
+            if (requesterUser.isPresent()) {
+                incomingRequests.add(requesterUser.get().getId());
+            }
+        }
+
+
+        if (requests.contains(receiverId) || incomingRequests.contains(receiverId)) {
             return true;
         }
         else {
