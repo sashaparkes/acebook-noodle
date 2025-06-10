@@ -160,6 +160,12 @@ public class PostsController {
             String userId = Long.toString(user.getId());
             String userDisplayName = user.getFirstName()  + " " + user.getLastName();
 
+            // Get current user for navbar
+            Optional<User> userOptional = userRepository.findUserByUsername(email);
+            User currentUser = userOptional.get();
+            modelAndView.addObject("currentUser", currentUser);
+
+
             modelAndView.addObject("userId", userId);
             modelAndView.addObject("userDisplayName", userDisplayName);
             modelAndView.addObject("post", postDto);
