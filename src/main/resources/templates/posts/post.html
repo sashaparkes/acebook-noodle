@@ -22,7 +22,7 @@
     <!-- Navbar  -->
     <nav class="navbar navbar-expand-md sticky-top">
         <div class="container d-flex justify-content-between align-items-center position-relative">
-            <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
+            <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
             <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
                 <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
             </a>
@@ -65,7 +65,7 @@
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i> Notifications</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
                     <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
@@ -95,88 +95,94 @@
                                  style="width: 300px; height: auto;" />
                             <span th:text="${post.content}"></span>
                         </div>
+
                     <!-- Likes -->
-                        <div id="post-likes-buttons button-group">
-                        <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
-                            <input type="hidden" name="postId" th:value="${postId}" />
-                            <button type="submit">Like</button>
-                        </form>
-                        <form th:action="@{/posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
-                            <input type="hidden" name="postId" th:value="${postId}" />
-                            <button type="submit">Unlike</button>
-                        </form>
-                        <div th:if="${post.posterId} == ${userId}">
-                            <form th:action="@{/posts/{postId}/delete(postId=${post.id})}" method="post" style="display:inline">
+                        <div class="p-3 d-flex align-items-center border-bottom"  id="post-likes-buttons button-group">
+                            <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                 <input type="hidden" name="postId" th:value="${postId}" />
-                                <button type="submit">Delete Post</button>
+                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
                             </form>
-                        </div>
+                            <form th:action="@{/posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
+                                <input type="hidden" name="postId" th:value="${postId}" />
+                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill"></i> Unlike</button></button>
+                            </form>
+                            <span th:text="'Likes: ' + ${post.postLikesCount}" style="display:inline; opacity:.7">0</span>
+                            <div th:if="${post.likedBy != null and !post.likedBy.isEmpty()}" style="margin-left:10px">
+                                <span style="opacity:.7;">Liked by: </span><span th:each="liker, iterStat : ${post.likedBy}" style="display:inline; opacity:.7">
+                                    <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+                                </span>
+                            </div>
+                            <div th:if="${post.posterId} == ${userId}" class="ms-auto">
+                                <form th:action="@{/posts/{postId}/delete(postId=${post.id})}" method="post" style="display:inline">
+                                    <input type="hidden" name="postId" th:value="${postId}" />
+                                    <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-trash text-danger"></i> Delete Post</button>
+                                </form>
+                            </div>
                         </div>
                         <!-- Show likes count -->
-                        <p>Likes: <span th:text="${post.postLikesCount}">0</span></p>
-                        <!-- Show who liked -->
-                        <p th:if="${post.likedBy != null and !post.likedBy.isEmpty()}">
-                            Liked by:
-                            <span th:each="liker, iterStat : ${post.likedBy}">
-                        <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
-                    </span>
-                        </p>
-                    </div>
-
-                    <hr/>
+<!--Comments -->
 
                     <div id="comments-section">
                         <h3>Comments</h3>
-                        <div th:if="${comments.size() == 0}">
-                            <p>No comments yet. Be the first to comment!</p>
+                        <div id="comments-count" style="display:inline; opacity:.7">
+                            <div th:if="${comments.size() == 0}">
+                                <p>No comments yet. Be the first to comment!</p>
+                            </div>
+                            <div th:if="${comments.size() == 1}">
+                                <p>1 comment so far.</p>
+                            </div>
+                            <div th:if="${comments.size() > 1}" th:text="${comments.size()} + ' comments so far.'">
+                            </div>
                         </div>
-                        <div th:if="${comments.size() == 1}">
-                            <p>1 comment so far.</p>
-                        </div>
-                        <div th:text="${comments.size()} + ' comments so far.'">
-                        </div>
-
-                        <ul>
-                            <li th:each="comment : ${comments}">
-                                <p>
-                                <p>
+                         <div th:each="comment : ${comments}">
+                                <div class="box shadow-sm border rounded bg-white mb-3 post">
+                                    <div class="p-3 d-flex align-items-center border-bottom">
                                     <span>
-                                            <img class="rounded-circle mb-2 mt-3" th:src="@{${comment.profilePic}}" alt="User Profile Image" style="width: 40px; height: 40px; object-fit: cover;"/>
-                                        </span>
-                                <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset"><strong th:text="${comment.displayName}">Name</strong></a> said:
-                                </p>
-                                <p th:text="${comment.content}"></p>
-                                <p><small th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Date</small></p>
 
-                                <div id="comments-likes-buttons button-group">
-                                <form th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
-                                    <input type="hidden" name="postId" th:value="${post.id}" />
-                                    <button type="submit">Like</button>
-                                </form>
-                                <form th:action="@{/posts/comments/{commentId}/unlike(commentId=${comment.id})}" method="post" style="display:inline">
-                                    <input type="hidden" name="postId" th:value="${post.id}" />
-                                    <button type="submit">Unlike</button>
-                                </form>
-                                <div th:if="${comment.commenterId} == ${userId}">
-                                    <form th:action="@{/posts/comments/{commentId}/delete(commentId=${comment.id})}" method="post" style="display:inline">
-                                        <input type="hidden" name="postId" th:value="${post.id}" />
-                                        <button type="submit">Delete Comment</button>
-                                    </form>
+                                        <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
+                                            <img class="rounded-circle mb-2 mt-3" th:src="@{${comment.profilePic}}" alt="User Profile Image" style="width: 40px; height: 40px; object-fit: cover;">
+                                        <strong th:text="${comment.displayName}"></strong></a> said:
+                                    </span>
+                                        <span class="ms-auto small" th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <a><span th:text="${comment.content}" /></a>
+                                    </div>
+
+                                    <div class="p-3 d-flex align-items-center border-bottom"  id="comments-likes-buttons button-group">
+                                        <form th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
+                                            <input type="hidden" name="postId" th:value="${post.id}" />
+                                            <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                        </form>
+                                        <form th:action="@{/posts/comments/{commentId}/unlike(commentId=${comment.id})}" method="post" style="display:inline">
+                                            <input type="hidden" name="postId" th:value="${post.id}" />
+                                            <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill"></i> Unlike</button>
+                                        </form>
+                                        <span th:text="'Likes: ' + ${comment.likesCount}" style="display:inline; width:30; opacity:.7">0</span>
+
+                                        <div th:if="${comment.likers != null and !comment.likers.isEmpty()}" style="margin-left:10px">
+                                            <span style="opacity:.7">Liked by: </span>
+                                            <span th:each="liker, iterStat : ${comment.likers}" style="display:inline; opacity:.7">
+                                                <span th:text="${liker}">User</span><span th:unless="${iterStat.last}">, </span>
+                                            </span>
+                                        </div>
+
+                                        <div th:if="${comment.likers != null and !comment.likers.isEmpty()}" style="display:inline">
+                                            <span th:each="'Liked by: ' + liker, iterStat : ${comment.likers}">
+                                                <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+                                            </span>
+                                        </div>
+                                        <div th:if="${comment.commenterId} == ${userId}" class="ms-auto">
+                                            <form th:action="@{/posts/comments/{commentId}/delete(commentId=${comment.id})}" method="post" style="display:inline">
+                                                <input type="hidden" name="postId" th:value="${post.id}" />
+                                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-trash text-danger"></i> Delete Comment</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 </div>
-
-                                <!-- Show likes count -->
-                                <p>Likes: <span th:text="${comment.likesCount}">0</span></p>
-
-                                <!-- Show who liked -->
-                                <p th:if="${comment.likers != null and !comment.likers.isEmpty()}">
-                                    Liked by:
-                                    <span th:each="liker, iterStat : ${comment.likers}">
-                        <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
-                    </span>
-                                </p>
-                            </li>
-                        </ul>
+                            </div>
                     </div>
 
                     <hr/>
