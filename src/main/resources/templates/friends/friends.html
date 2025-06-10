@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
 <head lang="en">
-  <meta charset="UTF-8"/>
-  <title>Friends</title>
+    <meta charset="UTF-8"/>
+    <title>Friends</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="icon" type="image/png" href="/favicon.png">
 
@@ -53,60 +53,80 @@
                         </div>
                     </li>
 
-                    <li class="nav-item d-block d-md-none text-center px-3">
-                        <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
-                        <div class="fw-bold text-center">
-                            <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
-                        </div>
-                    </li>
+                <li class="nav-item d-block d-md-none text-center px-3">
+                    <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                    <div class="fw-bold text-center">
+                        <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                    </div>
+                </li>
 
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
-                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End of navbar  -->
+
+<div class="container mt-3">
+    <div class="row">
+        <div  class="d-grid gap-2 d-md-block">
+            <div class="box shadow-sm border rounded mb-3">
+                <h2>Friend Requests</h2>
+                <ul>
+                    <li th:each="requester : ${requesterUsers}">
+                        <a th:href="@{/profile/{id}(id=${requester.id})}">
+                            <span th:text="${requester.firstName + ' ' + requester.lastName}"></span></a>
+                        <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
+                            <button type="submit" name="decision" value="accept">Accept</button>
+                            <button type="submit" name="decision" value="decline">Decline</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="box shadow-sm border rounded mb-3">
+                <h2>Your Friends</h2>
+                <ul>
+                    <li th:each="friend : ${friendUsers}">
+                        <a th:href="@{/profile/{id}(id=${friend.id})}">
+                            <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
+                        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
+                            <button type="submit">Remove Friend</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
-    </nav>
-    <!-- End of navbar  -->
-
-    <div class="container mt-3">
-        <div class="row">
-            <div  class="d-grid gap-2 d-md-block">
-                <div class="box shadow-sm border rounded mb-3">
-                    <h2>Friend Requests</h2>
-                    <ul>
-                      <li th:each="requester : ${requesterUsers}">
-                        <a th:href="@{/profile/{id}(id=${requester.id})}">
-                          <span th:text="${requester.firstName + ' ' + requester.lastName}"></span></a>
-                          <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
-                          <button type="submit" name="decision" value="accept">Accept</button>
-                          <button type="submit" name="decision" value="decline">Decline</button>
-                          </form>
-                      </li>
-                    </ul>
-                </div>
-                <div class="box shadow-sm border rounded mb-3">
-                    <h2>Your Friends</h2>
-                        <ul>
-                            <li th:each="friend : ${friendUsers}">
-                              <a th:href="@{/profile/{id}(id=${friend.id})}">
-                                <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
-                                <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
-                                    <button type="submit">Remove Friend</button>
-                                </form>
-                            </li>
-                        </ul>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 
-    <!--        scripts for bootstrap  -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<!--<h2>Friend Requests</h2>-->
+<!--<ul>-->
+<!--    <li th:each="requester : ${requesterUsers}">-->
+<!--        <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>-->
+<!--        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">-->
+<!--            <button type="submit" name="decision" value="accept">Accept</button>-->
+<!--            <button type="submit" name="decision" value="decline">Decline</button>-->
+<!--        </form>-->
+<!--    </li>-->
+<!--</ul>-->
+
+<!--<h2>Your Friends</h2>-->
+<!--<ul>-->
+<!--    <li th:each="friend : ${friendUsers}">-->
+<!--        <span th:text="${friend.firstName + ' ' + friend.lastName}"></span>-->
+<!--        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">-->
+<!--            <button type="submit">Remove Friend</button>-->
+<!--        </form>-->
+<!--    </li>-->
+<!--</ul>-->
+<!--        scripts for bootstrap  -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
