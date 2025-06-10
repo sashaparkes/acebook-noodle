@@ -54,6 +54,7 @@ public class ProfileController {
                 .getPrincipal();
 
         String username = (String) principal.getAttributes().get("email");
+        Long userId = (Long) principal.getAttributes().get("id");
         User userForProfile = userRepository.findById(id).get();
         Iterable<Post> posts = postRepository.findAllByUserId(id);
         Iterable<Friend> friendships = friendRepository.findAllByMainUserId(id);
@@ -68,6 +69,7 @@ public class ProfileController {
         }
 
         ModelAndView profile = new ModelAndView("users/profile");
+        profile.addObject("userId", userId);
         profile.addObject("user", userForProfile);
         profile.addObject("posts", posts);
         profile.addObject("friends", friends);

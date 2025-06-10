@@ -156,9 +156,12 @@ public class PostsController {
                         );
                     })
                     .toList();
-            String userId = Long.toString((userRepository.findUserByUsername(email).get()).getId());
+            User user = (userRepository.findUserByUsername(email)).orElse(null);
+            String userId = Long.toString(user.getId());
+            String userDisplayName = user.getFirstName()  + " " + user.getLastName();
 
             modelAndView.addObject("userId", userId);
+            modelAndView.addObject("userDisplayName", userDisplayName);
             modelAndView.addObject("post", postDto);
             modelAndView.addObject("comments", commentDtos);
             modelAndView.addObject("newComment", new Comment());

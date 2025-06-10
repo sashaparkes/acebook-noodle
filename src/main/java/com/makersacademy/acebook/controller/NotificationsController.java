@@ -42,7 +42,6 @@ public class NotificationsController {
         }
         model.addAttribute("notifications", notifications);
         model.addAttribute("senderNames", senderNames);
-        model.addAttribute("currentUser", currentUser);
         return "notifications/index";
     }
 
