@@ -45,7 +45,7 @@
                             <div class="fw-bold text-center">
                                 <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
                             </div>
-                            
+                        </div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i><small> My Profile</small></a>
                         <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
