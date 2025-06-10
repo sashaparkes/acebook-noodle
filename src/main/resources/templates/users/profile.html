@@ -33,7 +33,7 @@
                 <ul class="navbar-nav ms-auto d-flex align-items-center">
                     <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
                     <li class="nav-item d-none d-md-block"><a class="nav-link" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
-                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications"></i>&nbsp;</a></li>
+                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
                     <li class="nav-item dropdown d-none d-md-block">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="rounded-circle me-2" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
@@ -85,9 +85,12 @@
                 </div>
                 <!--<h2 th:text="'${user.firstName}''s Friends"></h2>-->
                 <div class="container d-flex flex-column align-items-center mt-3">
-                <form th:action="@{'/add_friend/' + ${user.id}}" method="POST" style="display:inline;">
-                    <button type="submit" class="mb-3">Add Friend</button>
-                </form>
+                    <form th:action="@{'/add_friend/' + ${user.id}}" method="POST" style="display:inline;">
+                        <button type="submit"
+                                th:disabled="${signedInUser.id == user.id}">
+                            Add Friend
+                        </button>
+                    </form>
                 <ul>
                     <li th:each="friend : ${friends}">
                         <a th:href="@{/profile/{id}(id=${friend.id})}">
