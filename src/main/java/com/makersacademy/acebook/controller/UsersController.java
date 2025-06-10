@@ -3,6 +3,7 @@ package com.makersacademy.acebook.controller;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.ImageStorageService;
+import com.makersacademy.acebook.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,9 @@ public class UsersController {
 
     @Autowired
     private ImageStorageService imageStorageService;
+
+    @Autowired
+    NotificationService notificationService;
 
     // Inserts "uploads/user_profile" filepath (taken from application.properties) as uploadDir variable value
     @Value("${file.upload-dir.user-profile}")
@@ -75,7 +79,12 @@ public class UsersController {
         String username = (String) principal.getAttributes().get("email");
         User userByEmail = userRepository.findUserByUsername(username).get();
         Optional<User> user = userRepository.findById(userByEmail.getId());
+
+        // Get notification count for navbar
+        Integer notificationCount = notificationService.notificationCount(userByEmail.getId());
+
         ModelAndView settings = new ModelAndView("/users/settings");
+        settings.addObject("notificationCount", notificationCount);
         settings.addObject("user", userByEmail);
         return settings;
     }
@@ -131,9 +140,15 @@ public class UsersController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 //        Iterable<User> otherUsers = userRepository.findUserByFirstNameAndLastName();
+        // Get notifications count for navbar
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
+        searchPage.addObject("notificationCount", notificationCount);
 
         searchPage.addObject("currentUser", currentUser);
         return searchPage;
     }
+
+//    @PostMapping
 
 }
