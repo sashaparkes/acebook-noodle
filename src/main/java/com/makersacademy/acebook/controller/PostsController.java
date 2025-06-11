@@ -81,7 +81,8 @@ public class PostsController {
         // Then utilizes the 'username' variable to search the database and return matching User object
         // Adds the user object to the model (page)
         String username = (String) principal.getAttributes().get("email");
-        User user = userRepository.findUserByUsername(username).get();
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Integer notificationCount = notificationService.notificationCount(user.getId());
         model.addAttribute("user", user);
         model.addAttribute("notificationCount", notificationCount);
@@ -156,16 +157,17 @@ public class PostsController {
                         );
                     })
                     .toList();
-            User user = (userRepository.findUserByUsername(email)).orElse(null);
-            String userId = Long.toString(user.getId());
-            String userDisplayName = user.getFirstName()  + " " + user.getLastName();
 
-            // Get current user for navbar
-            Optional<User> userOptional = userRepository.findUserByUsername(email);
-            User currentUser = userOptional.get();
+
+
+            // Get current user and notifications count for navbar
+            User currentUser = userRepository.findUserByUsername(email).orElse(null);
+            Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+            String userId = Long.toString(currentUser.getId());
+            String userDisplayName = currentUser.getFirstName()  + " " + currentUser.getLastName();
+
+            modelAndView.addObject("notificationCount", notificationCount);
             modelAndView.addObject("currentUser", currentUser);
-
-
             modelAndView.addObject("userId", userId);
             modelAndView.addObject("userDisplayName", userDisplayName);
             modelAndView.addObject("post", postDto);

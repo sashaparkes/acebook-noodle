@@ -45,7 +45,7 @@
                             <div class="fw-bold text-center">
                                 <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
                             </div>
-                            
+                        </div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i><small> My Profile</small></a>
                         <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
@@ -61,7 +61,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friends/search"><i class="bi bi-search"></i> Friend Search</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
 

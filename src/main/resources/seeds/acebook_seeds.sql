@@ -213,7 +213,7 @@ INSERT INTO notifications (receiving_user_id, sending_user_id, type, post_id, co
 -- Comment like notifications
 (2, 1, 'commentLike', 1, 1, true, NOW() - INTERVAL '50 minutes'),
 (9, 1, 'commentLike', 1, 2, false, NOW() - INTERVAL '35 minutes'),
-(8, 1, 'commentLike', 2, 3, false, NOW() - INTERVAL '10 hours'),
+(8, 1, 'commentLike', 2, 3, false, NOW() - INTERVAL '10 hours');
 
 -- Friend request notifications
 --(11, 4, 'friend_request', NULL, NULL, false, NOW() - INTERVAL '2 days'),
