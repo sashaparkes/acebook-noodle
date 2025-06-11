@@ -2,9 +2,12 @@ package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static java.lang.Boolean.TRUE;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Getter
+@Setter
 @Data
 @Entity
 @Table(name = "USERS")

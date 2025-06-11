@@ -1,12 +1,14 @@
 package com.makersacademy.acebook.model;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.*;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-
+@Getter
+@Setter
 @Data
 @Entity
 @Table(name = "POSTS")
@@ -30,6 +32,7 @@ public class Post {
     private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
