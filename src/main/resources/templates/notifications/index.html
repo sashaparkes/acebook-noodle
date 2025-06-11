@@ -81,6 +81,36 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Friend Requests
                 </h1>
+<!-- <<<<<<< more_html
+                <div class="row justify-content-center mt-3">
+                    <div class="col-md-6">
+                        <table class="table" th:each="notification: ${notifications}">
+                            <tr>
+                                <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
+                                    <div class="box shadow-sm border rounded bg-white post">
+                                        <div class="p-3 d-flex align-items-center border-bottom">
+                                            <input type="hidden" name="id" th:value="${notification.id}">
+                                            <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
+                                                <div th:if = "${notification.getType() == 'comment'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                                                </div>
+                                                <div th:if = "${notification.getType() == 'commentLike'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> liked your comment!
+                                                </div>
+                                                <div th:if = "${notification.getType() == 'postLike'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> liked your post!
+                                                </div>
+                                            </button>
+                                            <span class="ms-auto small" th:classappend="${notification.isRead ? 'text-muted' : 'red-text'}">
+                                                <i th:class="${notification.isRead ? 'bi bi-envelope-open' : 'bi bi-envelope'}" class="me-2"></i>
+                                                <span th:text="${notification.isRead ? 'Read' : 'Unread'}"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </tr>
+                        </table>
+======= -->
                 <p th:if="${#lists.isEmpty(pendingFriendRequests)}">You have no pending friend requests.</p>
                 <div class="box bg-white shadow-sm border rounded mb-3 p-3" th:unless="${#lists.isEmpty(pendingFriendRequests)}">
                     <div class="container">
@@ -131,11 +161,10 @@
                             </form>
                         </tr>
                     </div>
-                </table>
+                </div>
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <footer class="footer text-center">
         <div class="container">

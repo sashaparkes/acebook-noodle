@@ -31,17 +31,36 @@ h1 {
     height: auto;
 }
 
-.friend-tile {
-        background-color: #f0f0f0;   /* Light gray background */
-        border: 1px solid #ddd;      /* Light border around the tile */
-        padding: 20px;                /* Padding inside the tile */
-        border-radius: 8px;           /* Rounded corners */
-        display: flex;                /* Use flexbox to align content */
-        justify-content: center;      /* Center content horizontally */
-        align-items: center;          /* Center content vertically */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transition: transform 0.3s ease; /* Smooth hover effect */
-    }
+.red-text {
+    color: #cc3939
+}
+
+.red-gradient-text {
+    background: linear-gradient(256deg, #e06d6d 0%, #cc3939 100%);
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(256deg, #e06d6d 0%, #cc3939 100%);
+    border-color: #cc3939 !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(256deg, #d15656 0%, #b43030 100%);
+    border-color: #b43030 !important;
+}
+
+.btn-outline-primary {
+    color: #cc3939 !important;
+    border-color: #cc3939 !important;
+}
+
+.btn-outline-primary:hover {
+    color: #ffffff !important;
+    background-color: #cc3939 !important;
+    border-color: #cc3939 !important;
+}
 
 .navbar-text,
 .nav-link {
@@ -49,7 +68,9 @@ h1 {
 }
 
 .navbar .nav-link.active {
-  color: #cc3939 !important;
+  background: linear-gradient(256deg, #e06d6d 0%, #cc3939 100%) !important;
+  background-clip: text !important;
+  color: transparent !important;
 }
 
 .greeting {
