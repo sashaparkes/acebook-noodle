@@ -97,6 +97,7 @@
                             Remove Friend
                         </button>
                     </form>
+                        <h2 class="text-center mt-3 text-nowrap" th:text="${user.firstName + '&#39;s Friends'}"></h2>
                 <ul>
                     <li th:each="friend : ${friends}">
                         <a th:href="@{/profile/{id}(id=${friend.id})}">

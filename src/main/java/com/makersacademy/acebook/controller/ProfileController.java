@@ -102,32 +102,32 @@ public class ProfileController {
 
     }
 
-    private boolean isFriendRequest(Long requesterId, Long receiverId) {
+    private boolean isFriendRequest(Long userA, Long userB) {
 
-        Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(requesterId, "pending");
+        Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(userA, "pending");
 
-        List<Long> requests = new ArrayList<>();
+        List<Long> userARequests = new ArrayList<>();
         for (FriendRequest request : pendingFriendRequests) {
-            Long receiverUserId = request.getReceiverId();
-            Optional<User> receiverUser = userRepository.findById(receiverUserId);
-            if (receiverUser.isPresent()) {
-                requests.add(receiverUser.get().getId());
+            Long userBId = request.getReceiverId();
+            Optional<User> userBUser = userRepository.findById(userBId);
+            if (userBUser.isPresent()) {
+                userARequests.add(userBUser.get().getId());
             }
         }
 
-        Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByReceiverIdAndStatus(receiverId, "pending");
+        Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(userB, "pending");
 
-        List<Long> incomingRequests = new ArrayList<>();
+        List<Long> userBRequests = new ArrayList<>();
         for (FriendRequest request : incomingPendingFriendRequests) {
-            Long requesterUserId = request.getRequesterId();
-            Optional<User> requesterUser = userRepository.findById(requesterUserId);
-            if (requesterUser.isPresent()) {
-                incomingRequests.add(requesterUser.get().getId());
+            Long userAId = request.getReceiverId();
+            Optional<User> userAUser = userRepository.findById(userAId);
+            if (userAUser.isPresent()) {
+                userBRequests.add(userAUser.get().getId());
             }
         }
 
 
-        if (requests.contains(receiverId) || incomingRequests.contains(receiverId)) {
+        if (userARequests.contains(userB) || userBRequests.contains(userA)) {
             return true;
         }
         else {
@@ -135,5 +135,40 @@ public class ProfileController {
         }
 
     }
+
+//    private boolean isFriendRequest(Long requesterId, Long receiverId) {
+//
+//        Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(requesterId, "pending");
+//
+//        List<Long> requests = new ArrayList<>();
+//        for (FriendRequest request : pendingFriendRequests) {
+//            Long receiverUserId = request.getReceiverId();
+//            Optional<User> receiverUser = userRepository.findById(receiverUserId);
+//            if (receiverUser.isPresent()) {
+//                requests.add(receiverUser.get().getId());
+//            }
+//        }
+//
+//        Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByReceiverIdAndStatus(receiverId, "pending");
+//
+//        List<Long> incomingRequests = new ArrayList<>();
+//        for (FriendRequest request : incomingPendingFriendRequests) {
+//            Long requesterUserId = request.getRequesterId();
+//            Optional<User> requesterUser = userRepository.findById(requesterUserId);
+//            if (requesterUser.isPresent()) {
+//                incomingRequests.add(requesterUser.get().getId());
+//            }
+//        }
+//
+//
+//        if (requests.contains(receiverId) || incomingRequests.contains(receiverId)) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+//
+//    }
+
 
 }
