@@ -59,7 +59,7 @@ public class ProfileController {
         User signedInUser = userRepository.findUserByUsername(username).get();
         Long userId = (Long) principal.getAttributes().get("id");
         User userForProfile = userRepository.findById(id).get();
-        Iterable<Post> posts = postRepository.findAllByUserId(id);
+        Iterable<Post> posts = postRepository.findByUserIdOrderByTimePostedDesc(id);
         Iterable<Friend> friendships = friendRepository.findAllByMainUserId(id);
 
         List<User> friends = new ArrayList<>();
