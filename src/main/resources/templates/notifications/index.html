@@ -74,36 +74,83 @@
     </nav>
     <!-- End of navbar  -->
 
+            <!--Friend Requests-->
     <div class="container mt-3">
         <div class="row">
-            <div  class="d-grid gap-2 d-md-block">
+            <div  class="d-grid gap-2 d-md-block" >
+                <h1 class="text-center mt-3 text-nowrap">
+                    Friend Requests
+                </h1>
+                <p th:if="${#lists.isEmpty(pendingFriendRequests)}">You have no pending friend requests.</p>
+                <div class="box bg-white shadow-sm border rounded mb-3 p-3" th:unless="${#lists.isEmpty(pendingFriendRequests)}">
+                    <div class="container">
+                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
+                            <div th:each="requester : ${pendingFriendRequests}" class="col">
+                                <div class="border rounded mb-3 ">
+                                    <div class="p-3 d-flex align-items-center border-bottom">
+                                        <div class="me-2">
+                                            <a th:href="@{/profile/{id}(id=${requester.id})}" class="text-decoration-none text-reset">
+                                                <img class="rounded-circle" th:src="@{${requester.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            </a>
+                                        </div>
+                                        <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong></a>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
+                                            <button type="submit" name="decision" value="accept" class="small me-2 w-50">Accept</button>
+                                            <button type="submit" name="decision" value="decline" class="small w-50">Decline</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!--Notifications-->
                 <h1 class="text-center mt-3 text-nowrap">
                     Notifications
                 </h1>
-
-                <table class="table" th:each="notification: ${notifications}">
+                <p th:if="${#lists.isEmpty(notifications)}">You have no notifications.</p>
+                <table class="table" th:each="notification: ${notifications}" th:unless="${#lists.isEmpty(notifications)}">
                     <div class="box shadow-sm border rounded mb-3">
-                    <tr>
-                        <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
-                            <input type="hidden" name="id" th:value="${notification.id}">
-                                    <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
-                                        <div th:if = "${notification.getType() == 'comment'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> commented on your post!
-                                        </div>
-                                        <div th:if = "${notification.getType() == 'commentLike'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> liked your comment!
-                                        </div>
-                                        <div th:if = "${notification.getType() == 'postLike'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> liked your post!
-                                        </div>
-                                    </button>
-                        </form>
-                    </tr>
+                        <tr>
+                            <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
+                                <input type="hidden" name="id" th:value="${notification.id}">
+                                <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
+                                    <div th:if = "${notification.getType() == 'comment'}">
+                                        <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                                    </div>
+                                    <div th:if = "${notification.getType() == 'commentLike'}">
+                                        <span th:text="${senderNames[notification.id]}"></span> liked your comment!
+                                    </div>
+                                    <div th:if = "${notification.getType() == 'postLike'}">
+                                        <span th:text="${senderNames[notification.id]}"></span> liked your post!
+                                    </div>
+                                </button>
+                            </form>
+                        </tr>
                     </div>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p>
+                <span class="material-symbols-outlined" >
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+                </span>
+                Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+                <span class="material-symbols-outlined" >
+                <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+            </span>
+            </p>
+            <p>Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+        </div>
+    </footer>
 
     <!--        scripts for bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>

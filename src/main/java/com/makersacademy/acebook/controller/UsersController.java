@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.ui.Model;
@@ -128,38 +129,33 @@ public class UsersController {
     }
 
 
+    // Shows user search page
     @GetMapping("/friends/search")
-    public ModelAndView searchPage() {
-        ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
-        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        User currentUser = userRepository.findUserByUsername((String) principal.getAttributes().get("email"))
+    public ModelAndView searchPage(@AuthenticationPrincipal(expression = "attributes['email']") String email) {
+        User currentUser = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
+        ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
+
         searchPage.addObject("notificationCount", notificationCount);
         searchPage.addObject("currentUser", currentUser);
         return searchPage;
     }
 
 
+    // Search for friends via text input
     @RequestMapping(value = "/friends/search", method = RequestMethod.POST)
-    public ModelAndView searchUsers(@RequestParam String searchInput){
+    public ModelAndView searchUsers(@RequestParam String searchInput, @AuthenticationPrincipal(expression = "attributes['email']") String email){
+        User currentUser = userRepository.findUserByUsername(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
         ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
         ModelAndView errorPage = new ModelAndView("genericErrorPage");
-        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        User currentUser = userRepository.findUserByUsername((String) principal.getAttributes().get("email"))
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<User> searchResults = userRepository.findUsersBySearchInput(searchInput);
 
-//         Get notifications count for navbar
-        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
         searchPage.addObject("notificationCount", notificationCount);
         searchPage.addObject("currentUser", currentUser);
         searchPage.addObject("searchResults", searchResults);
