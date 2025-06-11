@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface FriendRepository extends CrudRepository<Friend, Long> {
     List<Friend> findAllByMainUserId(Long mainUserId);
     Optional<Friend> findByMainUserIdAndFriendUserId(Long currentUserId, Long friendId);
-    @Query("SELECT new com.makersacademy.acebook.model.Friend(a.friendUserId) " +
-            "FROM Friend a WHERE a.mainUserId = :currentUserId")
+    @Query("SELECT a.friendUserId FROM Friend a WHERE a.mainUserId = :currentUserId")
     List<Long> findFriendUserIdByMainUserId(Long currentUserId);
 }

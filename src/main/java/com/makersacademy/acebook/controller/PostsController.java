@@ -87,46 +87,30 @@ public class PostsController {
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Integer notificationCount = notificationService.notificationCount(user.getId());
+        Boolean globalWall = true;
+
         model.addAttribute("user", user);
         model.addAttribute("notificationCount", notificationCount);
+        model.addAttribute("globalWall", globalWall);
 
         return "posts/index";
     }
 
-//    // View currentUsers friends' posts
-//    @GetMapping("/posts/friends/{id}")
-//    public String viewFriendsPosts(Model model, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
-//        User currentUser = userRepository.findUserByUsername(email)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
-//
-//        List<Long> friendsIds = (friendRepository.findFriendUserIdByMainUserId(currentUser.getId()));
-//        for (friend : friendsIds) {
-//            userRepository.findById(friend);
-//        }
-
-        // Finds all posts and shows them in reverse chronological order
-        Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
-        model.addAttribute("posts", posts);
-        model.addAttribute("post", new Post());
-
-        // Creates principal variable of type Default0idcUser - Spring Security class which represents a user authenticated by Auth0
-        // The get commands work together to extract user attributes from Auth0 (email, given_name, family_name)
-        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        // Uses the principal variable above to extract email and assign to username var
-        // Then utilizes the 'username' variable to search the database and return matching User object
-        // Adds the user object to the model (page)
-        String username = (String) principal.getAttributes().get("email");
-        User user = userRepository.findUserByUsername(username)
+    // View currentUsers friends' posts
+    @GetMapping("/posts/friends/{id}")
+    public String viewFriendsPosts(Model friendsWall, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+        User currentUser = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Integer notificationCount = notificationService.notificationCount(user.getId());
-        model.addAttribute("user", user);
-        model.addAttribute("notificationCount", notificationCount);
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
 
+        List<Post> friendsPosts =  postService.findFriendsPosts(currentUser.getId());
+        Boolean globalWall = false;
+
+        friendsWall.addAttribute("globalWall", globalWall);
+        friendsWall.addAttribute("posts", friendsPosts);
+        friendsWall.addAttribute("user", currentUser);
+        friendsWall.addAttribute("notificationCount", notificationCount);
+        friendsWall.addAttribute("post", new Post());
         return "posts/index";
     }
 
@@ -134,6 +118,7 @@ public class PostsController {
     // Create new post
     @PostMapping("/posts")
     public RedirectView create(
+//            @RequestParam("globalWall") Boolean globalWall,
             @RequestParam("content") String content,
             @AuthenticationPrincipal(expression = "attributes['email']") String email,
             @RequestParam("image") MultipartFile file
@@ -151,6 +136,11 @@ public class PostsController {
         }
 
         return new RedirectView("/posts");
+//        if (globalWall == true) {
+//            return new RedirectView("/posts");
+//        } else {
+//            return new RedirectView("/posts/friends/{user.getId()");
+//        }
     }
 
 

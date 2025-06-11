@@ -1,5 +1,6 @@
 package com.makersacademy.acebook.service;
 
+import com.makersacademy.acebook.dto.PostDto;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.PostLike;
 import com.makersacademy.acebook.model.User;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -25,6 +27,8 @@ public class PostService {
     UserRepository userRepository;
     @Autowired
     FriendRepository friendRepository;
+    @Autowired
+    PostLikeService postLikeService;
 
 
     public PostService(PostRepository postRepository,
@@ -64,17 +68,14 @@ public class PostService {
     public List<Post> findFriendsPosts(Long currentUserId) {
         // Find the id's of each friend for current user
         List<Long> friendsIds = (friendRepository.findFriendUserIdByMainUserId(currentUserId));
-        List<User> friends = new ArrayList<>();
         List<Post> friendsPosts = new ArrayList<>();
         // find the User objects for each friend of current user
         for (Long friend : friendsIds) {
-            User friendUser = userRepository.findById(friend).orElse(null);
-            friends.add(addFriend);
+            Iterable<Post> postsOfFriend = postRepository.findAllByUserId(friend);
+            postsOfFriend.forEach(friendsPosts::add);
         }
-        // find all posts for each friendUser
-        for (User friendUser : friends)
-
-        for
+        friendsPosts.sort(Collections.reverseOrder());
+        return friendsPosts;
     }
 }
 
