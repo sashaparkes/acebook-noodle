@@ -3,6 +3,7 @@ package com.makersacademy.acebook.controller;
 import com.makersacademy.acebook.dto.CommentDto;
 import com.makersacademy.acebook.dto.PostDto;
 import com.makersacademy.acebook.model.*;
+import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostLikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
@@ -44,6 +45,8 @@ public class PostsController {
     ImageStorageService imageStorageService;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    FriendRepository friendRepository;
 
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
@@ -65,6 +68,43 @@ public class PostsController {
     // View all posts
     @GetMapping("/posts")
     public String index(Model model) {
+        // Finds all posts and shows them in reverse chronological order
+        Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
+        model.addAttribute("posts", posts);
+        model.addAttribute("post", new Post());
+
+        // Creates principal variable of type Default0idcUser - Spring Security class which represents a user authenticated by Auth0
+        // The get commands work together to extract user attributes from Auth0 (email, given_name, family_name)
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        // Uses the principal variable above to extract email and assign to username var
+        // Then utilizes the 'username' variable to search the database and return matching User object
+        // Adds the user object to the model (page)
+        String username = (String) principal.getAttributes().get("email");
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Integer notificationCount = notificationService.notificationCount(user.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("notificationCount", notificationCount);
+
+        return "posts/index";
+    }
+
+//    // View currentUsers friends' posts
+//    @GetMapping("/posts/friends/{id}")
+//    public String viewFriendsPosts(Model model, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+//        User currentUser = userRepository.findUserByUsername(email)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+//
+//        List<Long> friendsIds = (friendRepository.findFriendUserIdByMainUserId(currentUser.getId()));
+//        for (friend : friendsIds) {
+//            userRepository.findById(friend);
+//        }
+
         // Finds all posts and shows them in reverse chronological order
         Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
         model.addAttribute("posts", posts);
