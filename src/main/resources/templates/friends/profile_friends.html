@@ -75,30 +75,32 @@
 </nav>
 <!-- End of navbar  -->
 
-      <h1 class="text-center mt-3 text-nowrap">
-        Your Friends
-      </h1>
+<h1 class="text-center mt-3 text-nowrap" th:text="${profileUser.firstName} + '\'s Friends'">
+</h1>
 
+  <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}" th:text="${profileUser.firstName} + ' has no friends'"></p>
+
+
+    <div th:if="${not #lists.isEmpty(friendUsers)}">
       <div class="box bg-white shadow-sm border rounded mb-3 p-3">
         <div class="container">
-          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
-            <div th:each="friend : ${friendUsers}" class="col">
-              <div class="border rounded mb-3 ">
-                <div class="p-3 d-flex align-items-center border-bottom">
-                  <div class="me-2">
-                    <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
-                      <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+          <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
+          <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
+              <div th:each="friend : ${friendUsers}" class="col">
+                <div class="border rounded mb-3 ">
+                  <div class="p-3 d-flex align-items-center border-bottom">
+                    <div class="me-2">
+                      <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
+                        <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                    <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
                   </div>
-                  <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
 <!--        scripts for bootstrap  -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
