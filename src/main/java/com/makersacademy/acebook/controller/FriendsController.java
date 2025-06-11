@@ -196,6 +196,10 @@ public class FriendsController {
         Optional<User> userOptional = userRepository.findUserByUsername(email);
         User currentUser = userOptional.get();
 
+        // Profile User!
+        Optional<User> profileUserOptional = userRepository.findById(id);
+        User profileUser = profileUserOptional.get();
+
         // Friends!
         List<Friend> friendsList = friendRepository.findAllByMainUserId(id);
 
@@ -218,6 +222,7 @@ public class FriendsController {
         modelAndView.addObject("notificationCount", notificationCount);
         modelAndView.addObject("friendUsers", friendUsers);
         modelAndView.addObject("currentUser", currentUser);
+        modelAndView.addObject("profileUser", profileUser);
 
         return modelAndView;
     }

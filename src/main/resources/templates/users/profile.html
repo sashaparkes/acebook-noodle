@@ -113,8 +113,13 @@
                     <h1 class="text-center mt-3 text-nowrap" th:text="${user.firstName} + '\'s Friends'">
                     </h1>
 
+                    <p th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
+
+                <div th:if="${not #lists.isEmpty(friends)}">
                     <div class="box bg-white shadow-sm border rounded mb-3 p-3">
                         <div class="container">
+                            <p th:if="${friends.size() == 1}" th:text="${friends.size() + ' Friend'}"></p>
+                            <p th:if="${friends.size() > 1}" th:text="${friends.size() + ' Friends'}"></p>
                             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
                                 <div th:each="friend : ${friends}" class="col">
                                     <div class="border rounded mb-3 ">
@@ -139,6 +144,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
         <h1 class="text-center mt-3 text-nowrap" th:text="${user.firstName} + '\'s Posts'">
         </h1>
