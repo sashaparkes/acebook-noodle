@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "POSTS")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,11 @@ public class Post {
 
     public Post(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public int compareTo(Post p) {
+        return getTimePosted().compareTo(p.getTimePosted());
     }
 }
 

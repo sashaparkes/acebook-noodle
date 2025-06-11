@@ -3,6 +3,7 @@ package com.makersacademy.acebook.controller;
 import com.makersacademy.acebook.dto.CommentDto;
 import com.makersacademy.acebook.dto.PostDto;
 import com.makersacademy.acebook.model.*;
+import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostLikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
@@ -40,6 +41,8 @@ public class PostsController {
     ImageStorageService imageStorageService;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    FriendRepository friendRepository;
 
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
@@ -73,9 +76,31 @@ public class PostsController {
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Integer notificationCount = notificationService.notificationCount(user.getId());
+        Boolean globalWall = true;
+
         model.addAttribute("user", user);
         model.addAttribute("notificationCount", notificationCount);
+        model.addAttribute("globalWall", globalWall);
 
+        return "posts/index";
+    }
+
+    // View currentUsers friends' posts
+    @GetMapping("/posts/friends/{id}")
+    public String viewFriendsPosts(Model friendsWall, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+        User currentUser = userRepository.findUserByUsername(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
+        List<Post> friendsPosts =  postService.findFriendsPosts(currentUser.getId());
+        Boolean globalWall = false;
+
+        friendsWall.addAttribute("globalWall", globalWall);
+        friendsWall.addAttribute("posts", friendsPosts);
+        friendsWall.addAttribute("user", currentUser);
+        friendsWall.addAttribute("notificationCount", notificationCount);
+        friendsWall.addAttribute("post", new Post());
+      
         // ADD likeCounts and commentCounts
         Map<Long, Long> likeCounts = new HashMap<>();
         Map<Long, Long> commentCounts = new HashMap<>();
@@ -97,6 +122,7 @@ public class PostsController {
     //  Create new post
     @PostMapping("/posts")
     public RedirectView create(
+//            @RequestParam("globalWall") Boolean globalWall,
             @RequestParam("content") String content,
             @AuthenticationPrincipal(expression = "attributes['email']") String email,
             @RequestParam("image") MultipartFile file
@@ -114,6 +140,11 @@ public class PostsController {
         }
 
         return new RedirectView("/posts");
+//        if (globalWall == true) {
+//            return new RedirectView("/posts");
+//        } else {
+//            return new RedirectView("/posts/friends/{user.getId()");
+//        }
     }
 
 
