@@ -129,7 +129,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="/friends">View all</a>
+                            <div th:if="${signedInUser.id != user.id}">
+                            <a th:href="@{/friends/{id}(id=${user.id})}">View all</a>
+                            </div>
+                            <div th:if="${signedInUser.id == user.id}">
+                                <a href="/friends">View all</a>
+                            </div>
                         </div>
                     </div>
                 </div>
