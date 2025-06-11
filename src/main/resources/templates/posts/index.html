@@ -123,6 +123,7 @@
                                     </a>
                                 </div>
                                 <div>
+                                    <a th:href="@{/profile/{id}(id=${post.user.id})}" class="text-decoration-none text-reset">
                                     <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong>
                                     </a>
                                 </div>
