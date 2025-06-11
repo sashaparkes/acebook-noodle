@@ -64,8 +64,6 @@ public class PostsController {
     @GetMapping("/posts")
     public String index(Model model) {
         Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
-        model.addAttribute("posts", posts);
-        model.addAttribute("post", new Post());
 
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
@@ -78,6 +76,22 @@ public class PostsController {
         Integer notificationCount = notificationService.notificationCount(user.getId());
         Boolean globalWall = true;
 
+        // ADD likeCounts and commentCounts
+        Map<Long, Long> likeCounts = new HashMap<>();
+        Map<Long, Long> commentCounts = new HashMap<>();
+
+        for (Post post : posts) {
+            long postLikes = postService.getLikesCount(post.getId());
+            likeCounts.put(post.getId(), postLikes);
+
+            long postComments = commentService.getCommentsForPost(post.getId()).size();
+            commentCounts.put(post.getId(), postComments);
+        }
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("post", new Post());
+        model.addAttribute("likeCounts", likeCounts);
+        model.addAttribute("commentCounts", commentCounts);
         model.addAttribute("user", user);
         model.addAttribute("notificationCount", notificationCount);
         model.addAttribute("globalWall", globalWall);
@@ -95,17 +109,11 @@ public class PostsController {
         List<Post> friendsPosts =  postService.findFriendsPosts(currentUser.getId());
         Boolean globalWall = false;
 
-        friendsWall.addAttribute("globalWall", globalWall);
-        friendsWall.addAttribute("posts", friendsPosts);
-        friendsWall.addAttribute("user", currentUser);
-        friendsWall.addAttribute("notificationCount", notificationCount);
-        friendsWall.addAttribute("post", new Post());
-      
         // ADD likeCounts and commentCounts
         Map<Long, Long> likeCounts = new HashMap<>();
         Map<Long, Long> commentCounts = new HashMap<>();
 
-        for (Post post : posts) {
+        for (Post post : friendsPosts) {
             long postLikes = postService.getLikesCount(post.getId());
             likeCounts.put(post.getId(), postLikes);
 
@@ -113,8 +121,13 @@ public class PostsController {
             commentCounts.put(post.getId(), postComments);
         }
 
-        model.addAttribute("likeCounts", likeCounts);
-        model.addAttribute("commentCounts", commentCounts);
+        friendsWall.addAttribute("likeCounts", likeCounts);
+        friendsWall.addAttribute("commentCounts", commentCounts);
+        friendsWall.addAttribute("globalWall", globalWall);
+        friendsWall.addAttribute("posts", friendsPosts);
+        friendsWall.addAttribute("user", currentUser);
+        friendsWall.addAttribute("notificationCount", notificationCount);
+        friendsWall.addAttribute("post", new Post());
 
         return "posts/index";
     }
