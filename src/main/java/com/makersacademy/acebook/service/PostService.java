@@ -1,11 +1,19 @@
 package com.makersacademy.acebook.service;
 
+import com.makersacademy.acebook.dto.PostDto;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.PostLike;
+import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostLikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
+import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -15,6 +23,12 @@ public class PostService {
     PostRepository postRepository;
     @Autowired
     PostLikeRepository postLikeRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    FriendRepository friendRepository;
+    @Autowired
+    PostLikeService postLikeService;
 
 
     public PostService(PostRepository postRepository,
@@ -49,6 +63,19 @@ public class PostService {
 
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    public List<Post> findFriendsPosts(Long currentUserId) {
+        // Find the id's of each friend for current user
+        List<Long> friendsIds = (friendRepository.findFriendUserIdByMainUserId(currentUserId));
+        List<Post> friendsPosts = new ArrayList<>();
+        // find the User objects for each friend of current user
+        for (Long friend : friendsIds) {
+            Iterable<Post> postsOfFriend = postRepository.findAllByUserId(friend);
+            postsOfFriend.forEach(friendsPosts::add);
+        }
+        friendsPosts.sort(Collections.reverseOrder());
+        return friendsPosts;
     }
 }
 

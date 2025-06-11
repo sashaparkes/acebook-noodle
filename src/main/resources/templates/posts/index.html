@@ -80,6 +80,16 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Posts
                 </h1>
+                <!--  filter links -->
+                <div class ="ms-auto small" th:if="${globalWall == true}">
+                    <a th:href="@{/posts/friends/{id}(id=${user.id})}" class="text-secondary text-decoration-none ms-auto small">
+                            <i class="bi bi-people-fill"></i> View Friends Posts</a>
+                </div>
+                <div class ="ms-auto small" th:if="${globalWall == false}">
+                    <a th:href="@{/posts}" class="text-secondary text-decoration-none ms-auto small">
+                            <i class="bi bi-globe2"></i>View Global Posts</a>
+                </div>
+                <!-- end filter links -->
                 <div class="box shadow-sm border rounded bg-white mb-3 mt-3">
                     <form th:action="@{/posts}" method="post" enctype="multipart/form-data">
                         <div class="p-3 d-flex align-items-center border-bottom">
@@ -94,6 +104,7 @@
                             </div>
                         </div>
                         <div class="p-3 d-flex align-items-center border-bottom">
+<!--                            <input type="hidden" name="id" th:value="${globalWall}">-->
                             <div class="d-flex align-items-center me-3"><label class="form-label small mb-0 me-2">Upload an image:</label> <input type="file" name="image" class="form-control form-control-sm" style="width: auto;"></div>
                             <div class="ms-auto"> <input type="reset" value="Clear" class="btn btn-outline-primary btn-sm me-2" /><input type="submit" value="Post Status" class="btn btn-primary btn-sm"/></div>
                         </div>
@@ -112,6 +123,7 @@
                                     </a>
                                 </div>
                                 <div>
+                                    <a th:href="@{/profile/{id}(id=${post.user.id})}" class="text-decoration-none text-reset">
                                     <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong>
                                     </a>
                                 </div>

@@ -111,14 +111,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
             <h1 class="text-center mt-3 text-nowrap">
                     Your Friends
                 </h1>
-            <div class="row justify-content-center mt-3">
+            <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}">You have no friends!</p>
+            <div th:if="${not #lists.isEmpty(friendUsers)}">
+              <div class="row justify-content-center mt-3">
                 <div class="col-md-7">
                     <div class="box bg-white shadow-sm border rounded mb-3 p-3">
                         <div class="container">
+                          <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
+                          <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
                             <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
                                 <div th:each="friend : ${friendUsers}" class="col">
                                     <div class="border rounded mb-3 ">
@@ -134,8 +141,8 @@
                                                 <button type="submit" class="btn btn-outline-primary btn-sm me-2 w-60">Remove Friend</button>
                                             </form>
                                         </div>
-                                    </div>
-                                </div>
+                                  </div>
+
                             </div>
                         </div>
                     </div>
