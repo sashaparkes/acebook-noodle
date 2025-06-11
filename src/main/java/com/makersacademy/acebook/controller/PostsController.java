@@ -158,8 +158,6 @@ public class PostsController {
                     })
                     .toList();
 
-
-
             // Get current user and notifications count for navbar
             User currentUser = userRepository.findUserByUsername(email).orElse(null);
             Integer notificationCount = notificationService.notificationCount(currentUser.getId());
