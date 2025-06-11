@@ -85,8 +85,6 @@
                             <div class="me-2">
                                 <a th:href="@{/profile/{id}(id=${post.posterId})}" class="text-decoration-none text-reset">
                                     <img class="rounded-circle" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                            </div>
-                            <div>
                                 <strong th:text="${post.posterName}"></strong>
                                 </a>
                             </div>
@@ -146,8 +144,6 @@
                                         <div class="me-2">
                                             <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
                                                 <img class="rounded-circle" th:src="@{${comment.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                        </div>
-                                        <div>
                                             <strong th:text="${comment.displayName}"></strong>
                                             </a>
                                         </div>

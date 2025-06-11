@@ -90,21 +90,21 @@
                                         <div class="me-2">
                                             <a th:href="@{/profile/{id}(id=${requester.id})}" class="text-decoration-none text-reset">
                                                 <img class="rounded-circle" th:src="@{${requester.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong>
+                                            </a>
                                         </div>
-                                        <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong></a>
-                                    </div>
-                                    <div class="p-3 border-bottom">
-                                        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
-                                            <button type="submit" name="decision" value="accept" class="small me-2 w-50">Accept</button>
-                                            <button type="submit" name="decision" value="decline" class="small w-50">Decline</button>
-                                        </form>
+                                        <div class="p-3 border-bottom">
+                                            <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
+                                                <button type="submit" name="decision" value="accept" class="small me-2 w-50">Accept</button>
+                                                <button type="submit" name="decision" value="decline" class="small w-50">Decline</button>
+                                            </form>
+                                     </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <h1 class="text-center mt-3 text-nowrap">
                     Your Friends
                 </h1>
@@ -118,13 +118,13 @@
                                         <div class="me-2">
                                             <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
                                                 <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
                                         </div>
-                                        <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
-                                    </div>
-                                    <div class="p-3 border-bottom">
-                                        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
-                                            <button type="submit" class="small me-2 w-60">Remove Friend</button>
-                                        </form>
+                                        <div class="p-3 border-bottom">
+                                            <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
+                                                <button type="submit" class="small me-2 w-60">Remove Friend</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
