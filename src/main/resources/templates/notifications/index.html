@@ -80,30 +80,40 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Notifications
                 </h1>
-
-                <table class="table" th:each="notification: ${notifications}">
-                    <div class="box shadow-sm border rounded mb-3">
-                    <tr>
-                        <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
-                            <input type="hidden" name="id" th:value="${notification.id}">
-                                    <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
-                                        <div th:if = "${notification.getType() == 'comment'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                <div class="row justify-content-center mt-3">
+                    <div class="col-md-6">
+                        <table class="table" th:each="notification: ${notifications}">
+                            <tr>
+                                <form action="#" th:action="@{/notifications}" th:object="${notification}" method="POST">
+                                    <div class="box shadow-sm border rounded bg-white post">
+                                        <div class="p-3 d-flex align-items-center border-bottom">
+                                            <input type="hidden" name="id" th:value="${notification.id}">
+                                            <button class="btn toggle" th:id="'read' + ${notification.id}" value="read" type="submit" a href="/posts" th:styleappend="${notification.isRead == true ? 'opacity:.3' : 'opacity:1'}">
+                                                <div th:if = "${notification.getType() == 'comment'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> commented on your post!
+                                                </div>
+                                                <div th:if = "${notification.getType() == 'commentLike'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> liked your comment!
+                                                </div>
+                                                <div th:if = "${notification.getType() == 'postLike'}">
+                                                    <span th:text="${senderNames[notification.id]}"></span> liked your post!
+                                                </div>
+                                            </button>
+                                            <span class="ms-auto small" th:classappend="${notification.isRead ? 'text-muted' : 'red-text'}">
+                                                <i th:class="${notification.isRead ? 'bi bi-envelope-open' : 'bi bi-envelope'}" class="me-2"></i>
+                                                <span th:text="${notification.isRead ? 'Read' : 'Unread'}"></span>
+                                            </span>
                                         </div>
-                                        <div th:if = "${notification.getType() == 'commentLike'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> liked your comment!
-                                        </div>
-                                        <div th:if = "${notification.getType() == 'postLike'}">
-                                            <span th:text="${senderNames[notification.id]}"></span> liked your post!
-                                        </div>
-                                    </button>
-                        </form>
-                    </tr>
+                                    </div>
+                                </form>
+                            </tr>
+                        </table>
                     </div>
-                </table>
+                </div>
             </div>
         </div>
     </div>
+
 
     <!--        scripts for bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
