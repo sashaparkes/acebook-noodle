@@ -6,6 +6,7 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.FriendRequestRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,8 @@ public class FriendsController {
     FriendRepository friendRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("/friends")
     public ModelAndView friendList(@AuthenticationPrincipal(expression = "attributes['email']") String email) {
@@ -71,6 +74,11 @@ public class FriendsController {
             }
         }
 
+
+        // Get notifications count for navbar
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
+        modelAndView.addObject("notificationCount", notificationCount);
         modelAndView.addObject("friendUsers", friendUsers);
         modelAndView.addObject("requesterUsers", requesterUsers);
         modelAndView.addObject("currentUser", currentUser);

@@ -9,6 +9,7 @@ import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.CommentLikeService;
 import com.makersacademy.acebook.service.CommentService;
 import com.makersacademy.acebook.service.ImageStorageService;
+import com.makersacademy.acebook.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,6 +43,8 @@ public class ProfileController {
     FriendRepository friendRepository;
     @Autowired
     FriendRequestRepository friendRequestRepository;
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("/profile/{userId}")
     public ModelAndView profile(@PathVariable("userId") Long id) {
@@ -66,10 +69,14 @@ public class ProfileController {
             }
         }
 
+        // Get notifications count for navbar
+        Integer notificationCount = notificationService.notificationCount(signedInUser.getId());
+
         boolean isFriend = isFriend(signedInUser.getId(), userForProfile.getId());
         boolean pendingRequest = isFriendRequest(signedInUser.getId(), userForProfile.getId());
 
         ModelAndView profile = new ModelAndView("users/profile");
+        profile.addObject("notificationCount", notificationCount);
         profile.addObject("userId", userId);
         profile.addObject("user", userForProfile);
         profile.addObject("signedInUser", signedInUser);
