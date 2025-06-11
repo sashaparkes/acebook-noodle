@@ -82,18 +82,24 @@
                     <div id="post-body">
                         <!-- Show posters profile picture and name -->
                         <div class="p-3 d-flex align-items-center border-bottom">
-                                     <span>
-                                        <img class="rounded-circle mb-2 mt-3" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                        <strong th:text="${post.posterName}"></strong> posted:
-                                     </span>
+                            <div class="me-2">
+                                <a th:href="@{/profile/{id}(id=${post.posterId})}" class="text-decoration-none text-reset">
+                                    <img class="rounded-circle" th:src="@{${post.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                            </div>
+                            <div>
+                                <strong th:text="${post.posterName}"></strong>
+                                </a>
+                            </div>
                             <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                         </div>
-                        <div class="p-3 d-flex align-items-center border-bottom">
+                        <div class="p-3 border-bottom">
                             <img th:if="${post.image != null}"
                                  th:src="@{${post.image}}"
                                  alt="Post image"
-                                 style="width: 300px; height: auto;" />
-                            <span th:text="${post.content}"></span>
+                                 class="img-fluid custom-image-2 mt-1 mb-3"/>
+                            <div>
+                                <a><span th:text="${post.content}"></span></a>
+                            </div>
                         </div>
 
                     <!-- Likes -->
@@ -137,12 +143,14 @@
                          <div th:each="comment : ${comments}">
                                 <div class="box shadow-sm border rounded bg-white mb-3 post">
                                     <div class="p-3 d-flex align-items-center border-bottom">
-                                    <span>
-
-                                        <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
-                                            <img class="rounded-circle mb-2 mt-3" th:src="@{${comment.profilePic}}" alt="User Profile Image" style="width: 40px; height: 40px; object-fit: cover;">
-                                        <strong th:text="${comment.displayName}"></strong></a> said:
-                                    </span>
+                                        <div class="me-2">
+                                            <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
+                                                <img class="rounded-circle" th:src="@{${comment.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                        </div>
+                                        <div>
+                                            <strong th:text="${comment.displayName}"></strong>
+                                            </a>
+                                        </div>
                                         <span class="ms-auto small" th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
                                     </div>
                                     <div class="p-3 border-bottom">

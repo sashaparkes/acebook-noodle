@@ -73,58 +73,70 @@
 </nav>
 <!-- End of navbar  -->
 
-<!--  Main content  -->
-<div class="container">
-    <div class="row">
-        <div  class="d-grid gap-2 d-md-block">
-            <h1 class="text-center mt-3 text-nowrap">
-                Posts
-            </h1>
-
-            <div class="box shadow-sm border rounded bg-white mb-3 mt-3">
-                <form th:action="@{/posts}" method="post" enctype="multipart/form-data">
-                    <p>Say Something: <input type="text" name="content"/></p>
-                    <input type="file" name="image" />
-                    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-                </form>
+    <!--  Main content  -->
+    <div class="container">
+        <div class="row">
+            <div  class="d-grid gap-2 d-md-block">
+                <h1 class="text-center mt-3 text-nowrap">
+                    Posts
+                </h1>
+                <div class="box shadow-sm border rounded bg-white mb-3 mt-3">
+                    <form th:action="@{/posts}" method="post" enctype="multipart/form-data">
+                        <div class="p-3 d-flex align-items-center border-bottom">
+                            <a><i class="bi bi-pencil-square"></i> Share an update</a>
+                        </div>
+                        <div class="p-3 d-flex align-items-center border-bottom">
+                            <div class="me-3">
+                                <img class="rounded-circle" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                            </div>
+                            <div class="flex-grow-1">
+                                <textarea class="form-control border-0 p-0 shadow-none mt-2" placeholder="Write your thoughts..." name="content" rows="1"></textarea>
+                            </div>
+                        </div>
+                        <div class="p-3 d-flex align-items-center border-bottom">
+                            <div class="d-flex align-items-center me-3"><label class="form-label small mb-0 me-2">Upload an image:</label> <input type="file" name="image" class="form-control form-control-sm" style="width: auto;"></div>
+                            <div class="ms-auto"> <input type="reset" value="Clear" class="small me-2" /><input type="submit" value="Post Status" class="small"/></div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <div  class="d-grid gap-2 d-md-block">
-            <div class="list-group list-group-flush" >
-                <div th:each="post: ${posts}">
-                    <div class="box shadow-sm border rounded bg-white mb-3 post">
-                        <div class="p-3 d-flex align-items-center border-bottom">
-
-                                 <span>
-                                  <a th:href="@{/profile/{id}(id=${post.user.id})}" class="text-decoration-none text-reset">
-                                    <img class="rounded-circle mb-2 mt-3" th:src="@{${post.user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                    <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong></a> posted:
-                                 </span>
-                            <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
-                        </div>
-                        <div class="p-3 border-bottom">
-                            <a><span th:text="${post.content}" /></a>
-                            <img th:if="${post.image != null}"
-                                 th:src="@{${post.image}}"
-                                 alt="Post image"
-                                 style="width: 100px; height: auto;" />
-                        </div>
-                        <div class="p-3 d-flex align-items-center border-bottom">
-                            <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
-                                <input type="hidden" name="postId" th:value="${postId}" />
-                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
-                            </form>
-                            <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none"><i class="bi-chat-left-fill"></i> Comment</a>
-                            <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small"><i class="bi bi-eye-fill"></i>View Post</a>
+            <div  class="d-grid gap-2 d-md-block">
+                <div class="list-group list-group-flush" >
+                    <div th:each="post: ${posts}">
+                        <div class="box shadow-sm border rounded bg-white mb-3 post">
+                            <div class="p-3 d-flex align-items-center border-bottom">
+                                <div class="me-2">
+                                    <a th:href="@{/profile/{id}(id=${post.user.id})}" class="text-decoration-none text-reset">
+                                        <img class="rounded-circle" th:src="@{${post.user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <strong th:text="${post.user.firstName + ' ' + post.user.lastName}"></strong>
+                                    </a>
+                                </div>
+                                <span class="ms-auto small" th:text="${#dates.format(post.timePosted, 'MMM d, yyyy HH:mm')}">Time Stamp</span>
+                            </div>
+                            <div class="p-3 border-bottom">
+                                <img th:if="${post.image != null}" th:src="@{${post.image}}" alt="Post image" class="img-fluid custom-image-1 mt-1 mb-3"/>
+                                <div>
+                                    <a><span th:text="${post.content}"></span></a>
+                                </div>
+                            </div>
+                            <div class="p-3 d-flex align-items-center border-bottom">
+                                <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
+                                    <input type="hidden" name="postId" th:value="${postId}" />
+                                    <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                </form>
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none"><i class="bi-chat-left-fill"></i> Comment</a>
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small"><i class="bi bi-eye-fill"></i> View Post</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--  End of main content  -->
+    <!--  End of main content  -->
 
 <!--        script for bootstrap  -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
