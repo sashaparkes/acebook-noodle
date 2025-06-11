@@ -110,7 +110,9 @@
                         <button type="submit" disabled>Friend Request Pending</button>
                     </div>
 
-                    <h1 class="text-center mt-3 text-nowrap" th:text="${user.firstName} + '\'s Friends'">
+                    <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Friends'">
+                    </h1>
+                    <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id == user.id}">Your Friends
                     </h1>
 
                     <p th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
@@ -146,7 +148,9 @@
         </div>
     </div>
 
-        <h1 class="text-center mt-3 text-nowrap" th:text="${user.firstName} + '\'s Posts'">
+        <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Posts'">
+        </h1>
+        <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id == user.id}">Your Posts
         </h1>
 
         <div class="list-group list-group-flush" >
