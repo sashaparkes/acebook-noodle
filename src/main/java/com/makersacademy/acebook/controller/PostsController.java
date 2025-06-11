@@ -21,11 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import jakarta.transaction.Transactional;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import lombok.*;
-
+import java.util.*;
 
 @Controller
 public class PostsController {
@@ -58,28 +54,21 @@ public class PostsController {
         this.commentLikeService = commentLikeService;
     }
 
-
     @Value("${file.upload-dir.post-images}")
     private String uploadDir;
 
-    // View all posts
+    // ✅ View all posts
     @GetMapping("/posts")
     public String index(Model model) {
-        // Finds all posts and shows them in reverse chronological order
         Iterable<Post> posts = postRepository.findByOrderByTimePostedDesc();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
 
-        // Creates principal variable of type Default0idcUser - Spring Security class which represents a user authenticated by Auth0
-        // The get commands work together to extract user attributes from Auth0 (email, given_name, family_name)
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        // Uses the principal variable above to extract email and assign to username var
-        // Then utilizes the 'username' variable to search the database and return matching User object
-        // Adds the user object to the model (page)
         String username = (String) principal.getAttributes().get("email");
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -87,11 +76,25 @@ public class PostsController {
         model.addAttribute("user", user);
         model.addAttribute("notificationCount", notificationCount);
 
+        // ✅ ADD likeCounts and commentCounts for Thymeleaf template
+        Map<Long, Long> likeCounts = new HashMap<>();
+        Map<Long, Long> commentCounts = new HashMap<>();
+
+        for (Post post : posts) {
+            long postLikes = postService.getLikesCount(post.getId());
+            likeCounts.put(post.getId(), postLikes);
+
+            long postComments = commentService.getCommentsForPost(post.getId()).size();
+            commentCounts.put(post.getId(), postComments);
+        }
+
+        model.addAttribute("likeCounts", likeCounts);
+        model.addAttribute("commentCounts", commentCounts);
+
         return "posts/index";
     }
 
-
-    // Create new post
+    // ✅ Create new post
     @PostMapping("/posts")
     public RedirectView create(
             @RequestParam("content") String content,
@@ -113,8 +116,7 @@ public class PostsController {
         return new RedirectView("/posts");
     }
 
-
-    //View specific post
+    // ✅ View specific post
     @GetMapping("/posts/{id}")
     public ModelAndView viewPost(@PathVariable("id") Long id, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
         ModelAndView modelAndView = new ModelAndView("posts/post");
@@ -158,9 +160,6 @@ public class PostsController {
                     })
                     .toList();
 
-
-
-            // Get current user and notifications count for navbar
             User currentUser = userRepository.findUserByUsername(email).orElse(null);
             Integer notificationCount = notificationService.notificationCount(currentUser.getId());
             String userId = Long.toString(currentUser.getId());
@@ -177,7 +176,6 @@ public class PostsController {
         }
     }
 
-
     @Transactional
     @PostMapping("/posts/{postId}/delete")
     public RedirectView deletePost(@PathVariable Long postId,
@@ -188,6 +186,4 @@ public class PostsController {
         }
         return new RedirectView("/posts");
     }
-
 }
-
