@@ -180,18 +180,47 @@ public class FriendsController {
         FriendRequest request = new FriendRequest();
         request.setRequesterId(currentUserId);
         request.setReceiverId(requesteeId);
+        request.setStatus("pending"); // Set status
+        request.setCreatedAt(new Timestamp(System.currentTimeMillis())); // Set timestamp
         friendRequestRepository.save(request);
 
-        return new RedirectView("/friends");
+        return new RedirectView("/profile/{userId}");
     }
 
-//    @PostMapping("/friends")
-//    public RedirectView create(@ModelAttribute Friend friend, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
-//        Optional<User> user = userRepository.findUserByUsername(email);
-//        if (user.isPresent()) {
-//            Long id = user.get().getId();
-//        }
-//        return new RedirectView("friends/friends");
-//    }
+    @GetMapping("/friends/{userId}")
+    public ModelAndView profileFriendList(@AuthenticationPrincipal(expression = "attributes['email']") String email,
+                                          @PathVariable("userId") Long id) {
+        ModelAndView modelAndView = new ModelAndView("friends/profile_friends");
+
+        // User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+        User currentUser = userOptional.get();
+
+        // Friends!
+        List<Friend> friendsList = friendRepository.findAllByMainUserId(id);
+
+        // Objectify!
+        List<User> friendUsers = new ArrayList<>();
+        for (Friend friend : friendsList) {
+            Long friendId = friend.getFriendUserId();
+            Optional<User> friendUser = userRepository.findById(friendId);
+            if (friendUser.isPresent()) {
+                friendUsers.add(friendUser.get());
+            }
+        }
+
+        // Sort the users into alphabetical order!
+        friendUsers.sort(Comparator.comparing(User::getFirstName));
+
+        // Get notifications count for navbar
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+
+        modelAndView.addObject("notificationCount", notificationCount);
+        modelAndView.addObject("friendUsers", friendUsers);
+        modelAndView.addObject("currentUser", currentUser);
+
+        return modelAndView;
     }
+
+}
 

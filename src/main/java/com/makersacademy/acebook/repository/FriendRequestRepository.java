@@ -15,4 +15,13 @@ public interface FriendRequestRepository extends CrudRepository<FriendRequest, L
     Optional<FriendRequest> findByRequesterIdAndReceiverIdAndStatus(Long requesterId, Long currentUserId, String pending);
 
     List<FriendRequest> findAllByReceiverIdAndStatusOrderByCreatedAtDesc(Long userId, String pending);
+
+    Integer countByReceiverIdAndStatus(Long userId, String pending);
+
+    Iterable<FriendRequest> findAllByRequesterId(Long requesterId);
+
+    Iterable<FriendRequest> findAllByReceiverId(Long receiverId);
+
+    Iterable<FriendRequest> findAllByRequesterIdAndStatus(Long requesterId, String pending);
+
 }
