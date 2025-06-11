@@ -75,9 +75,11 @@
 </nav>
 <!-- End of navbar  -->
 
-    <div class="container mt-3">
-        <div class="row">
-            <div  class="d-grid gap-2 d-md-block">
+<div class="container mt-3">
+    <div class="row">
+        <div  class="d-grid gap-2 d-md-block">
+            <div th:if="${not #lists.isEmpty(requesterUsers)}">
+
                 <h1 class="text-center mt-3 text-nowrap">
                     Friend Requests
                 </h1>
@@ -105,7 +107,9 @@
                         </div>
                     </div>
                 </div>
-                <h1 class="text-center mt-3 text-nowrap">
+            </div>
+
+            <h1 class="text-center mt-3 text-nowrap">
                     Your Friends
                 </h1>
 
