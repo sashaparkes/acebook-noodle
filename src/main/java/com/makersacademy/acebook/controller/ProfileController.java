@@ -27,6 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +75,11 @@ public class ProfileController {
         Integer notificationCount = notificationService.notificationCount(signedInUser.getId());
 
         boolean isFriend = isFriend(signedInUser.getId(), userForProfile.getId());
-        boolean pendingRequest = isFriendRequest(signedInUser.getId(), userForProfile.getId());
+        boolean incomingRequest = incomingFriendRequest(signedInUser.getId(), userForProfile.getId());
+        boolean outgoingRequest = outgoingFriendRequest(signedInUser.getId(), userForProfile.getId());
+        boolean pendingRequest = isFriendRequest(outgoingRequest,
+                incomingRequest);
+
 
         ModelAndView profile = new ModelAndView("users/profile");
         profile.addObject("notificationCount", notificationCount);
@@ -84,7 +90,59 @@ public class ProfileController {
         profile.addObject("friends", friends);
         profile.addObject("isFriend", isFriend);
         profile.addObject("pendingRequest", pendingRequest);
+        profile.addObject("incomingRequest", incomingRequest);
+        profile.addObject("outgoingRequest", outgoingRequest);
         return profile;
+    }
+
+    @PostMapping("/profile_friend_request/{requesterId}")
+    public RedirectView respondToFriendRequest(
+            @PathVariable Long requesterId,
+            @RequestParam String decision,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        // Get Friend Request!
+        Optional<FriendRequest> friendRequestOptional = friendRequestRepository
+                .findByRequesterIdAndReceiverIdAndStatus(requesterId, currentUserId, "pending");
+
+
+        FriendRequest friendRequest = friendRequestOptional.get();
+
+        if (decision.equals("accept")) {
+            friendRequest.setStatus("accepted");
+            Instant instant = Instant.now();
+            Timestamp now = Timestamp.from(instant);
+            friendRequest.setRespondedAt(now);
+            friendRequestRepository.save(friendRequest);
+
+
+            Friend friendship1 = new Friend();
+            friendship1.setMainUserId(currentUserId);
+            friendship1.setFriendUserId(requesterId);
+            friendship1.setFriendsSince(now);
+            friendRepository.save(friendship1);
+
+            Friend friendship2 = new Friend();
+            friendship2.setMainUserId(requesterId);
+            friendship2.setFriendUserId(currentUserId);
+            friendship2.setFriendsSince(now);
+            friendRepository.save(friendship2);
+
+        } else if (decision.equals("decline")) {
+            friendRequest.setStatus("rejected");
+            Instant instant = Instant.now();
+            Timestamp now = Timestamp.from(instant);
+            friendRequest.setRespondedAt(now);
+            friendRequestRepository.save(friendRequest);
+        }
+
+        return new RedirectView("/profile/{requesterId}");
     }
 
     private boolean isFriend(Long userId, Long friendId) {
@@ -109,7 +167,7 @@ public class ProfileController {
 
     }
 
-    private boolean isFriendRequest(Long userA, Long userB) {
+    private boolean outgoingFriendRequest(Long userA, Long userB) {
 
         Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(userA, "pending");
 
@@ -121,6 +179,17 @@ public class ProfileController {
                 userARequests.add(userBUser.get().getId());
             }
         }
+
+        if (userARequests.contains(userB)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    private boolean incomingFriendRequest(Long userA, Long userB) {
 
         Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(userB, "pending");
 
@@ -134,7 +203,7 @@ public class ProfileController {
         }
 
 
-        if (userARequests.contains(userB) || userBRequests.contains(userA)) {
+        if (userBRequests.contains(userA)) {
             return true;
         }
         else {
@@ -143,39 +212,14 @@ public class ProfileController {
 
     }
 
-//    private boolean isFriendRequest(Long requesterId, Long receiverId) {
-//
-//        Iterable<FriendRequest> pendingFriendRequests = friendRequestRepository.findAllByRequesterIdAndStatus(requesterId, "pending");
-//
-//        List<Long> requests = new ArrayList<>();
-//        for (FriendRequest request : pendingFriendRequests) {
-//            Long receiverUserId = request.getReceiverId();
-//            Optional<User> receiverUser = userRepository.findById(receiverUserId);
-//            if (receiverUser.isPresent()) {
-//                requests.add(receiverUser.get().getId());
-//            }
-//        }
-//
-//        Iterable<FriendRequest> incomingPendingFriendRequests = friendRequestRepository.findAllByReceiverIdAndStatus(receiverId, "pending");
-//
-//        List<Long> incomingRequests = new ArrayList<>();
-//        for (FriendRequest request : incomingPendingFriendRequests) {
-//            Long requesterUserId = request.getRequesterId();
-//            Optional<User> requesterUser = userRepository.findById(requesterUserId);
-//            if (requesterUser.isPresent()) {
-//                incomingRequests.add(requesterUser.get().getId());
-//            }
-//        }
-//
-//
-//        if (requests.contains(receiverId) || incomingRequests.contains(receiverId)) {
-//            return true;
-//        }
-//        else {
-//            return false;
-//        }
-//
-//    }
+    private boolean isFriendRequest(Boolean sent, Boolean incoming) {
 
+        if (sent & incoming) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 }
