@@ -101,7 +101,6 @@
                                 <a><span th:text="${post.content}"></span></a>
                             </div>
                         </div>
-
                     <!-- Likes -->
                         <div class="p-3 d-flex align-items-center border-bottom"  id="post-likes-buttons button-group">
                             <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
