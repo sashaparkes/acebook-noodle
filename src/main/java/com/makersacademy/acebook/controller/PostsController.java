@@ -152,7 +152,6 @@ public class PostsController {
             postRepository.save(post);
         }
 
-//        return new RedirectView("/posts");
         if (globalWall) {
             return new RedirectView("/posts");
         } else {
