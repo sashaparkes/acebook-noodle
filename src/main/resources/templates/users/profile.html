@@ -180,10 +180,22 @@
                             <div class="p-3 d-flex align-items-center border-bottom">
                                 <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                     <input type="hidden" name="postId" th:value="${postId}" />
-                                    <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                    <button type="submit" class="me-3 text-secondary text-decoration-none d-flex align-items-center" style="border: none; background: none">
+                                        <i class="bi bi-heart-fill text-danger me-1"></i>
+                                        <span>Like</span>
+                                        <span class="badge bg-light text-dark ms-1" th:text="${likeCounts[post.id]}">0</span>
+                                    </button>
                                 </form>
-                                <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none"><i class="bi-chat-left-fill"></i> Comment</a>
-                                <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small"><i class="bi bi-eye-fill"></i> View Post</a>
+
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none d-flex align-items-center">
+                                    <i class="bi bi-chat-left-fill me-1"></i>
+                                    <span>Comment</span>
+                                    <span class="badge bg-light text-dark ms-1" th:text="${commentCounts[post.id]}">0</span>
+                                </a>
+
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small">
+                                    <i class="bi bi-eye-fill"></i> View Post
+                                </a>
                             </div>
                         </div>
                     </div>
