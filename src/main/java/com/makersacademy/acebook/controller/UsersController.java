@@ -115,4 +115,25 @@ public class UsersController {
 
         return new RedirectView("/settings");
     }
+
+
+    // Search database for users
+    @GetMapping("/friends/search")
+    public ModelAndView searchMenu(){
+        ModelAndView searchPage = new ModelAndView("friends/friendsSearch");
+
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User currentUser = userRepository.findUserByUsername((String) principal.getAttributes().get("email"))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+//        Iterable<User> otherUsers = userRepository.findUserByFirstNameAndLastName();
+
+        searchPage.addObject("currentUser", currentUser);
+        return searchPage;
+    }
+
 }

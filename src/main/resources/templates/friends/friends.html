@@ -21,7 +21,7 @@
 <!-- Navbar  -->
 <nav class="navbar navbar-expand-md sticky-top">
     <div class="container d-flex justify-content-between align-items-center position-relative">
-        <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
+        <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
         <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
             <img src="images/AcebookSmall.png" alt="Acebook Logo" height="50">
         </a>
@@ -54,7 +54,6 @@
                     </div>
                 </li>
 
-
                 <li class="nav-item d-block d-md-none text-center px-3">
                     <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                     <div class="fw-bold text-center">
@@ -65,7 +64,8 @@
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
+
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i> Notifications</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="p-3 border-bottom">
                                         <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
-                                            <button type="submit" name="decision" value="accept" class="small me-2 w-60">Remove Friend</button>
+                                            <button type="submit" class="small me-2 w-60">Remove Friend</button>
                                         </form>
                                     </div>
                                 </div>
