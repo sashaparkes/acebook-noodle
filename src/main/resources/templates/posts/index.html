@@ -150,7 +150,7 @@
                                 <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                     <input type="hidden" name="postId" th:value="${postId}" />
                                     <button type="submit" class="me-3 text-secondary text-decoration-none d-flex align-items-center" style="border: none; background: none">
-                                        <i class="bi bi-heart-fill text-danger me-1 red-gradient-text"></i>
+                                        <i class="bi bi-heart-fill me-1 red-gradient-text"></i>
                                         <span class="red-gradient-text text-decoration-none"> Like</span>
                                         &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${likeCounts[post.id]}">0</span>
                                     </button>

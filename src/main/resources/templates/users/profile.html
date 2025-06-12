@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Acebook</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="icon" type="image/png" href="/favicon.png">
 
@@ -131,7 +131,7 @@
                     <h3 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id == user.id}">Your Friends
                     </h3>
 
-                    <p th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
+                    <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
 
                     <div th:if="${not #lists.isEmpty(friends)}">
                         <div class="row justify-content-center mt-3">
@@ -167,9 +167,9 @@
             </div>
         </div>
 
-        <h3 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Posts'">
+        <h3 class="text-center mt-3 text-nowrap mb-3" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Posts'">
         </h3>
-        <h3 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id == user.id}">Your Posts
+        <h3 class="text-center mt-3 text-nowrap mb-3" th:if="${signedInUser.id == user.id}">Your Posts
         </h3>
 
         <div class="list-group list-group-flush" >
@@ -200,14 +200,14 @@
                                 <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                     <input type="hidden" name="postId" th:value="${postId}" />
                                     <button type="submit" class="me-3 text-secondary text-decoration-none d-flex align-items-center" style="border: none; background: none">
-                                        <i class="bi bi-heart-fill text-danger me-1 red-gradient-text"></i>
+                                        <i class="bi bi-heart-fill me-1 red-gradient-text"></i>
                                         <span class="red-gradient-text text-decoration-none"> Like</span>
                                         &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${likeCounts[post.id]}">0</span>
                                     </button>
                                 </form>
 
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none d-flex align-items-center">
-                                    <i class="bi bi-chat-left me-1 red-gradient-text"></i>
+                                    <i class="bi bi-chat-left-fill me-1 red-gradient-text"></i>
                                     <span class="red-gradient-text text-decoration-none"> Comment</span>
                                     &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${commentCounts[post.id]}">0</span>
                                 </a>
