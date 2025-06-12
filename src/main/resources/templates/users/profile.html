@@ -17,12 +17,23 @@
     <!--        end links for bootstrap-->
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar  -->
     <nav class="navbar navbar-expand-md sticky-top">
         <div class="container d-flex justify-content-between align-items-center position-relative">
-            <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
+            <!-- Search bar start -->
+            <div class="d-flex align-items-center position-relative">
+                <form th:action="@{/friends/search}" method="post">
+                    <input type="text" class="form-control rounded-pill search-bar pe-5" placeholder="Search..." aria-label="Search" name="searchInput">
+                    <button class="btn position-absolute top-50 end-0 translate-middle-y" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+            <!-- Search bar end-->
             <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
                 <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
             </a>
@@ -81,7 +92,7 @@
             <div  class="d-grid gap-2 d-md-block">
                 <div class="container d-flex align-items-center justify-content-center mt-3">
                     <img class="rounded-circle mb-2 me-3" th:src="@{${user.profilePic}}" style="width: 100px; height: 100px; object-fit: cover;">
-                <h1 class="text-nowrap" th:text="' ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
+                    <h1 class="text-nowrap" th:text="' ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
                 </div>
                 <!--<h2 th:text="'${user.firstName}''s Friends"></h2>-->
                 <div class="container d-flex flex-column align-items-center mt-3">
@@ -109,6 +120,7 @@
                     <div th:if="${signedInUser.id != user.id and !isFriend and outgoingRequest}">
                         <button type="submit" disabled>Friend Request Pending</button>
                     </div>
+                </div>
 
                     <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Friends'">
                     </h1>
@@ -117,36 +129,39 @@
 
                     <p th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
 
-                <div th:if="${not #lists.isEmpty(friends)}">
-                    <div class="box bg-white shadow-sm border rounded mb-3 p-3">
-                        <div class="container">
-                            <p th:if="${friends.size() == 1}" th:text="${friends.size() + ' Friend'}"></p>
-                            <p th:if="${friends.size() > 1}" th:text="${friends.size() + ' Friends'}"></p>
-                            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
-                                <div th:each="friend, iterStat : ${friends}" th:if="${iterStat.count < 4}" class="col">
-                                    <div class="border rounded mb-3 ">
-                                        <div class="p-3 d-flex align-items-center border-bottom">
-                                            <div class="me-2">
-                                                <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
-                                                    <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                    <div th:if="${not #lists.isEmpty(friends)}">
+                        <div class="row justify-content-center mt-3">
+                            <div class="col-md-7">
+                                <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+                                    <div class="container">
+                                        <p th:if="${friends.size() == 1}" th:text="${friends.size() + ' Friend'}"></p>
+                                        <p th:if="${friends.size() > 1}" th:text="${friends.size() + ' Friends'}"></p>
+                                        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                                            <div th:each="friend, iterStat : ${friends}" th:if="${iterStat.count < 4}" class="col">
+                                                <div class="border rounded mb-3 ">
+                                                    <div class="p-3 d-flex align-items-center border-bottom">
+                                                        <div class="me-2">
+                                                            <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
+                                                                <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                                        </div>
+                                                        <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+                                        </div>
+                                        <div th:if="${signedInUser.id != user.id}" class="d-flex justify-content-center align-items-center" >
+                                            <a th:href="@{/friends/{id}(id=${user.id})}" class="btn btn-primary btn-sm">View all</a>
+                                        </div>
+                                        <div th:if="${signedInUser.id == user.id}" class="d-flex justify-content-center align-items-center" >
+                                            <a href="/friends" class="btn btn-primary btn-sm">View all</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div th:if="${signedInUser.id != user.id}">
-                            <a th:href="@{/friends/{id}(id=${user.id})}">View all</a>
-                            </div>
-                            <div th:if="${signedInUser.id == user.id}">
-                                <a href="/friends">View all</a>
-                            </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
-    </div>
 
         <h1 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id != user.id}" th:text="${user.firstName} + '\'s Posts'">
         </h1>
@@ -199,24 +214,20 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer text-center">
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
         <div class="container">
-            <p>
-                <span class="material-symbols-outlined" >
-                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+                    <span class="material-symbols-outlined" >
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                    </span>
+            Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+            <span class="material-symbols-outlined" >
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
                 </span>
-                Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
-                <span class="material-symbols-outlined" >
-                <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
-            </span>
-            </p>
-            <p>Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
         </div>
     </footer>
 

@@ -18,11 +18,22 @@
         <!--        end links for bootstrap-->
     </head>
 
-    <body>
+    <body class="d-flex flex-column min-vh-100">
     <!-- Navbar  -->
     <nav class="navbar navbar-expand-md sticky-top">
         <div class="container d-flex justify-content-between align-items-center position-relative">
-            <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
+            <!-- Search bar start -->
+            <div class="d-flex align-items-center position-relative">
+                <form th:action="@{/friends/search}" method="post">
+                    <input type="text" class="form-control rounded-pill search-bar pe-5" placeholder="Search..." aria-label="Search" name="searchInput">
+                    <button class="btn position-absolute top-50 end-0 translate-middle-y" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+            <!-- Search bar end-->
             <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
                 <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
             </a>
@@ -138,7 +149,7 @@
                             </div>
                         </div>
                          <div th:each="comment : ${comments}">
-                                <div class="box shadow-sm border rounded bg-white mb-3 post">
+                                <div class="box border rounded bg-white post">
                                     <div class="p-3 d-flex align-items-center border-bottom">
                                         <div class="me-2">
                                             <a th:href="@{/profile/{id}(id=${comment.commenterId})}" class="text-decoration-none text-reset">
@@ -205,18 +216,16 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer text-center">
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
         <div class="container">
-            <p>
-                <span class="material-symbols-outlined" >
-                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+                    <span class="material-symbols-outlined" >
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                    </span>
+            Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+            <span class="material-symbols-outlined" >
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
                 </span>
-                Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
-                <span class="material-symbols-outlined" >
-                <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
-            </span>
-            </p>
-            <p>Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
         </div>
     </footer>
 

@@ -15,15 +15,26 @@
 </head>
 
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 
 <!-- Navbar  -->
 <nav class="navbar navbar-expand-md sticky-top">
     <div class="container d-flex justify-content-between align-items-center position-relative">
-        <a class="nav-link d-none d-md-block" href="/friends/search"><i class="bi bi-search" title="Friend Search"></i></a>
+        <!-- Search bar start -->
+        <div class="d-flex align-items-center position-relative">
+            <form th:action="@{/friends/search}" method="post">
+                <input type="text" class="form-control rounded-pill search-bar pe-5" placeholder="Search..." aria-label="Search" name="searchInput">
+                <button class="btn position-absolute top-50 end-0 translate-middle-y" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <!-- Search bar end-->
         <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
-            <img src="images/AcebookSmall.png" alt="Acebook Logo" height="50">
+            <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
         </a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -75,7 +86,7 @@
 </nav>
 <!-- End of navbar  -->
 
-<div class="container mt-3">
+<div class="container">
     <div class="row">
         <div  class="d-grid gap-2 d-md-block">
             <div th:if="${not #lists.isEmpty(requesterUsers)}">
@@ -83,23 +94,28 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Friend Requests
                 </h1>
-                <div class="box bg-white shadow-sm border rounded mb-3 p-3">
-                    <div class="container">
-                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3 justify-content-center align-items-center">
-                            <div th:each="requester : ${requesterUsers}" class="col">
-                                <div class="border rounded mb-3 ">
-                                    <div class="p-3 d-flex align-items-center border-bottom">
-                                        <div class="me-2">
-                                            <a th:href="@{/profile/{id}(id=${requester.id})}" class="text-decoration-none text-reset">
-                                                <img class="rounded-circle" th:src="@{${requester.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                            <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong>
-                                            </a>
+
+                <div class="row justify-content-center mt-3">
+                    <div class="col-md-7">
+                        <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+                            <div class="container">
+                                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                                    <div th:each="requester : ${requesterUsers}" class="col">
+                                        <div class="border rounded mb-3 ">
+                                            <div class="p-3 d-flex align-items-center border-bottom">
+                                                <div class="me-2">
+                                                    <a th:href="@{/profile/{id}(id=${requester.id})}" class="text-decoration-none text-reset">
+                                                        <img class="rounded-circle" th:src="@{${requester.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                                </div>
+                                                <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong></a>
+                                            </div>
+                                            <div class="p-3 border-bottom">
+                                                <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
+                                                    <button type="submit" name="decision" value="accept" class="btn btn-primary btn-sm me-2 w-50">Accept</button>
+                                                    <button type="submit" name="decision" value="decline" class="btn btn-outline-primary btn-sm w-50">Decline</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    <div class="p-3 border-bottom">
-                                        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
-                                            <button type="submit" name="decision" value="accept" class="btn btn-primary btn-sm me-2 w-50">Accept</button>
-                                            <button type="submit" name="decision" value="decline" class="btn btn-outline-primary btn-sm w-50">Decline</button>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -111,54 +127,58 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <div  class="d-grid gap-2 d-md-block">
             <h1 class="text-center mt-3 text-nowrap">
                     Your Friends
                 </h1>
-
-    <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}">You have no friends!</p>
-
-    <div th:if="${not #lists.isEmpty(friendUsers)}">
-                <div class="box bg-white shadow-sm border rounded mb-3 p-3">
-                    <div class="container">
-                        <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
-                        <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
-                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3 justify-content-center align-items-center">
-                            <div th:each="friend : ${friendUsers}" class="col">
-                                <div class="border rounded mb-3 ">
-                                    <div class="p-3 d-flex align-items-center border-bottom">
-                                        <div class="me-2">
-                                            <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
-                                                <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                                        <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
-                                    </div>
-                                    <div class="p-3 border-bottom">
-                                        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-outline-primary btn-sm me-2 w-60">Remove Friend</button>
-                                        </form>
+            <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}">You have no friends!</p>
+            <div th:if="${not #lists.isEmpty(friendUsers)}">
+              <div class="row justify-content-center mt-3">
+                <div class="col-md-7">
+                    <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+                        <div class="container">
+                          <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
+                          <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
+                            <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                                <div th:each="friend : ${friendUsers}" class="col">
+                                    <div class="border rounded mb-3 ">
+                                        <div class="p-3 d-flex align-items-center border-bottom">
+                                            <div class="me-2">
+                                                <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
+                                                    <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            </div>
+                                            <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+                                        </div>
+                                        <div class="p-3 border-bottom">
+                                            <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm me-2 w-60">Remove Friend</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
         </div>
     </div>
 </div>
 
     <!-- Footer -->
-    <footer class="footer text-center">
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
         <div class="container">
-            <p>
                     <span class="material-symbols-outlined" >
-                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
                     </span>
                 Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
                 <span class="material-symbols-outlined" >
-                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
                 </span>
-            </p>
-            <p>Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
         </div>
     </footer>
 
