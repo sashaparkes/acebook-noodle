@@ -206,7 +206,7 @@
                                         <div th:if="${comment.likers != null and !comment.likers.isEmpty()}" style="margin-left:10px">
                                             <span class="red-gradient-text text-decoration-none small" style="display:inline">Liked by: </span>
                                             <span th:each="liker, iterStat : ${comment.likers}" style="display:inline">
-                                                <span class="red-gradient-text text-decoration-none small" style="display:inline" th:text="${liker}">User</span><span th:unless="${iterStat.last}">, </span>
+                                                <span class="red-gradient-text text-decoration-none small" style="display:inline" th:text="${liker}">User</span><span class="red-gradient-text" th:unless="${iterStat.last}">, </span>
                                             </span>
                                         </div>
 
