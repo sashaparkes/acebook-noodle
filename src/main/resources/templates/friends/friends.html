@@ -89,12 +89,13 @@
 <div class="container">
     <div class="row">
         <div  class="d-grid gap-2 d-md-block">
-            <div th:if="${not #lists.isEmpty(requesterUsers)}">
+
 
                 <h1 class="text-center mt-3 text-nowrap">
                     Friend Requests
                 </h1>
-
+            <p class="text-center mt-3" th:if="${#lists.isEmpty(requesterUsers)}">You have no pending friend requests!</p>
+            <div th:if="${not #lists.isEmpty(requesterUsers)}">
                 <div class="row justify-content-center mt-3">
                     <div class="col-md-7">
                         <div class="box bg-white shadow-sm border rounded mb-3 p-3">

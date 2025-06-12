@@ -112,7 +112,7 @@
                                 </div>
                             </form>
                         </div>
-                        <h3 th:text="'Search Results for ' + ${searchInput} + ':'" th:unless="${searchInput ==  null}"></h3>
+                        <h3 th:text="'Search results for ' + ${searchInput} + ':'" th:unless="${searchInput ==  null}"></h3>
                         <p th:if="${searchResults != null && searchResults.isEmpty()}">No users found.</p>
                         <div id="search-results" th:each="user : ${searchResults}" th:unless="${searchResults != null && searchResults.isEmpty()}">
                             <div class="box shadow-sm border rounded bg-white mb-3 post">
