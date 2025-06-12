@@ -9,6 +9,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class HomeController {
 	@RequestMapping(value = "/")
 	public ModelAndView index() {
-		return new ModelAndView("/landing");
+		return new ModelAndView("landing");
 	}
 }
