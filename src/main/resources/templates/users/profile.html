@@ -137,7 +137,7 @@
                                         <p th:if="${friends.size() == 1}" th:text="${friends.size() + ' Friend'}"></p>
                                         <p th:if="${friends.size() > 1}" th:text="${friends.size() + ' Friends'}"></p>
                                         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
-                                            <div th:each="friend : ${friends}" class="col">
+                                            <div th:each="friend, iterStat : ${friends}" th:if="${iterStat.count < 4}" class="col">
                                                 <div class="border rounded mb-3 ">
                                                     <div class="p-3 d-flex align-items-center border-bottom">
                                                         <div class="me-2">
