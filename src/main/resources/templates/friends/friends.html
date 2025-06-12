@@ -94,7 +94,7 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Friend Requests
                 </h1>
-            <p class="text-center" th:if="${#lists.isEmpty(requesterUsers)}">You have no pending friend requests!</p>
+            <p class="text-center mt-3" th:if="${#lists.isEmpty(requesterUsers)}">You have no pending friend requests!</p>
             <div th:if="${not #lists.isEmpty(requesterUsers)}">
                 <div class="row justify-content-center mt-3">
                     <div class="col-md-7">

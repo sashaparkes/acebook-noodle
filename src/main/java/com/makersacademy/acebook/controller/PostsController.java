@@ -208,6 +208,8 @@ public class PostsController {
             String userId = Long.toString(currentUser.getId());
             String userDisplayName = currentUser.getFirstName()  + " " + currentUser.getLastName();
 
+            boolean likedBySignedInUser = likedByUser(userDisplayName, likedBy);
+
             modelAndView.addObject("notificationCount", notificationCount);
             modelAndView.addObject("currentUser", currentUser);
             modelAndView.addObject("userId", userId);
@@ -215,6 +217,7 @@ public class PostsController {
             modelAndView.addObject("post", postDto);
             modelAndView.addObject("comments", commentDtos);
             modelAndView.addObject("newComment", new Comment());
+            modelAndView.addObject("likedBySignedInUser", likedBySignedInUser);
             return modelAndView;
         }
     }
@@ -228,5 +231,14 @@ public class PostsController {
             postService.deletePost(postId);
         }
         return new RedirectView("/posts");
+    }
+
+    private boolean likedByUser(String displayName, List<String> likedBy){
+        if (likedBy.contains(displayName)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

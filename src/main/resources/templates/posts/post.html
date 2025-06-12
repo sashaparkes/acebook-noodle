@@ -110,20 +110,20 @@
                                 <a><span th:text="${post.content}"></span></a>
                             </div>
                         </div>
-                    <!-- Likes -->
+
                         <div class="p-3 d-flex align-items-center border-bottom"  id="post-likes-buttons button-group">
-                            <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
+                            <form th:if="${!likedBySignedInUser}" th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                 <input type="hidden" name="postId" th:value="${postId}" />
-                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                <button type="submit" style="border: none; background: none"><i class="bi bi-heart-fill red-gradient-text"></i></button>
                             </form>
-                            <form th:action="@{/posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
+                            <form th:if="${likedBySignedInUser}" th:action="@{/posts/{postId}/unlike(postId=${post.id})}" method="post" style="display:inline">
                                 <input type="hidden" name="postId" th:value="${postId}" />
-                                <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill"></i> Unlike</button></button>
+                                <button type="submit" class="text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill red-gradient-text"></i></button></button>
                             </form>
-                            <span th:text="'Likes: ' + ${post.postLikesCount}" style="display:inline; opacity:.7">0</span>
+                            <span class="red-gradient-text text-decoration-none" th:text="${post.postLikesCount}" style="display:inline">0</span>
                             <div th:if="${post.likedBy != null and !post.likedBy.isEmpty()}" style="margin-left:10px">
-                                <span style="opacity:.7;">Liked by: </span><span th:each="liker, iterStat : ${post.likedBy}" style="display:inline; opacity:.7">
-                                    <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+                                <span class="red-gradient-text text-decoration-none small">Liked by: </span><span th:each="liker, iterStat : ${post.likedBy}" style="display:inline">
+                                    <span class="red-gradient-text text-decoration-none small" th:text="${liker}">User</span><span class="red-gradient-text text-decoration-none" th:if="${!iterStat.last}">, </span>
                                 </span>
                             </div>
                             <div th:if="${post.posterId} == ${userId}" class="ms-auto">
@@ -133,8 +133,8 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- Show likes count -->
-<!--Comments -->
+
+                        <!--Comments -->
 
                     <div id="comments-section">
                         <h3>Comments</h3>
