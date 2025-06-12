@@ -99,26 +99,30 @@
 
                     <div th:if="${signedInUser.id != user.id and !isFriend and !incomingRequest and !outgoingRequest}">
                         <form th:action="@{/add_friend/{id}(id=${user.id})}" method="POST" style="display:inline;">
-                            <button type="submit">Add Friend</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Add Friend</button>
                         </form>
                     </div>
 
                     <div th:if="${signedInUser.id != user.id and isFriend}">
                         <form th:action="@{/remove_friend/{id}(id=${user.id})}" method="POST" style="display:inline;">
-                            <button type="submit">Remove Friend</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Remove Friend</button>
                         </form>
                     </div>
 
-                    <div th:if="${signedInUser.id != user.id and !isFriend and incomingRequest}">
-                        <p th:text="${user.firstName + ' wants to be your friend'}"></p>
-                    <form th:action="@{'/profile_friend_request/' + ${user.id}}" method="POST" class="d-flex">
-                        <button type="submit" name="decision" value="accept" class="small me-2 w-50">Accept</button>
-                        <button type="submit" name="decision" value="decline" class="small w-50">Decline</button>
-                    </form>
+                    <div class="container">
+                        <div class="d-flex justify-content-center">
+                            <div th:if="${signedInUser.id != user.id and !isFriend and incomingRequest}" class="text-center">
+                                <p th:text="${user.firstName + ' wants to be your friend'}"></p>
+                                <form th:action="@{'/profile_friend_request/' + ${user.id}}" method="POST" class="d-flex justify-content-center gap-2">
+                                    <button type="submit" name="decision" value="accept" class="btn btn-primary btn-sm">Accept</button>
+                                    <button type="submit" name="decision" value="decline" class="btn btn-primary btn-sm">Decline</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
 
                     <div th:if="${signedInUser.id != user.id and !isFriend and outgoingRequest}">
-                        <button type="submit" disabled>Friend Request Pending</button>
+                        <button type="submit" class="btn btn-primary btn-sm" disabled>Friend Request Pending</button>
                     </div>
                 </div>
 
@@ -197,15 +201,15 @@
                                     <input type="hidden" name="postId" th:value="${postId}" />
                                     <button type="submit" class="me-3 text-secondary text-decoration-none d-flex align-items-center" style="border: none; background: none">
                                         <i class="bi bi-heart-fill text-danger me-1 red-gradient-text"></i>
-                                        <span class="red-gradient-text text-decoration-none">Like</span>
-                                        &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${likeCounts[post.id]}"></span>
+                                        <span class="red-gradient-text text-decoration-none"> Like</span>
+                                        &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${likeCounts[post.id]}">0</span>
                                     </button>
                                 </form>
 
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none d-flex align-items-center">
                                     <i class="bi bi-chat-left me-1 red-gradient-text"></i>
-                                    <span class="red-gradient-text text-decoration-none">Comment</span>
-                                    &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${commentCounts[post.id]}"></span>
+                                    <span class="red-gradient-text text-decoration-none"> Comment</span>
+                                    &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${commentCounts[post.id]}">0</span>
                                 </a>
 
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small">

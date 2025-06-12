@@ -98,7 +98,7 @@
                 </div>
                 <div class ="ms-auto small" th:if="${globalWall == false}">
                     <a th:href="@{/posts}" class="text-secondary text-decoration-none ms-auto small">
-                            <i class="bi bi-globe2"></i>View Global Posts</a>
+                            <i class="bi bi-globe2"></i> View Global Posts</a>
                 </div>
                 <!-- end filter links -->
                 <div class="box shadow-sm border rounded bg-white mb-3 mt-3">
@@ -150,16 +150,16 @@
                                 <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post" style="display:inline">
                                     <input type="hidden" name="postId" th:value="${postId}" />
                                     <button type="submit" class="me-3 text-secondary text-decoration-none d-flex align-items-center" style="border: none; background: none">
-                                        <i class="bi bi-heart-fill text-danger me-1"></i>
-                                        <span>Like</span>
-                                        <span class="badge bg-light text-dark ms-1" th:text="${likeCounts[post.id]}">0</span>
+                                        <i class="bi bi-heart-fill text-danger me-1 red-gradient-text"></i>
+                                        <span class="red-gradient-text text-decoration-none"> Like</span>
+                                        &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${likeCounts[post.id]}">0</span>
                                     </button>
                                 </form>
 
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="me-3 text-secondary text-decoration-none d-flex align-items-center">
-                                    <i class="bi bi-chat-left-fill me-1"></i>
-                                    <span>Comment</span>
-                                    <span class="badge bg-light text-dark ms-1" th:text="${commentCounts[post.id]}">0</span>
+                                    <i class="bi bi-chat-left-fill me-1 red-gradient-text"></i>
+                                    <span class="red-gradient-text text-decoration-none"> Comment</span>
+                                    &nbsp;<span class="red-gradient-text text-decoration-none" th:text="${commentCounts[post.id]}">0</span>
                                 </a>
 
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="text-secondary text-decoration-none ms-auto small">
