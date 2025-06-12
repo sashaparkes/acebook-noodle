@@ -1,6 +1,6 @@
 okta:
   oauth2:
-    issuer: ${OKTA_ISSUER}
+    issuer: https://dev-11mkptye4o4w052e.us.auth0.com
     client-id: ${OKTA_CLIENT_ID}
     client-secret: ${OKTA_CLIENT_SECRET}
 #    redirect-uri: "{BASE_URL}/login/oauth2/code/okta"
