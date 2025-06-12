@@ -86,33 +86,71 @@
 </nav>
 <!-- End of navbar  -->
 
-<h1 class="text-center mt-3 text-nowrap" th:text="${profileUser.firstName} + '\'s Friends'">
-</h1>
+<!--<h1 class="text-center mt-3 text-nowrap" th:text="${profileUser.firstName} + '\'s Friends'">-->
+<!--</h1>-->
 
-  <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}" th:text="${profileUser.firstName} + ' has no friends'"></p>
+<!--  <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}" th:text="${profileUser.firstName} + ' has no friends'"></p>-->
 
 
-    <div th:if="${not #lists.isEmpty(friendUsers)}">
-      <div class="box bg-white shadow-sm border rounded mb-3 p-3">
-        <div class="container">
-          <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
-          <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">
-              <div th:each="friend : ${friendUsers}" class="col">
-                <div class="border rounded mb-3 ">
-                  <div class="p-3 d-flex align-items-center border-bottom">
-                    <div class="me-2">
-                      <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
-                        <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
-                    <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+<!--    <div th:if="${not #lists.isEmpty(friendUsers)}">-->
+<!--      <div class="box bg-white shadow-sm border rounded mb-3 p-3">-->
+<!--        <div class="container">-->
+<!--          <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>-->
+<!--          <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>-->
+<!--            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 g-lg-3">-->
+<!--              <div th:each="friend : ${friendUsers}" class="col">-->
+<!--                <div class="border rounded mb-3 ">-->
+<!--                  <div class="p-3 d-flex align-items-center border-bottom">-->
+<!--                    <div class="me-2">-->
+<!--                      <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">-->
+<!--                        <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">-->
+<!--                    <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    </div>-->
+
+<div class="container">
+  <div class="row">
+    <div  class="d-grid gap-2 d-md-block">
+      <h1 class="text-center mt-3 text-nowrap" th:text="${profileUser.firstName} + '\'s Friends'"></h1>
+      <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}" th:text="${profileUser.firstName} + ' has no friends'"></p>
+
+      <div th:if="${not #lists.isEmpty(friendUsers)}">
+        <div class="row justify-content-center mt-3">
+          <div class="col-md-7">
+            <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+              <div class="container">
+                <p th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
+                <p th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
+                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                  <div th:each="friend : ${friendUsers}" class="col">
+                    <div class="border rounded mb-3 ">
+                      <div class="p-3 d-flex align-items-center border-bottom">
+                        <div class="me-2">
+                          <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
+                            <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                        </div>
+                        <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+                      </div>
+                      <div class="p-3 border-bottom d-flex justify-content-center">
+                        <a th:href="@{/profile/{id}(id=${friend.id})}" class="btn btn-primary btn-sm me-2 w-60">View Profile</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
-    </div>
+  </div>
+</div>
 
   <!-- Footer -->
   <footer class="footer text-center mt-auto small" style="opacity: 0.6;">

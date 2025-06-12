@@ -116,12 +116,13 @@
                         <p th:if="${searchResults != null && searchResults.isEmpty()}">No users found.</p>
                         <div id="search-results" th:each="user : ${searchResults}" th:unless="${searchResults != null && searchResults.isEmpty()}">
                             <div class="box shadow-sm border rounded bg-white mb-3 post">
-                                <div class="p-3 d-flex align-items-center border-bottom">
-                                    <span>
+                                <div class="p-3 d-flex align-items-center justify-content-between border-bottom">
+                                    <span class="d-flex align-items-center">
                                         <a th:href="@{/profile/{id}(id=${user.id})}" class="text-decoration-none text-reset">
-                                        <img class="rounded-circle mb-2 mt-3" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                        <img class="rounded-circle" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
                                             <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></a>
                                     </span>
+                                    <a th:href="@{/profile/{id}(id=${user.id})}" class="btn btn-primary btn-sm w-60 ">View Profile</a>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +131,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <!-- Footer -->
     <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
