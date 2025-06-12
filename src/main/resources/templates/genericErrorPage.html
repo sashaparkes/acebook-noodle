@@ -72,7 +72,8 @@
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/profile" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+                        <a class="dropdown-item" th:href="@{/profile/{id}(id=${user.id})}"><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+
                         <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
