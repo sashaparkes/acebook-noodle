@@ -127,7 +127,7 @@
                 <h1 class="text-center mt-3 text-nowrap">
                     Notifications
                 </h1>
-                <p class="text-center" th:if="${#lists.isEmpty(notifications)}">You have no notifications!</p>
+                <p class="text-center mt-3" th:if="${#lists.isEmpty(notifications)}">You have no notifications!</p>
                     <div class="row justify-content-center mt-3">
                         <div class="col-md-7">
                             <table class="table" th:each="notification: ${notifications}" th:unless="${#lists.isEmpty(notifications)}">
