@@ -3,5 +3,5 @@ okta:
     issuer: ${OKTA_ISSUER}
     client-id: ${OKTA_CLIENT_ID}
     client-secret: ${OKTA_CLIENT_SECRET}
-    redirect-uri: https://acebook-noodle.onrender.com/login/oauth2/code/okta
+    redirect-uri: https://acebook-noodle-oveh.onrender.com/login/oauth2/code/okta
     post-logout-redirect-uri: ${OKTA_LOGOUT_URI}
