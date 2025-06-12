@@ -135,7 +135,7 @@ public class PostsController {
     //  Create new post
     @PostMapping("/posts")
     public RedirectView create(
-//            @RequestParam("globalWall") Boolean globalWall,
+            @RequestParam("globalWall") Boolean globalWall,
             @RequestParam("content") String content,
             @AuthenticationPrincipal(expression = "attributes['email']") String email,
             @RequestParam("image") MultipartFile file
@@ -152,12 +152,11 @@ public class PostsController {
             postRepository.save(post);
         }
 
-        return new RedirectView("/posts");
-//        if (globalWall == true) {
-//            return new RedirectView("/posts");
-//        } else {
-//            return new RedirectView("/posts/friends/{user.getId()");
-//        }
+        if (globalWall) {
+            return new RedirectView("/posts");
+        } else {
+            return new RedirectView("/posts/friends/" + user.getId());
+        }
     }
 
 

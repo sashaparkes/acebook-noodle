@@ -1,9 +1,7 @@
 package com.makersacademy.acebook.service;
 
-import com.makersacademy.acebook.dto.PostDto;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.PostLike;
-import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostLikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
@@ -68,7 +66,10 @@ public class PostService {
     public List<Post> findFriendsPosts(Long currentUserId) {
         // Find the id's of each friend for current user
         List<Long> friendsIds = (friendRepository.findFriendUserIdByMainUserId(currentUserId));
+        Iterable<Post> currentUserPosts = postRepository.findAllByUserId(currentUserId);
         List<Post> friendsPosts = new ArrayList<>();
+        currentUserPosts.forEach(friendsPosts::add);
+
         // find the User objects for each friend of current user
         for (Long friend : friendsIds) {
             Iterable<Post> postsOfFriend = postRepository.findAllByUserId(friend);
