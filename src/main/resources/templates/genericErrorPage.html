@@ -28,7 +28,7 @@
 </head>
 
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navbar  -->
     <nav class="navbar navbar-expand-md sticky-top">
         <div class="container d-flex justify-content-between align-items-center position-relative">
@@ -111,18 +111,16 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer text-center">
-        <div class="container">
-            <p>
-                <span class="material-symbols-outlined" >
-                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
+        <div class="mt-3 container">
+                    <span class="material-symbols-outlined" >
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                    </span>
+            Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+            <span class="material-symbols-outlined" >
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
                 </span>
-                Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
-                <span class="material-symbols-outlined" >
-                <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo">
-            </span>
-            </p>
-            <p>Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
         </div>
     </footer>
 
