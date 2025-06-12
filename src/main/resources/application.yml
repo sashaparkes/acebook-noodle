@@ -3,5 +3,5 @@ okta:
     issuer: ${OKTA_ISSUER}
     client-id: ${OKTA_CLIENT_ID}
     client-secret: ${OKTA_CLIENT_SECRET}
-#    redirect-uri: "{BASE_URL}/login/oauth2/code/okta"
-#    post-logout-redirect-uri: "{BASE_URL}"
+    redirect-uri: "{BASE_URL}/login/oauth2/code/okta"
+    post-logout-redirect-uri: "{BASE_URL}"
