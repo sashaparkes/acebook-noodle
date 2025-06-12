@@ -79,5 +79,6 @@ public class CommentController {
             return new RedirectView("/profile");
         }
     }
+
 }
 

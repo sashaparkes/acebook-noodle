@@ -192,27 +192,27 @@
                                     </div>
 
                                     <div class="d-flex align-items-center border-bottom"  id="comments-likes-buttons button-group">
-                                        <div class="mb-2 mt-2 ms-3 me-3">
-                                        <form th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
+                                        <div class="d-flex align-items-center gap-2 mb-2 mt-2 ms-3 me-3 flex-wrap">
+                                        <form th:if="${!#lists.contains(comment.likers, userDisplayName)}" th:action="@{/posts/comments/{commentId}/like(commentId=${comment.id})}" method="post" style="display:inline">
                                             <input type="hidden" name="postId" th:value="${post.id}" />
-                                            <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill text-danger"></i> Like</button>
+                                            <button type="submit" class="red-gradient-text text-decoration-none" style="border: none; background: none"><i class="bi bi-heart-fill red-gradient-text"></i></button>
                                         </form>
-                                        <form th:action="@{/posts/comments/{commentId}/unlike(commentId=${comment.id})}" method="post" style="display:inline">
+                                        <form th:if="${#lists.contains(comment.likers, userDisplayName)}" th:action="@{/posts/comments/{commentId}/unlike(commentId=${comment.id})}" method="post" style="display:inline">
                                             <input type="hidden" name="postId" th:value="${post.id}" />
-                                            <button type="submit" class="me-3 text-secondary text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill"></i> Unlike</button>
+                                            <button type="submit" class="red-gradient-text text-decoration-none" style="border: none; background: none"><i class="bi bi-hand-thumbs-down-fill red-gradient-text"></i></button>
                                         </form>
-                                        <span th:text="'Likes: ' + ${comment.likesCount}" style="display:inline; width:30; opacity:.7">0</span>
+                                        <span class="red-gradient-text text-decoration-none" th:text="${comment.likesCount}" style="display:inline; width:30">0</span>
 
                                         <div th:if="${comment.likers != null and !comment.likers.isEmpty()}" style="margin-left:10px">
-                                            <span style="opacity:.7">Liked by: </span>
-                                            <span th:each="liker, iterStat : ${comment.likers}" style="display:inline; opacity:.7">
-                                                <span th:text="${liker}">User</span><span th:unless="${iterStat.last}">, </span>
+                                            <span class="red-gradient-text text-decoration-none small" style="display:inline">Liked by: </span>
+                                            <span th:each="liker, iterStat : ${comment.likers}" style="display:inline">
+                                                <span class="red-gradient-text text-decoration-none small" style="display:inline" th:text="${liker}">User</span><span th:unless="${iterStat.last}">, </span>
                                             </span>
                                         </div>
 
                                         <div th:if="${comment.likers != null and !comment.likers.isEmpty()}" style="display:inline">
                                             <span th:each="'Liked by: ' + liker, iterStat : ${comment.likers}">
-                                                <span th:text="${liker}">User</span><span th:if="${!iterStat.last}">, </span>
+                                                <span class="red-gradient-text text-decoration-none small" th:text="${liker}">User</span><span th:if="${!iterStat.last}"> </span>
                                             </span>
                                         </div>
                                         </div>
