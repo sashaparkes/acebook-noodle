@@ -60,12 +60,12 @@
                 <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
                 <li class="nav-item dropdown d-none d-md-block">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
+                        <img class="rounded-circle me-2" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
                     </a>
                     <div class="dropdown-menu dropdown-menu-end navbar-dropdown">
                         <div class="d-flex flex-column align-items-center">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                                <img class="rounded-circle" th:src="@{${user.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                             </div>
                             <div class="fw-bold text-center">
                                 <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
@@ -80,7 +80,7 @@
                 </li>
 
                 <li class="nav-item d-block d-md-none text-center px-3">
-                    <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                    <img class="rounded-circle mb-2 mt-3" th:src="@{${user.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                     <div class="fw-bold text-center">
                         <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
                     </div>

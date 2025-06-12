@@ -13,6 +13,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+        // Serve static resources from default locations (preserves /main.css, /favicon.png, /images, etc.)
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/", "classpath:/public/");
+
         // Handler for profile images
         registry.addResourceHandler("/uploads/user_profile/**")
                 .addResourceLocations("file:uploads/user_profile/");
