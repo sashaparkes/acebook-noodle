@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT a FROM User a WHERE " +
+            "LOWER(CONCAT('%', a.firstName, '%')) LIKE LOWER(CONCAT('%', :searchInput, '%')) OR " +
+            "LOWER(CONCAT('%', a.lastName, '%')) LIKE LOWER(CONCAT('%', :searchInput, '%')) OR " +
             "LOWER(CONCAT('%', a.firstName, ' ', a.lastName, '%')) LIKE LOWER(CONCAT('%', :searchInput, '%')) OR " +
             "LOWER(CONCAT('%', a.lastName, ' ', a.firstName, '%')) LIKE LOWER(CONCAT('%', :searchInput, '%')) OR " +
             "LOWER(CONCAT('%', a.lastName, a.firstName, '%')) LIKE LOWER(CONCAT('%', :searchInput, '%')) OR " +
