@@ -3,7 +3,8 @@
 INSERT INTO users (username, enabled, first_name, last_name, profile_pic) VALUES
 ('avianstuff@yahoo.com', true, 'Avian', 'Schmigiel', '/uploads/user_profile/avian.jpg'),
 ('sashaparkes1@gmail.com', true, 'Sasha', 'Parkes', '/uploads/user_profile/sasha.png'),
-('jordangill@live.co.uk', true, 'Jordan', 'Gill', NULL),
+
+('jordangill@live.co.uk', true, 'Jordan', 'Gill', '/images/profile/default.jpg'),
 ('shanice598@yahoo.co.uk', true, 'Shanice', 'Williams', '/uploads/user_profile/shanni.png'),
 ('harrymcconville1998@gmail.com', true, 'Harry', 'McConville', '/uploads/user_profile/harrymc.jpg');
 
@@ -23,7 +24,7 @@ INSERT INTO posts (content, user_id, time_posted, image) VALUES
 ('Good vibes, good music, good people.', 30, NOW() - INTERVAL '4 days', NULL),
 -- Shanice
 ('Studio lights > nightlife 💡', 31, NOW() - INTERVAL '3 hours', NULL),
-('My voice, my rules 🎤', 31, NOW() - INTERVAL '1 day', '/uploads/post_images/shanni_post.jpeg'),
+('My voice, my rules 🎤', 31, NOW() - INTERVAL '1 day', '/uploads/post_images/shanni_post.jpg'),
 ('Nothing like singing in the rain 🌧️🎶', 31, NOW() - INTERVAL '2 days', NULL),
 -- Harry
 ('Looped the same beat for 3 hours. Still vibing.', 32, NOW() - INTERVAL '30 minutes', NULL),
