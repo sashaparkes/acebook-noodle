@@ -104,7 +104,7 @@
                     </div>
 
                     <div th:if="${signedInUser.id != user.id and isFriend}">
-                        <form th:action="@{/remove_friend/{id}(id=${user.id})}" method="POST" style="display:inline;">
+                        <form th:action="@{/profile_remove_friend/{id}(id=${user.id})}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-primary btn-sm">Remove Friend</button>
                         </form>
                     </div>
