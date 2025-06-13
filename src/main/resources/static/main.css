@@ -158,11 +158,11 @@ h3 {
 
 }
 
-.search-bar {
+input.search-bar.form-control {
     transition: width 0.3s ease-in-out;
-    width: 40px;
+    width: 40px !important;
 }
 
-.search-bar:focus {
-    width: 250px;
+input.search-bar.form-control:focus {
+    width: 250px !important;
 }
