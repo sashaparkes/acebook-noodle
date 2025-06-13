@@ -157,12 +157,3 @@ h3 {
     box-shadow: none !important;
 
 }
-
-input.search-bar.form-control {
-    transition: width 0.3s ease-in-out;
-    width: 40px !important;
-}
-
-input.search-bar.form-control:focus {
-    width: 250px !important;
-}
