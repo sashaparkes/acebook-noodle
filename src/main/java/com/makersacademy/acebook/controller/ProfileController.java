@@ -140,6 +140,7 @@ public class ProfileController {
             friendRequest.setRespondedAt(now);
             friendRequestRepository.save(friendRequest);
         }
+        friendRequestRepository.delete(friendRequest);
 
         return new RedirectView("/profile/{requesterId}");
     }
