@@ -1,22 +1,23 @@
 package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+
+@Data
 @Entity
 @Table(name = "comments")
-@Getter
-@Setter
 @NoArgsConstructor
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="post_id", insertable=false, updatable=false)
+    public Long postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
@@ -36,3 +37,4 @@ public class Comment {
         this.id = id;
     }
 }
+

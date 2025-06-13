@@ -15,14 +15,26 @@
 </head>
 
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
 
 <!-- Navbar  -->
 <nav class="navbar navbar-expand-md sticky-top">
     <div class="container d-flex justify-content-between align-items-center position-relative">
-        <a class="nav-link d-none d-md-block" href="/friendsearch"><i class="bi bi-search" title="Friend Search"></i></a>
+        <!-- Search bar start -->
+        <div class="d-flex align-items-center position-relative">
+            <form th:action="@{/friends/search}" method="post">
+                <input type="text" class="form-control rounded-pill search-bar pe-5" placeholder="Search..." aria-label="Search" name="searchInput">
+                <button class="btn position-absolute top-50 end-0 translate-middle-y" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <!-- Search bar end-->
         <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
-            <img src="images/AcebookSmall.png" alt="Acebook Logo" height="50">
+            <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
         </a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -31,7 +43,7 @@
             <ul class="navbar-nav ms-auto d-flex align-items-center">
                 <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
                 <li class="nav-item d-none d-md-block"><a class="nav-link active" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
-                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications"></i>&nbsp;</a></li>
+                <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
                 <li class="nav-item dropdown d-none d-md-block">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
@@ -42,11 +54,11 @@
                                 <img class="rounded-circle" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                             </div>
                             <div class="fw-bold text-center">
-                                <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                                <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/profile" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+                        <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i><small> My Profile</small></a>
                         <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
@@ -56,15 +68,16 @@
                 <li class="nav-item d-block d-md-none text-center px-3">
                     <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
                     <div class="fw-bold text-center">
-                        <div class="text-truncate"><span sec:authentication="principal.attributes['given_name']"></span> <span sec:authentication="principal.attributes['family_name']"></span></div>
+                        <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
                     </div>
                 </li>
 
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friendsearch"><i class="bi bi-search"></i> Friend Search</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friends/search"><i class="bi bi-search"></i> Friend Search</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>
-                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i> Notifications</a></li>
+                <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
                 <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
@@ -73,59 +86,105 @@
 </nav>
 <!-- End of navbar  -->
 
-<div class="container mt-3">
+<div class="container">
     <div class="row">
         <div  class="d-grid gap-2 d-md-block">
-            <div class="box shadow-sm border rounded mb-3">
-                <h2>Friend Requests</h2>
-                <ul>
-                    <li th:each="requester : ${requesterUsers}">
-                        <a th:href="@{/profile/{id}(id=${requester.id})}">
-                            <span th:text="${requester.firstName + ' ' + requester.lastName}"></span></a>
-                        <form th:action="@{'/friendRequest/' + ${requester.id}}" method="POST">
-                            <button type="submit" name="decision" value="accept">Accept</button>
-                            <button type="submit" name="decision" value="decline">Decline</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-            <div class="box shadow-sm border rounded mb-3">
-                <h2>Your Friends</h2>
-                <ul>
-                    <li th:each="friend : ${friendUsers}">
-                        <a th:href="@{/profile/{id}(id=${friend.id})}">
-                            <span th:text="${friend.firstName + ' ' + friend.lastName}"></span></a>
-                        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
-                            <button type="submit">Remove Friend</button>
-                        </form>
-                    </li>
-                </ul>
+
+
+                <h1 class="text-center mt-3 text-nowrap">
+                    Friend Requests
+                </h1>
+            <p class="text-center mt-3" th:if="${#lists.isEmpty(requesterUsers)}">You have no pending friend requests!</p>
+            <div th:if="${not #lists.isEmpty(requesterUsers)}">
+                <div class="row justify-content-center mt-3">
+                    <div class="col-md-7">
+                        <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+                            <div class="container">
+                                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                                    <div th:each="requester : ${requesterUsers}" class="col">
+                                        <div class="border rounded mb-3 ">
+                                            <div class="p-3 d-flex align-items-center border-bottom">
+                                                <div class="me-2">
+                                                    <a th:href="@{/profile/{id}(id=${requester.id})}" class="text-decoration-none text-reset">
+                                                        <img class="rounded-circle" th:src="@{${requester.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                                </div>
+                                                <strong th:text="${requester.firstName + ' ' + requester.lastName}"></strong></a>
+                                            </div>
+                                            <div class="p-3 border-bottom">
+                                                <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST" class="d-flex">
+                                                    <button type="submit" name="decision" value="accept" class="btn btn-primary btn-sm me-2 w-50">Accept</button>
+                                                    <button type="submit" name="decision" value="decline" class="btn btn-outline-primary btn-sm w-50">Decline</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<h2>Friend Requests</h2>
-<ul>
-    <li th:each="requester : ${requesterUsers}">
-        <span th:text="${requester.firstName + ' ' + requester.lastName}"></span>
-        <form th:action="@{'/friend_request/' + ${requester.id}}" method="POST">
-            <button type="submit" name="decision" value="accept">Accept</button>
-            <button type="submit" name="decision" value="decline">Decline</button>
-        </form>
-    </li>
-</ul>
+<div class="container">
+    <div class="row">
+        <div  class="d-grid gap-2 d-md-block">
+            <h1 class="text-center mt-3 text-nowrap">
+                    Your Friends
+                </h1>
+            <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friendUsers)}">You have no friends!</p>
+            <div th:if="${not #lists.isEmpty(friendUsers)}">
+              <div class="row justify-content-center mt-3">
+                <div class="col-md-7">
+                    <div class="box bg-white shadow-sm border rounded mb-3 p-3">
+                        <div class="container">
+                          <p class="red-gradient-text text-decoration-none fw-bold" th:if="${friendUsers.size() == 1}" th:text="${friendUsers.size() + ' Friend'}"></p>
+                          <p class="red-gradient-text text-decoration-none fw-bold" th:if="${friendUsers.size() > 1}" th:text="${friendUsers.size() + ' Friends'}"></p>
+                            <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 g-lg-3 justify-content-center align-items-center">
+                                <div th:each="friend : ${friendUsers}" class="col">
+                                    <div class="border rounded mb-3 ">
+                                        <div class="p-3 d-flex align-items-center border-bottom">
+                                            <div class="me-2">
+                                                <a th:href="@{/profile/{id}(id=${friend.id})}" class="text-decoration-none text-reset">
+                                                    <img class="rounded-circle" th:src="@{${friend.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            </div>
+                                            <strong th:text="${friend.firstName + ' ' + friend.lastName}"></strong></a>
+                                        </div>
+                                        <div class="p-3 border-bottom">
+                                            <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" class="d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm me-2 w-60">Remove Friend</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>Your Friends</h2>
-<ul>
-    <li th:each="friend : ${friendUsers}">
-        <span th:text="${friend.firstName + ' ' + friend.lastName}"></span>
-        <form th:action="@{'/remove_friend/' + ${friend.id}}" method="POST" style="display:inline;">
-            <button type="submit">Remove Friend</button>
-        </form>
-    </li>
-</ul>
+    <!-- Footer -->
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
+        <div class="container">
+                    <span class="material-symbols-outlined" >
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                    </span>
+                Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+                <span class="material-symbols-outlined" >
+                    <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                </span>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+        </div>
+    </footer>
+
 <!--        scripts for bootstrap  -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

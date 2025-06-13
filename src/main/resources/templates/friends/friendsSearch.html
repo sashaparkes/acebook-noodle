@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Acebook</title>
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <!--        links for bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--        end links for bootstrap-->
+
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+<!-- Navbar  -->
+    <nav class="navbar navbar-expand-md sticky-top">
+        <div class="container d-flex justify-content-between align-items-center position-relative">
+            <!-- Search bar start -->
+            <div class="d-flex align-items-center position-relative">
+                    <form th:action="@{/friends/search}" method="post">
+                        <input type="text" class="form-control rounded-pill search-bar pe-5" placeholder="Search..." aria-label="Search" name="searchInput">
+                            <button class="btn position-absolute top-50 end-0 translate-middle-y" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
+                    </form>
+                </div>
+        <!-- Search bar end-->
+            <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="/posts">
+                <img src="/images/AcebookSmall.png" alt="Acebook Logo" height="50">
+            </a>
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="collapseNavbar">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/posts"><i class="bi bi-house-door-fill" title="Home"></i></a></li>
+                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/friends"><i class="bi bi-people-fill" title="Friends"></i></a></li>
+                    <li class="nav-item d-none d-md-block"><a class="nav-link" href="/notifications"><i class="bi bi-bell-fill" title="Notifications" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i>&nbsp;</a></li>
+                    <li class="nav-item dropdown d-none d-md-block">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="rounded-circle me-2" th:src="@{${currentUser.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;" >
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="dropdown-list-image mr-3">
+                                    <img class="rounded-circle" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                                </div>
+                                <div class="fw-bold text-center">
+                                    <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" th:href="@{/profile/{id}(id=${currentUser.id})}" ><i class="bi bi-person-circle"></i><small> My Profile</small></a>
+                            <a class="dropdown-item" href="/settings"><i class="bi bi-gear-fill"></i><small> Settings</small></a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i><small> Logout</small></a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item d-block d-md-none text-center px-3">
+                        <img class="rounded-circle mb-2 mt-3" th:src="@{${currentUser.profilePic}}" style="width: 50px; height: 50px; object-fit: cover;">
+                        <div class="fw-bold text-center">
+                            <div class="text-truncate"><span th:text="@{${currentUser.firstName}}"></span> <span th:text="@{${currentUser.lastName}}"></span></div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item d-block d-md-none"><a class="nav-link active text-start" href="/friends/search"><i class="bi bi-search"></i> Friend Search</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/posts"><i class="bi bi-house-door-fill"></i> Home</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/friends"><i class="bi bi-people-fill"></i> Friends</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/notifications"><i class="bi bi-bell-fill" th:styleappend="${notificationCount == 0 ? 'color:dark gray' : 'color:FireBrick'}"></i> Notifications</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" th:href="@{/profile/{id}(id=${currentUser.id})}"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/settings"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link text-start" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End of navbar  -->
+
+    <div class="container mt-3">
+        <div class="row">
+            <div  class="d-grid gap-2 d-md-block">
+                <h1 class="text-center mt-3 text-nowrap">
+                    Find Friends
+                </h1>
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <div class="search-container">
+                            <form th:action="@{/friends/search}" method="post">
+                                <div class="position-relative mb-4">
+                                    <input type="text" name="searchInput" class="form-control search-input" placeholder="Type to search...">
+                                    <button class="btn position-absolute top-50 end-0 translate-middle-y" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <h3 th:text="'Search results for ' + ${searchInput} + ':'" th:unless="${searchInput ==  null}"></h3>
+                        <p th:if="${searchResults != null && searchResults.isEmpty()}">No users found.</p>
+                        <div id="search-results" th:each="user : ${searchResults}" th:unless="${searchResults != null && searchResults.isEmpty()}">
+                            <div class="box shadow-sm border rounded bg-white mb-3 post">
+                                <div class="p-3 d-flex align-items-center justify-content-between border-bottom">
+                                    <span class="d-flex align-items-center">
+                                        <a th:href="@{/profile/{id}(id=${user.id})}" class="text-decoration-none text-reset">
+                                        <img class="rounded-circle" th:src="@{${user.profilePic}}" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></a>
+                                    </span>
+                                    <a th:href="@{/profile/{id}(id=${user.id})}" class="btn btn-primary btn-sm w-60 ">View Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Footer -->
+    <footer class="footer text-center mt-auto small" style="opacity: 0.6;">
+        <div class="container">
+                        <span class="material-symbols-outlined" >
+                            <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                        </span>
+            Copyright &copy; Acebook-Noodle 2025. All rights reserved. Acebook.Noodle@hot-shot.com
+            <span class="material-symbols-outlined" >
+                        <img class="logo" th:src="@{/logo.png}" alt="Acebook-Noodle Logo" style="width: 20px; height: 20px;">
+                    </span>
+            <p >Designed by Jordan Gill, Sasha Parkes, Avian Schmigiel, Shanni Williams, and Harry Mcconville</p>
+        </div>
+    </footer>
+
+    <!--        script for bootstrap  -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

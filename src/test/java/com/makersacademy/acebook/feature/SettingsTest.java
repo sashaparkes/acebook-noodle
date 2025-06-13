@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SettingsTest {
@@ -59,8 +60,12 @@ public class SettingsTest {
         passwordField.sendKeys("Password123");
         driver.findElement(By.className("auth0-label-submit")).click();
         driver.findElement(By.name("action")).click();
+        WebElement dropdown = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector("a.nav-link.dropdown-toggle"))
+        );
+        dropdown.click();
         WebElement settingsLink = wait.until(
-                ExpectedConditions.elementToBeClickable(By.linkText("| Settings |"))
+                ExpectedConditions.elementToBeClickable(By.linkText("Settings"))
         );
         settingsLink.click();
         String actualTitle = driver.getTitle();
@@ -89,10 +94,17 @@ public class SettingsTest {
         driver.findElement(By.className("auth0-label-submit")).click();
         driver.findElement(By.name("action")).click();
 
-        driver.findElement(By.linkText("| Settings |")).click();
+        WebElement dropdown = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector("a.nav-link.dropdown-toggle"))
+        );
+        dropdown.click();
+        WebElement settingsLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.linkText("Settings"))
+        );
+        settingsLink.click();
 
         WebDriverWait waitForImageField = new WebDriverWait(driver, Duration.ofSeconds(10));
-        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='User Profile Image']")));
+        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div/form/div[2]/input")));
 
         Path imagePath = Paths.get("src/test/resources/Test_Profile.png");
         WebElement fileInput = driver.findElement(By.name("file"));
@@ -101,10 +113,10 @@ public class SettingsTest {
         driver.findElement(By.id("submit")).click();
 
         WebDriverWait waitForImage = new WebDriverWait(driver, Duration.ofSeconds(10));
-        waitForImage.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='User Profile Image']")));
+        waitForImage.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div/form/div[2]/input")));
 
-        WebElement fileName = driver.findElement(By.xpath("//img[@alt='User Profile Image']"));
-        String src = fileName.getAttribute("src");
+        WebElement image = driver.findElement(By.xpath("/html/body/div/div/div/form/div[1]/img"));
+        String src = image.getAttribute("src");
 
         Assertions.assertFalse(src.contains("default.jpg"));
     }
@@ -130,22 +142,31 @@ public class SettingsTest {
         driver.findElement(By.className("auth0-label-submit")).click();
         driver.findElement(By.name("action")).click();
 
-        driver.findElement(By.linkText("| Settings |")).click();
+        WebElement dropdown = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector("a.nav-link.dropdown-toggle"))
+        );
+        dropdown.click();
+        WebElement settingsLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.linkText("Settings"))
+        );
+        settingsLink.click();
 
         WebDriverWait waitForImageField = new WebDriverWait(driver, Duration.ofSeconds(10));
-        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='User Profile Image']")));
+        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div/form/div[2]/input")));
 
-        driver.findElement(By.id("last_name")).clear();
+        driver.findElement(By.id("lastName")).clear();
         driver.findElement(By.id("firstName")).clear();
         driver.findElement(By.id("firstName")).sendKeys("Harry");
-        driver.findElement(By.id("last_name")).sendKeys("Parkes");
+        driver.findElement(By.id("lastName")).sendKeys("Parkes");
         driver.findElement(By.xpath("//input[@type='submit']")).click();
 
-        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='User Profile Image']")));
-        List<WebElement> headers = driver.findElements(By.tagName("h2"));
-        assertEquals(headers.get(0).getText(), "First name: Harry");
-        assertEquals(headers.get(1).getText(), "Surname: Parkes");
-
+        waitForImageField.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div/form/div[2]/input")));
+        WebElement firstName = driver.findElement(By.xpath("//*[@id=\"firstName\"]"));
+        WebElement lastName = driver.findElement(By.xpath("//*[@id=\"lastName\"]"));
+        String firstNameValue = firstName.getAttribute("value");
+        assertThat(firstNameValue, equalTo("Harry"));
+        String lastNameValue = lastName.getAttribute("value");
+        assertThat(lastNameValue, equalTo("Parkes"));
         }
 
     }

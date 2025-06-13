@@ -1,18 +1,18 @@
 package com.makersacademy.acebook.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+
 
 @Data
 @Entity
 @Table(name = "POSTS")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +33,13 @@ public class Post {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-
     public Post(Long id) {
         this.id = id;
     }
+
+    @Override
+    public int compareTo(Post p) {
+        return getTimePosted().compareTo(p.getTimePosted());
+    }
 }
+
