@@ -126,7 +126,7 @@
             <div  class="d-grid gap-2 d-md-block">
                 <div class="list-group list-group-flush" >
                     <div th:each="post: ${posts}">
-                        <div class="box shadow-sm border rounded bg-white mb-3 post">
+                        <div class="box shadow-sm border rounded bg-white mb-3 post" th:attr="data-post-id=${post.id}">
                             <div class="p-3 d-flex align-items-center border-bottom">
                                 <div class="me-2">
                                     <a th:href="@{/profile/{id}(id=${post.user.id})}" class="text-decoration-none text-reset">
