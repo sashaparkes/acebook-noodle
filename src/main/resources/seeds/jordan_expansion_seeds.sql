@@ -3,7 +3,7 @@
 INSERT INTO users (username, enabled, first_name, last_name, profile_pic) VALUES
 ('avianstuff@yahoo.com', true, 'Avian', 'Schmigiel', '/uploads/user_profile/avian.jpg'),
 ('sashaparkes1@gmail.com', true, 'Sasha', 'Parkes', '/uploads/user_profile/sasha.png'),
-('jordangill@live.co.uk', true, 'Jordan', 'Gill', NULL),
+('jordangill@live.co.uk', true, 'Jordan', 'Gill', '/images/profile/default.jpg'),
 ('shanice598@yahoo.co.uk', true, 'Shanice', 'Williams', '/uploads/user_profile/shanice.png'),
 ('harrymcconville1998@gmail.com', true, 'Harry', 'McConville', '/uploads/user_profile/harrymc.jpg');
 
