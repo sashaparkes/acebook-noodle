@@ -131,9 +131,10 @@
                     <h3 class="text-center mt-3 text-nowrap" th:if="${signedInUser.id == user.id}">Your Friends
                     </h3>
 
-                    <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friends)}" th:text="${user.firstName} + ' has no friends'"></p>
+                <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friends) and signedInUser.id != user.id}" th:text="${user.firstName} + ' has no friends!'"></p>
+                <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(friends) and signedInUser.id == user.id}">You have no friends!</p>
 
-                    <div th:if="${not #lists.isEmpty(friends)}">
+                <div th:if="${not #lists.isEmpty(friends)}">
                         <div class="row justify-content-center mt-3">
                             <div class="col-md-7">
                                 <div class="box bg-white shadow-sm border rounded mb-3 p-3">
@@ -171,6 +172,10 @@
         </h3>
         <h3 class="text-center mt-3 text-nowrap mb-3" th:if="${signedInUser.id == user.id}">Your Posts
         </h3>
+
+        <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(posts) and signedInUser.id != user.id}" th:text="${user.firstName} + ' has no posts!'"></p>
+        <p class="text-center mt-3 text-nowrap" th:if="${#lists.isEmpty(posts) and signedInUser.id == user.id}">You have no posts!</p>
+
 
         <div class="list-group list-group-flush" >
                     <div th:each="post: ${posts}">
