@@ -88,8 +88,11 @@
     <div class="container">
         <div class="row">
             <div  class="d-grid gap-2 d-md-block">
-                <h1 class="text-center mt-3 text-nowrap">
-                    Posts
+                <h1 class="text-center mt-3 text-nowrap" th:if="${globalWall == true}">
+                    Global Posts
+                </h1>
+                <h1 class="text-center mt-3 text-nowrap" th:if="${globalWall == false}">
+                    Friend's Posts
                 </h1>
                 <!--  filter links -->
                 <div class ="ms-auto small" th:if="${globalWall == true}">
