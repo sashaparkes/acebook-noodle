@@ -163,64 +163,62 @@ public class PostsController {
     @GetMapping("/posts/{id}")
     public ModelAndView viewPost(@PathVariable("id") Long id, @AuthenticationPrincipal(expression = "attributes['email']") String email) {
         ModelAndView modelAndView = new ModelAndView("posts/post");
-        ModelAndView errorView = new ModelAndView("genericErrorPage");
-        Optional<Post> currentPost = postRepository.findById(id);
-        if (currentPost.isEmpty()) {
-            return errorView;
-        }
-        else {
-            Post post = currentPost.get();
-            String posterName = post.getUser().getFirstName() + " " + post.getUser().getLastName();
-            long postLikesCount = postService.getLikesCount(post.getId());
-            List<String> likedBy = postLikeService.getLikersForPost(post.getId());
-            PostDto postDto = new PostDto(
-                    post.getId(),
-                    post.getContent(),
-                    posterName,
-                    post.getTimePosted(),
-                    post.getImage(),
-                    postLikesCount,
-                    likedBy,
-                    post.getUser().getProfilePic(),
-                    post.getUser().getId()
-            );
-            List<Comment> commentEntities = commentService.getCommentsForPost(id);
-            List<CommentDto> commentDtos = commentEntities.stream()
-                    .map(comment -> {
-                        String displayName = comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
-                        long likesCount = commentService.getLikesCount(comment.getId());
-                        List<String> likers = commentLikeService.getLikersForComment(comment.getId());
-                        return new CommentDto(
-                                comment.getId(),
-                                comment.getContent(),
-                                displayName,
-                                comment.getCreatedAt(),
-                                likesCount,
-                                likers,
-                                comment.getUser().getProfilePic(),
-                                comment.getUser().getId()
-                        );
-                    })
-                    .toList();
 
-            User currentUser = userRepository.findUserByUsername(email).orElse(null);
-            Integer notificationCount = notificationService.notificationCount(currentUser.getId());
-            String userId = Long.toString(currentUser.getId());
-            String userDisplayName = currentUser.getFirstName()  + " " + currentUser.getLastName();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Post not found with id: " + id));
 
-            boolean likedBySignedInUser = likedByUser(userDisplayName, likedBy);
+        String posterName = post.getUser().getFirstName() + " " + post.getUser().getLastName();
+        long postLikesCount = postService.getLikesCount(post.getId());
+        List<String> likedBy = postLikeService.getLikersForPost(post.getId());
+        PostDto postDto = new PostDto(
+                post.getId(),
+                post.getContent(),
+                posterName,
+                post.getTimePosted(),
+                post.getImage(),
+                postLikesCount,
+                likedBy,
+                post.getUser().getProfilePic(),
+                post.getUser().getId()
+        );
 
-            modelAndView.addObject("notificationCount", notificationCount);
-            modelAndView.addObject("currentUser", currentUser);
-            modelAndView.addObject("userId", userId);
-            modelAndView.addObject("userDisplayName", userDisplayName);
-            modelAndView.addObject("post", postDto);
-            modelAndView.addObject("comments", commentDtos);
-            modelAndView.addObject("newComment", new Comment());
-            modelAndView.addObject("likedBySignedInUser", likedBySignedInUser);
-            return modelAndView;
-        }
+        List<Comment> commentEntities = commentService.getCommentsForPost(id);
+        List<CommentDto> commentDtos = commentEntities.stream()
+                .map(comment -> {
+                    String displayName = comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
+                    long likesCount = commentService.getLikesCount(comment.getId());
+                    List<String> likers = commentLikeService.getLikersForComment(comment.getId());
+                    return new CommentDto(
+                            comment.getId(),
+                            comment.getContent(),
+                            displayName,
+                            comment.getCreatedAt(),
+                            likesCount,
+                            likers,
+                            comment.getUser().getProfilePic(),
+                            comment.getUser().getId()
+                    );
+                }).toList();
+
+        User currentUser = userRepository.findUserByUsername(email).orElse(null);
+        Integer notificationCount = notificationService.notificationCount(currentUser.getId());
+        String userId = Long.toString(currentUser.getId());
+        String userDisplayName = currentUser.getFirstName()  + " " + currentUser.getLastName();
+
+        boolean likedBySignedInUser = likedByUser(userDisplayName, likedBy);
+
+        modelAndView.addObject("notificationCount", notificationCount);
+        modelAndView.addObject("currentUser", currentUser);
+        modelAndView.addObject("userId", userId);
+        modelAndView.addObject("userDisplayName", userDisplayName);
+        modelAndView.addObject("post", postDto);
+        modelAndView.addObject("comments", commentDtos);
+        modelAndView.addObject("newComment", new Comment());
+        modelAndView.addObject("likedBySignedInUser", likedBySignedInUser);
+        return modelAndView;
     }
+
+
 
     @Transactional
     @PostMapping("/posts/{postId}/delete")
