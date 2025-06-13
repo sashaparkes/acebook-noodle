@@ -4,14 +4,14 @@ INSERT INTO users (username, enabled, first_name, last_name, profile_pic) VALUES
 ('avianstuff@yahoo.com', true, 'Avian', 'Schmigiel', '/uploads/user_profile/avian.jpg'),
 ('sashaparkes1@gmail.com', true, 'Sasha', 'Parkes', '/uploads/user_profile/sasha.png'),
 ('jordangill@live.co.uk', true, 'Jordan', 'Gill', NULL),
-('shanice598@yahoo.co.uk', true, 'Shanice', 'Williams', '/uploads/user_profile/shanice.png'),
+('shanice598@yahoo.co.uk', true, 'Shanice', 'Williams', '/uploads/user_profile/shanni.png'),
 ('harrymcconville1998@gmail.com', true, 'Harry', 'McConville', '/uploads/user_profile/harrymc.jpg');
 
 -- Posts by new users (user_ids 28–32 assumed)
 INSERT INTO posts (content, user_id, time_posted, image) VALUES
 -- Avian
-('Studio all day, beats all night 🧠🎧', 28, NOW() - INTERVAL '2 hours', '/uploads/post_images/38.jpeg'),
-('Don’t sleep on the quiet ones 🔥', 28, NOW() - INTERVAL '2 days', '/uploads/post_images/83.jpeg'),
+('Studio all day, beats all night 🧠🎧', 28, NOW() - INTERVAL '2 hours', '/uploads/post_images/39.jpg'),
+('Don’t sleep on the quiet ones 🔥', 28, NOW() - INTERVAL '2 days', '/uploads/post_images/83.jpg'),
 ('Mixing emotions into every track 🎶', 28, NOW() - INTERVAL '3 days', NULL),
 -- Sasha
 ('First gig in London! Let’s go! 🇬🇧', 29, NOW() - INTERVAL '1 hour', NULL),
