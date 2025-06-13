@@ -126,6 +126,8 @@ public class FriendsController {
             friendship2.setFriendsSince(now);
             friendRepository.save(friendship2);
 
+            friendRequestRepository.delete(friendRequest);
+
         } else if (decision.equals("decline")) {
             friendRequest.setStatus("rejected");
             Instant instant = Instant.now();
