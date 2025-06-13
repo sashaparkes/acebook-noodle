@@ -3,7 +3,6 @@ package com.makersacademy.acebook.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 
@@ -34,7 +33,7 @@ public class Comment {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Comment(Long id, Object o, Object object, String testComment, Timestamp now) {
+    public Comment(Long id) {
         this.id = id;
     }
 }
