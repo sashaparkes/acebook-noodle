@@ -143,6 +143,31 @@ public class ProfileController {
         friendRequestRepository.delete(friendRequest);
 
         return new RedirectView("/profile/{requesterId}");
+
+
+    }
+    @PostMapping("/profile_remove_friend/{friendId}")
+    public RedirectView removeFriend(
+            @PathVariable Long friendId,
+            @AuthenticationPrincipal(expression = "attributes['email']") String email) {
+
+        // Get User!
+        Optional<User> userOptional = userRepository.findUserByUsername(email);
+
+        User currentUser = userOptional.get();
+        Long currentUserId = currentUser.getId();
+
+        //Find Friendships!
+
+        Optional<Friend> friendship1 = friendRepository.findByMainUserIdAndFriendUserId(currentUserId, friendId);
+        Optional<Friend> friendship2 = friendRepository.findByMainUserIdAndFriendUserId(friendId, currentUserId);
+
+        //Remove Friendships!
+        friendship1.ifPresent(friendRepository::delete);
+        friendship2.ifPresent(friendRepository::delete);
+
+        //Redirect to Friends!
+        return new RedirectView("/profile/{friendId}");
     }
 
     private boolean isFriend(Long userId, Long friendId) {
